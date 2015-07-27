@@ -1,2 +1,5 @@
 /build
 *.apk
+
+# Config.java contains private IDs and keys
+src/main/java/eu/zkkn/android/kaktus/Config.java

@@ -1,0 +1,5 @@
+/build
+backend.iml
+
+# appengine-web.xml contains private IDs and keys
+/src/main/webapp/WEB-INF/appengine-web.xml

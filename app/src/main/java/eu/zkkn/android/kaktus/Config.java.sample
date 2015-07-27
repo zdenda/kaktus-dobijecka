@@ -1,0 +1,20 @@
+package eu.zkkn.android.kaktus;
+
+/**
+ * App Configuration
+ */
+public class Config {
+
+    /**
+     * Backend base URL. It corresponds to Project ID
+     * For example: https://<ProjectID>.appspot.com/
+     */
+    public static final String BACKEND_ROOT_URL = "http://localhost:8080/";
+
+    /**
+     * This is the Project Number from the Google Developers Console
+     * https://console.developers.google.com/project
+     */
+    public static final String GCM_SENDER_ID = "...";
+
+}
