@@ -1,6 +1,5 @@
 package eu.zkkn.android.kaktus;
 
-import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,37 +7,20 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.gcm.GcmListenerService;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class GcmIntentService extends IntentService {
+public class MyGcmListenerService extends GcmListenerService {
 
     private static final int NOTIFICATION_ID = 1;
 
-    public GcmIntentService() {
-        super("GcmIntentService");
-    }
-
     @Override
-    protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        // The getMessageType() intent parameter must be the intent you received
-        // in your BroadcastReceiver.
-        String messageType = gcm.getMessageType(intent);
-
-        if (extras != null && !extras.isEmpty()) {  // has effect of unparcelling Bundle
-            // Since we're not using two way messaging, this is all we really to check for
-            if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                Logger.getLogger("GCM_RECEIVED").log(Level.INFO, extras.toString());
-
-                showNotification(extras.getString("message"));
-            }
-        }
-        GcmBroadcastReceiver.completeWakefulIntent(intent);
+    public void onMessageReceived(String from, Bundle data) {
+        super.onMessageReceived(from, data);
+        String message = data.getString("message");
+        Log.d(Config.TAG, "From: " + from + ", Message: " + message);
+        showNotification(message);
     }
 
     protected void showNotification(String message) {

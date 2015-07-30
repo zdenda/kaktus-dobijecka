@@ -24,7 +24,7 @@ import static eu.zkkn.android.kaktus.backend.OfyService.ofy;
  * For more information, see
  * https://developers.google.com/appengine/docs/java/endpoints/
  * <p/>
- * NOTE: This endpoint does not use any form of authorization or
+ * TODO: This endpoint does not use any form of authorization or
  * authentication! If this app is deployed, anyone can access this endpoint! If
  * you'd like to add authentication, take a look at the documentation.
  */
@@ -38,7 +38,9 @@ public class RegistrationEndpoint {
      *
      * @param regId The Google Cloud Messaging registration Id to add
      */
-    @ApiMethod(name = "register")
+    // force path, otherwise it would be "registerDevice/{regId}", which causes problem for Jetty (App Engine on localhost).
+    // regId might contain colon (":") and jetty returns error 404 if colon is in URL path
+    @ApiMethod(name = "register", path = "registerDevice")
     public void registerDevice(@Named("regId") String regId) {
         if (findRecord(regId) != null) {
             log.info("Device " + regId + " already registered, skipping register");
@@ -54,7 +56,9 @@ public class RegistrationEndpoint {
      *
      * @param regId The Google Cloud Messaging registration Id to remove
      */
-    @ApiMethod(name = "unregister")
+    // force path, otherwise it would be "registerDevice/{regId}", which causes problem for Jetty (App Engine on localhost).
+    // regId might contain colon (":") and jetty returns error 404 if colon is in URL path
+    @ApiMethod(name = "unregister", path = "unregisterDevice")
     public void unregisterDevice(@Named("regId") String regId) {
         RegistrationRecord record = findRecord(regId);
         if (record == null) {
@@ -70,6 +74,7 @@ public class RegistrationEndpoint {
      * @param count The number of devices to list
      * @return a list of Google Cloud Messaging registration Ids
      */
+    //TODO: hide this from public web
     @ApiMethod(name = "listDevices")
     public CollectionResponse<RegistrationRecord> listDevices(@Named("count") int count) {
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(count).list();

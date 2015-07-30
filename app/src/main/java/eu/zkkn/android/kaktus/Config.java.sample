@@ -6,6 +6,11 @@ package eu.zkkn.android.kaktus;
 public class Config {
 
     /**
+     * Debug log tag
+     */
+    public static final String TAG = "DobijeckabLog";
+
+    /**
      * Backend base URL. It corresponds to Project ID
      * For example: https://<ProjectID>.appspot.com/
      */

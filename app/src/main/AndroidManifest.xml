@@ -3,7 +3,10 @@
     package="eu.zkkn.android.kaktus" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!--
+      this permission should no longer be needed for GCM to work
+        uses-permission android:name="android.permission.GET_ACCOUNTS" /
+    -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
@@ -29,7 +32,8 @@
         </activity>
 
         <receiver
-            android:name=".GcmBroadcastReceiver"
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -38,9 +42,24 @@
         </receiver>
 
         <service
-            android:name=".GcmIntentService"
+            android:name=".MyGcmListenerService"
             android:enabled="true"
             android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".GcmRegistrationService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".IdListenerService"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
         </service>
     </application>
 
