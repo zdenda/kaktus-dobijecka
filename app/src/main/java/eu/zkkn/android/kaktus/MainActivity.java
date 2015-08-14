@@ -1,12 +1,18 @@
 package eu.zkkn.android.kaktus;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -14,16 +20,37 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 
 public class MainActivity extends AppCompatActivity {
 
+    private BroadcastReceiver mGcmRegistrationBroadcastReceiver;
+    private TextView mTvStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (checkPlayServices() && TextUtils.isEmpty(GcmHelper.loadGcmToken(this))) {
-            // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, GcmRegistrationService.class);
-            startService(intent);
+        mTvStatus = (TextView) findViewById(R.id.tv_status);
+
+        if (checkPlayServices()) {
+            if (TextUtils.isEmpty(GcmHelper.loadGcmToken(this))) {
+                mTvStatus.setText(R.string.status_gcm_registration_in_progress);
+                // Start IntentService to register this application with GCM and
+                // register local broadcast receiver for result of the registration.
+                registerGcmRegistrationReceiver();
+                startService(new Intent(this, GcmRegistrationService.class));
+            } else {
+                mTvStatus.setText(R.string.status_gcm_registered);
+            }
+        } else {
+            mTvStatus.setTextColor(Color.RED);
+            mTvStatus.setText(R.string.status_missing_google_play_services);
         }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unRegisterGcmRegistrationReceiver();
     }
 
     @Override
@@ -46,6 +73,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void registerGcmRegistrationReceiver() {
+        mGcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (TextUtils.isEmpty(GcmHelper.loadGcmToken(context))) {
+                    mTvStatus.setTextColor(Color.RED);
+                    mTvStatus.setText(R.string.status_gcm_registration_error);
+                } else {
+                    mTvStatus.setText(R.string.status_gcm_registered);
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mGcmRegistrationBroadcastReceiver,
+                new IntentFilter(GcmRegistrationService.REGISTRATION_COMPLETE));
+    }
+
+    private void unRegisterGcmRegistrationReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmRegistrationBroadcastReceiver);
     }
 
     /**

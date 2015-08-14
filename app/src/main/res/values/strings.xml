@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Kaktus Dobíječka</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="status_missing_google_play_services">Toto zařízení bohužel není podporováno. Aplikace vyžaduje Služby Google Play, které zde nejsou dostupné.</string>
+    <string name="status_gcm_registered">Příjem upozornění na Kaktus dobíječku je aktivní.</string>
+    <string name="status_gcm_registration_in_progress">Probíhá přihlášení k odběru upozornění na Kaktus dobíječku ...</string>
+    <string name="status_gcm_registration_error">Registrace pro příjem upozornení se nezdařila. Zkuste to za chvíli znovu.</string>
+
 </resources>

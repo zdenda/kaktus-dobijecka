@@ -114,10 +114,13 @@ public class CheckServlet extends HttpServlet {
             message = message.substring(0, 1000) + "[...]";
         }
         Sender sender = new Sender(API_KEY);
+        //TODO: add time to live (probably 12 hours or less)
+        //TODO: maybe use Notification instead of Data payload
         Message msg = new Message.Builder().addData("message", message).build();
         //TODO: increase/remove the limit
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
         for (RegistrationRecord record : records) {
+            //TODO: maybe use Topic or Group Messaging
             Result result = sender.send(msg, record.getRegId(), 5);
             if (result.getMessageId() != null) {
                 log.info("Message sent to " + record.getRegId());

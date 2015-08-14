@@ -2,6 +2,7 @@ package eu.zkkn.android.kaktus;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmPubSub;
@@ -21,6 +22,8 @@ import eu.zkkn.android.kaktus.backend.registration.Registration;
  * Service for registration to receiving Google Cloud Messages
  */
 public class GcmRegistrationService extends IntentService {
+
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
 
     private static final String TAG = "GcmRegistrationService";
     private static final String[] TOPICS = {"global"};
@@ -59,6 +62,9 @@ public class GcmRegistrationService extends IntentService {
             // on a third-party server, this ensures that we'll attempt the update at a later time.
             Preferences.setGcmSentTokenToServer(this, false);
         }
+
+        // Notify UI that registration has completed.
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(REGISTRATION_COMPLETE));
 
     }
 
