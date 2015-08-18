@@ -42,7 +42,7 @@ public class CheckServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Document document = Jsoup.connect("https://www.mujkaktus.cz/chces-pridat").get();
+        Document document = Jsoup.connect("https://www.mujkaktus.cz/chces-pridat").timeout(0).get();
         Elements elements = document.select("div.wrapper > h2.uppercase + h3.uppercase.text-drawn");
 
         // there should be only one element
