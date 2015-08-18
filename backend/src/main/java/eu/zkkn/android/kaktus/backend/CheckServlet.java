@@ -36,7 +36,7 @@ public class CheckServlet extends HttpServlet {
      */
     private static final String API_KEY = System.getProperty("gcm.api.key");
 
-    private static final Logger log = Logger.getLogger(MessagingEndpoint.class.getName());
+    private static final Logger log = Logger.getLogger(CheckServlet.class.getName());
 
 
     @Override

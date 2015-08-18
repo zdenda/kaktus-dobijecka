@@ -68,19 +68,6 @@ public class RegistrationEndpoint {
         ofy().delete().entity(record).now();
     }
 
-    /**
-     * Return a collection of registered devices
-     *
-     * @param count The number of devices to list
-     * @return a list of Google Cloud Messaging registration Ids
-     */
-    //TODO: hide this from public web
-    @ApiMethod(name = "listDevices")
-    public CollectionResponse<RegistrationRecord> listDevices(@Named("count") int count) {
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(count).list();
-        return CollectionResponse.<RegistrationRecord>builder().setItems(records).build();
-    }
-
     private RegistrationRecord findRecord(String regId) {
         return ofy().load().type(RegistrationRecord.class).filter("regId", regId).first().now();
     }

@@ -25,9 +25,7 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>eu.zkkn.android.kaktus.backend.RegistrationEndpoint,
-                eu.zkkn.android.kaktus.backend.MessagingEndpoint
-            </param-value>
+            <param-value>eu.zkkn.android.kaktus.backend.RegistrationEndpoint</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
