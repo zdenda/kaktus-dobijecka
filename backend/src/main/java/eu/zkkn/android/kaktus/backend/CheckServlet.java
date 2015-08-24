@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 
@@ -42,34 +43,32 @@ public class CheckServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        Document document = Jsoup.connect("https://www.mujkaktus.cz/chces-pridat").timeout(0).get();
-        Elements elements = document.select("div.wrapper > h2.uppercase + h3.uppercase.text-drawn");
+        String text = loadTextFromWeb();
 
-        // there should be only one element
-        if (elements.size() != 1) {
-            // something wrong happened if there's more or less than one element
-            // for example the structure of kaktus web might have been changed
+        // return error if there's no text
+        if (text == null || text.length() == 0) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "HTML Parse Error");
             return;
         }
 
-        String text = elements.first().text();
-
         List<ParseResult> previousResults = ofy().load().type(ParseResult.class).order("-date")
                 .limit(24).list();
 
-        boolean changed = false;
+        boolean sendNotifications = false;
         if (!previousResults.isEmpty()) {
+            DateFormat dayMonthRegExpFormat = new SimpleDateFormat("d\\.M\\.", Locale.US);
+            dayMonthRegExpFormat.setTimeZone(TimeZone.getTimeZone("Europe/Prague"));
             // set changed if the current text is different from text of the most recent result in database
-            // TODO: Check more thoroughly before sending GCM (maybe if the date in text is today)
-            changed = !previousResults.get(0).getText().equals(text);
+            // and if it contains today's date
+            sendNotifications = !previousResults.get(0).getText().equals(text)
+                    && text.matches(".+ " + dayMonthRegExpFormat.format(new Date()) + " .+");
         }
 
         saveParseResult(text);
         //TODO: delete too old records, so they wouldn't take up space in database
 
         // if change was detected, send GCM notifications
-        if (changed) {
+        if (sendNotifications) {
             sendMessage(text);
         }
 
@@ -77,14 +76,14 @@ public class CheckServlet extends HttpServlet {
         try {
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("result", text);
-            jsonResponse.put("changed", changed);
+            jsonResponse.put("notifications", sendNotifications);
 
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            DateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
             JSONArray jsonPrevious = new JSONArray();
             for (ParseResult parseResult : previousResults) {
                 JSONObject jsonResult = new JSONObject();
-                jsonResult.put("date", format.format(parseResult.getDate()));
+                jsonResult.put("date", isoFormat.format(parseResult.getDate()));
                 jsonResult.put("text", parseResult.getText());
                 jsonPrevious.put(jsonResult);
             }
@@ -97,6 +96,39 @@ public class CheckServlet extends HttpServlet {
         } catch (JSONException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
+    }
+
+
+    /**
+     * It loads and validates a text of specific element on the Kaktus' web page.
+     * The text must match a specific pattern.
+     *
+     * @return text or null if the text doesn't match specific pattern
+     * @throws IOException
+     */
+    private String loadTextFromWeb() throws IOException {
+        Document document = Jsoup.connect("https://www.mujkaktus.cz/chces-pridat").timeout(0).get();
+        Elements elements = document.select("div.wrapper > h2.uppercase + h3.uppercase.text-drawn");
+
+        // there should be only one element
+        if (elements.size() != 1) {
+            // something wrong happened if there's more or less than one element
+            // for example the structure of kaktus web might have been changed
+            return null;
+        }
+
+        String text = elements.first().text();
+
+        // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
+        String regex = "Pokud si dneska \\d+\\.\\d+\\. od \\d+:\\d+ do \\d+:\\d+ hodin dobije\u0161 alespo\u0148 \\d+ K\u010d, d\u00e1me ti dvojn\u00e1sob\\.";
+        // the text of that element should match pattern
+        if (!text.matches(regex)) {
+            // something wrong happened if there's no match
+            // for example the structure of kaktus web might have been changed
+            return null;
+        }
+
+        return text;
     }
 
     /**
@@ -118,7 +150,7 @@ public class CheckServlet extends HttpServlet {
         //TODO: maybe use Notification instead of Data payload
         Message msg = new Message.Builder().addData("message", message).build();
         //TODO: increase/remove the limit
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();
+        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(1000).list();
         for (RegistrationRecord record : records) {
             //TODO: maybe use Topic or Group Messaging
             Result result = sender.send(msg, record.getRegId(), 5);
