@@ -17,11 +17,17 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
+import java.util.Date;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver mGcmRegistrationBroadcastReceiver;
+    private BroadcastReceiver mGcmMessageBroadcastReceiver;
     private TextView mTvStatus;
+    private TextView mTvLastNotificationDate;
+    private TextView mTvLastNotificationText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +51,27 @@ public class MainActivity extends AppCompatActivity {
             mTvStatus.setText(R.string.status_missing_google_play_services);
         }
 
+        // Last notification
+        LastNotification.Notification notification = LastNotification.load(this);
+        mTvLastNotificationDate = (TextView) findViewById(R.id.tv_lastNotificationDate);
+        mTvLastNotificationText = (TextView) findViewById(R.id.tv_lastNotificationText);
+        registerGcmMessageReceiver();
+
+        if (notification != null) {
+            mTvLastNotificationDate.setText(Helper.formatDate(this, notification.date));
+            mTvLastNotificationText.setText(notification.text);
+        } else {
+            mTvLastNotificationDate.setText(Helper.formatDate(this, new Date()));
+            mTvLastNotificationText.setText(R.string.lastNotification_none);
+        }
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         unRegisterGcmRegistrationReceiver();
+        unregisterGcmMessageReceiver();
     }
 
     @Override
@@ -93,6 +114,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void unRegisterGcmRegistrationReceiver() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmRegistrationBroadcastReceiver);
+    }
+
+    private void registerGcmMessageReceiver() {
+        mGcmMessageBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                LastNotification.Notification notification = LastNotification.load(context);
+                if (notification != null) {
+                    mTvLastNotificationDate.setText(Helper.formatDate(context, notification.date));
+                    mTvLastNotificationText.setText(notification.text);
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mGcmMessageBroadcastReceiver,
+                new IntentFilter(MyGcmListenerService.GCM_MESSAGE_RECEIVED));
+    }
+
+    private void unregisterGcmMessageReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmMessageBroadcastReceiver);
     }
 
     /**
