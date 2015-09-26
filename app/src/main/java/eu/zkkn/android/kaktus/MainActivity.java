@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.Date;
 
@@ -141,10 +141,11 @@ public class MainActivity extends AppCompatActivity {
      * the Google Play Store or enable it in the device's system settings.
      */
     private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this, 9000).show();
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, 9000).show();
             } else {
                 Log.i(Config.TAG, "This device is not supported. GooglePlayServices not available.");
                 finish();

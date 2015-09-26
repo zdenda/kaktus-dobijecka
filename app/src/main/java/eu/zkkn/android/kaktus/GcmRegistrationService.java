@@ -100,8 +100,8 @@ public class GcmRegistrationService extends IntentService {
      * @throws IOException if unable to reach the GCM PubSub service
      */
     private void subscribeTopics(String token) throws IOException {
+        GcmPubSub pubSub = GcmPubSub.getInstance(this);
         for (String topic : TOPICS) {
-            GcmPubSub pubSub = GcmPubSub.getInstance(this);
             pubSub.subscribe(token, "/topics/" + topic, null);
         }
     }
