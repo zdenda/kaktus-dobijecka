@@ -19,6 +19,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.Date;
 
+import eu.zkkn.android.kaktus.gcm.GcmHelper;
+import eu.zkkn.android.kaktus.gcm.GcmRegistrationService;
+import eu.zkkn.android.kaktus.gcm.MyGcmListenerService;
+
 
 public class MainActivity extends AppCompatActivity {
 

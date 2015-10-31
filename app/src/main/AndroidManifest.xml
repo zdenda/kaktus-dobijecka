@@ -42,7 +42,7 @@
         </receiver>
 
         <service
-            android:name=".MyGcmListenerService"
+            android:name=".gcm.MyGcmListenerService"
             android:enabled="true"
             android:exported="false" >
             <intent-filter>
@@ -50,11 +50,11 @@
             </intent-filter>
         </service>
         <service
-            android:name=".GcmRegistrationService"
+            android:name=".gcm.GcmRegistrationService"
             android:exported="false" >
         </service>
         <service
-            android:name=".IdListenerService"
+            android:name=".gcm.IdListenerService"
             android:enabled="true"
             android:exported="false" >
             <intent-filter>

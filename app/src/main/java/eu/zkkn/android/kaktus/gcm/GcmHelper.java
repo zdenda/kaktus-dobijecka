@@ -1,10 +1,12 @@
-package eu.zkkn.android.kaktus;
+package eu.zkkn.android.kaktus.gcm;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import eu.zkkn.android.kaktus.Preferences;
 
 /**
  *

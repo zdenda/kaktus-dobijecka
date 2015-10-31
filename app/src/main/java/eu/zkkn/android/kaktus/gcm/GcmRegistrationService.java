@@ -1,4 +1,4 @@
-package eu.zkkn.android.kaktus;
+package eu.zkkn.android.kaktus.gcm;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -15,6 +15,8 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 
 import java.io.IOException;
 
+import eu.zkkn.android.kaktus.Config;
+import eu.zkkn.android.kaktus.Preferences;
 import eu.zkkn.android.kaktus.backend.registration.Registration;
 
 

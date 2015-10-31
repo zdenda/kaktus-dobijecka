@@ -1,4 +1,4 @@
-package eu.zkkn.android.kaktus;
+package eu.zkkn.android.kaktus.gcm;
 
 import android.content.Intent;
 

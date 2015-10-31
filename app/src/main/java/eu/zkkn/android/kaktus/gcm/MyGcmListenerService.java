@@ -1,4 +1,4 @@
-package eu.zkkn.android.kaktus;
+package eu.zkkn.android.kaktus.gcm;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,6 +13,11 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import java.util.Date;
+
+import eu.zkkn.android.kaktus.Config;
+import eu.zkkn.android.kaktus.LastNotification;
+import eu.zkkn.android.kaktus.Preferences;
+import eu.zkkn.android.kaktus.R;
 
 public class MyGcmListenerService extends GcmListenerService {
 
