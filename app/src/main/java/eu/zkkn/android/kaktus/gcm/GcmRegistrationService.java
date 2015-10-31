@@ -16,6 +16,7 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import java.io.IOException;
 
 import eu.zkkn.android.kaktus.Config;
+import eu.zkkn.android.kaktus.Helper;
 import eu.zkkn.android.kaktus.Preferences;
 import eu.zkkn.android.kaktus.backend.registration.Registration;
 
@@ -85,7 +86,8 @@ public class GcmRegistrationService extends IntentService {
                         @Override
                         public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
                                 throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true);
+                            abstractGoogleClientRequest.setDisableGZipContent(true)
+                                    .getRequestHeaders().setUserAgent(Helper.getUserAgent());
                         }
                     });
             registration = builder.build();
