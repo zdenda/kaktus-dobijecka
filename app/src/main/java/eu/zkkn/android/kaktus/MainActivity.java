@@ -22,6 +22,7 @@ import java.util.Date;
 import eu.zkkn.android.kaktus.gcm.GcmHelper;
 import eu.zkkn.android.kaktus.gcm.GcmRegistrationService;
 import eu.zkkn.android.kaktus.gcm.MyGcmListenerService;
+import eu.zkkn.android.kaktus.sync.SyncUtils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -69,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
             mTvLastNotificationText.setText(R.string.lastNotification_none);
         }
 
+        // if there's no settings for sync, enable it
+        if (Preferences.getSyncStatus(this) == Preferences.SYNC_NOT_SET) {
+            SyncUtils.enableSync(this);
+        }
+
     }
 
     @Override
@@ -82,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_sync_settings)
+                .setChecked(Preferences.getSyncStatus(this) == Preferences.SYNC_ENABLED
+                        && SyncUtils.isSyncable(this)); //account could have been removed in system settings
         return true;
     }
 
@@ -92,8 +101,13 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sync_settings) {
+            if (!item.isChecked()) {
+                SyncUtils.enableSync(this);
+            } else {
+                SyncUtils.disableSync(this);
+            }
+            invalidateOptionsMenu();
             return true;
         }
 

@@ -3,16 +3,28 @@ package eu.zkkn.android.kaktus;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 import android.text.TextUtils;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
 
 import eu.zkkn.android.kaktus.LastNotification.Notification;
+
+//TODO: Marshmallow has auto back up, so check which preferences shouldn't be backed up
 
 /**
  * App settings
  */
 public class Preferences {
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({SYNC_NOT_SET, SYNC_DISABLED, SYNC_ENABLED})
+    public @interface SyncStatus {}
+    public static final int SYNC_NOT_SET = 0;
+    public static final int SYNC_DISABLED = 1;
+    public static final int SYNC_ENABLED = 2;
 
     /**
      * GCM token
@@ -38,6 +50,11 @@ public class Preferences {
      * Text of the last received notification
      */
     private static final String PREF_KEY_LAST_NOTIFICATION_TEXT = "lastNotificationText";
+
+    /**
+     * Preference that indicates whether synchronization is enabled
+     */
+    private static final String PREF_KEY_SYNCHRONIZATION_STATUS = "synchronizationEnabled";
 
 
     private static SharedPreferences sPreferences;
@@ -87,6 +104,17 @@ public class Preferences {
         if (unixTimeMs == 0 || TextUtils.isEmpty(text)) return null;
 
         return new Notification(new Date(unixTimeMs), text);
+    }
+
+    public static void setSyncStatus(Context context, @SyncStatus int status) {
+        getPref(context).edit().putInt(PREF_KEY_SYNCHRONIZATION_STATUS, status).commit();
+    }
+
+    @SyncStatus
+    public static int getSyncStatus(Context context) {
+        // annotation check would return error if we didn't check returned value
+        @SyncStatus int status = getPref(context).getInt(PREF_KEY_SYNCHRONIZATION_STATUS, SYNC_NOT_SET);
+        return (status == SYNC_DISABLED || status == SYNC_ENABLED) ? status : SYNC_NOT_SET;
     }
 
 }

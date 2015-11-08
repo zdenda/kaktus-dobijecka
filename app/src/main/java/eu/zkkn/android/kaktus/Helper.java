@@ -12,6 +12,10 @@ import java.util.Date;
  */
 public class Helper {
 
+    public static final long MIN_IN_S = 60;
+    public static final long HOUR_IN_S = MIN_IN_S * 60;
+    public static final long DAY_IN_S = HOUR_IN_S * 24;
+
     /**
      * Formats the date as a string with date and time. It respect the localization of device.
      *

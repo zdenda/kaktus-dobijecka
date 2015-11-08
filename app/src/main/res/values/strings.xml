@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kaktus Dobíječka</string>
 
-    <string name="action_settings">Nastavení</string>
+    <string name="action_sync_settings">Synchronizovat Facebook</string>
 
     <string name="lastNotification_header">Poslední upozornění</string>
     <string name="lastNotification_none">Zatím nebylo přijato žádné upozornění.</string>
