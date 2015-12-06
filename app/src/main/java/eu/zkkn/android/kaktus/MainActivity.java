@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTvStatus;
     private TextView mTvLastNotificationDate;
     private TextView mTvLastNotificationText;
+    private TextView mTvLastFbPostDate;
+    private TextView mTvLastFbPostText;
 
 
     @Override
@@ -73,6 +75,19 @@ public class MainActivity extends AppCompatActivity {
         // if there's no settings for sync, enable it
         if (Preferences.getSyncStatus(this) == Preferences.SYNC_NOT_SET) {
             SyncUtils.enableSync(this);
+        }
+
+        // Facebook
+        //TODO: update on synchronization
+        LastFbPost.FbPost fbPost = LastFbPost.load(this);
+        mTvLastFbPostDate = (TextView) findViewById(R.id.tv_lastFbPostDate);
+        mTvLastFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
+        if (fbPost != null) {
+            mTvLastFbPostDate.setText(Helper.formatDate(this, fbPost.date));
+            mTvLastFbPostText.setText(fbPost.text);
+        } else {
+            mTvLastFbPostDate.setText(Helper.formatDate(this, new Date()));
+            mTvLastFbPostText.setText(R.string.lastFbPost_none);
         }
 
     }

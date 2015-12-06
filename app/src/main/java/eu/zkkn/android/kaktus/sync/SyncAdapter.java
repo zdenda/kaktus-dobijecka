@@ -7,10 +7,25 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.json.JsonObjectParser;
+
+import java.io.IOException;
+
 import eu.zkkn.android.kaktus.Config;
+import eu.zkkn.android.kaktus.Helper;
+import eu.zkkn.android.kaktus.LastFbPost;
+import eu.zkkn.android.kaktus.LastFbPost.FbPost;
+import eu.zkkn.android.kaktus.model.FbApiResponse;
+import eu.zkkn.android.kaktus.model.FbApiResponsePost;
 
 /**
  * Handle the transfer of data between a server and an
@@ -37,8 +52,34 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                               ContentProviderClient provider, SyncResult syncResult) {
 
         Log.d(Config.TAG, "SyncAdapter.onPerformSync()");
-        //TODO: add synchronization which actually synchronizes something
-        SystemClock.sleep(5 * 1000);
+
+        try {
+
+            HttpRequestFactory requestFactory = AndroidHttp.newCompatibleTransport()
+                    .createRequestFactory(new HttpRequestInitializer() {
+                        @Override
+                        public void initialize(HttpRequest httpRequest) throws IOException {
+                            //TODO: better error handling for FB API requests
+                            // httpRequest.setThrowExceptionOnExecuteError(false);
+                            httpRequest.setParser(new JsonObjectParser(new AndroidJsonFactory()));
+                        }
+                    });
+
+            GenericUrl url = new GenericUrl("https://graph.facebook.com/v2.5/Kaktus/posts");
+            url.put("access_token", Config.FB_ACCESS_TOKEN);
+            url.put("limit", 1);
+
+            HttpResponse response = requestFactory.buildGetRequest(url).execute();
+            FbApiResponse fbApiResponse = response.parseAs(FbApiResponse.class);
+            FbApiResponsePost fbApiPost = fbApiResponse.posts[0];
+            FbPost fbPost = new FbPost(Helper.parseFbDate(fbApiPost.createdTime), fbApiPost.message);
+            //TODO: use ContentProvider
+            LastFbPost.save(getContext(), fbPost);
+
+        } catch (IOException e) {
+            Log.e("SyncAdapter", e.getMessage());
+        }
+
         Log.d(Config.TAG, "SyncAdapter.onPerformSync() end");
     }
 }

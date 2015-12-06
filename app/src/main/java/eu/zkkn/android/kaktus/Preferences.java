@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
 
+import eu.zkkn.android.kaktus.LastFbPost.FbPost;
 import eu.zkkn.android.kaktus.LastNotification.Notification;
 
 //TODO: Marshmallow has auto back up, so check which preferences shouldn't be backed up
@@ -55,6 +56,16 @@ public class Preferences {
      * Preference that indicates whether synchronization is enabled
      */
     private static final String PREF_KEY_SYNCHRONIZATION_STATUS = "synchronizationEnabled";
+
+    /**
+     * Time when was the last post on Kaktus' Facebook page created
+     */
+    private static final String PREF_KEY_LAST_FB_POST_DATE = "lastKaktusFbPostDate";
+
+    /**
+     * Text of the last post on Kaktus' Facebook page
+     */
+    private static final String PREF_KEY_LAST_FB_POST_TEXT = "lastKaktusFbPostText";
 
 
     private static SharedPreferences sPreferences;
@@ -104,6 +115,22 @@ public class Preferences {
         if (unixTimeMs == 0 || TextUtils.isEmpty(text)) return null;
 
         return new Notification(new Date(unixTimeMs), text);
+    }
+
+    public static void setLastFbPost(Context context, FbPost fbPost) {
+        getPref(context).edit().putLong(PREF_KEY_LAST_FB_POST_DATE, fbPost.date.getTime())
+                .putString(PREF_KEY_LAST_FB_POST_TEXT, fbPost.text).commit();
+    }
+
+    public static FbPost getLastFbPost(Context context) {
+        SharedPreferences preferences = getPref(context);
+        Long unixTimeMs = preferences.getLong(PREF_KEY_LAST_FB_POST_DATE, 0);
+        String text = preferences.getString(PREF_KEY_LAST_FB_POST_TEXT, null);
+
+        // if there's no last notification
+        if (unixTimeMs == 0 || TextUtils.isEmpty(text)) return null;
+
+        return new FbPost(new Date(unixTimeMs), text);
     }
 
     public static void setSyncStatus(Context context, @SyncStatus int status) {

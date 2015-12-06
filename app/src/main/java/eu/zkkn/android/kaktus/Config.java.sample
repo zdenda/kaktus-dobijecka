@@ -22,4 +22,11 @@ public class Config {
      */
     public static final String GCM_SENDER_ID = "...";
 
+    /**
+     * Facebook App Access Token
+     * https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
+     * Use App Access Token, so that users do not have to log in
+     */
+    public static final String FB_ACCESS_TOKEN = "...";
+
 }

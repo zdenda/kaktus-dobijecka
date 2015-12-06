@@ -3,9 +3,13 @@ package eu.zkkn.android.kaktus;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Collection of useful methods
@@ -15,6 +19,8 @@ public class Helper {
     public static final long MIN_IN_S = 60;
     public static final long HOUR_IN_S = MIN_IN_S * 60;
     public static final long DAY_IN_S = HOUR_IN_S * 24;
+
+    public static final String FB_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     /**
      * Formats the date as a string with date and time. It respect the localization of device.
@@ -27,6 +33,21 @@ public class Helper {
     public static String formatDate(Context context, Date date) {
         return DateFormat.getLongDateFormat(context).format(date)
                 + " " + DateFormat.getTimeFormat(context).format(date);
+    }
+
+    /**
+     * Parses date strings from Facebook API
+     * @param string String in format {@link #FB_DATE_PATTERN}
+     * @return Date object
+     */
+    @Nullable
+    public static Date parseFbDate(String string) {
+        SimpleDateFormat fbDateFormat = new SimpleDateFormat(FB_DATE_PATTERN, Locale.US);
+        try {
+            return fbDateFormat.parse(string);
+        } catch (ParseException e) {
+            return new Date();
+        }
     }
 
     /**
