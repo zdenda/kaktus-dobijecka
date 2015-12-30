@@ -47,6 +47,7 @@ public class CheckServlet extends HttpServlet {
 
         // return error if there's no text
         if (text == null || text.length() == 0) {
+            // TODO: send notification/email to admin
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "HTML Parse Error");
             return;
         }
@@ -56,7 +57,7 @@ public class CheckServlet extends HttpServlet {
 
         boolean sendNotifications = false;
         if (!previousResults.isEmpty()) {
-            DateFormat dayMonthRegExpFormat = new SimpleDateFormat("d\\.M\\.", Locale.US);
+            DateFormat dayMonthRegExpFormat = new SimpleDateFormat("d\\.\\'s?'M\\.", Locale.US);
             dayMonthRegExpFormat.setTimeZone(TimeZone.getTimeZone("Europe/Prague"));
             // set changed if the current text is different from text of the most recent result in database
             // and if it contains today's date
@@ -120,7 +121,7 @@ public class CheckServlet extends HttpServlet {
         String text = elements.first().text();
 
         // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
-        String regex = "Pokud si dneska \\d+\\.\\d+\\. od \\d+:\\d+ do \\d+:\\d+ hodin dobije\u0161 alespo\u0148 \\d+ K\u010d, d\u00e1me ti dvojn\u00e1sob\\.";
+        String regex = "Pokud si dneska \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? od \\d+:\\d+ do \\d+:\\d+ hodin dobije\u0161 alespo\u0148 \\d+ K\u010d, d\u00e1me ti dvojn\u00e1sob\\.";
         // the text of that element should match pattern
         if (!text.matches(regex)) {
             // something wrong happened if there's no match
