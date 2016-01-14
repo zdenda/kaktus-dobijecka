@@ -4,6 +4,9 @@ import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
+import com.google.appengine.api.memcache.Expiration;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
@@ -38,6 +41,7 @@ public class CheckServlet extends HttpServlet {
     private static final String API_KEY = System.getProperty("gcm.api.key");
 
     private static final Logger log = Logger.getLogger(CheckServlet.class.getName());
+    private static final String EMAIL_SENT_KEY = "emailSentKey";
 
 
     @Override
@@ -47,7 +51,16 @@ public class CheckServlet extends HttpServlet {
 
         // return error if there's no text
         if (text == null || text.length() == 0) {
-            // TODO: send notification/email to admin
+
+            // send notification email to admin, but only one email in 12 hours
+            MemcacheService memcache = MemcacheServiceFactory.getMemcacheService();
+            if (!memcache.contains(EMAIL_SENT_KEY)) {
+                if (Utils.sendEmail("admin", System.getProperty("admin.email"),
+                        "HTML Parse Error", "Hello,\n\nplease have a look at it.\n\nThank you,\nyour users")) {
+                    memcache.put(EMAIL_SENT_KEY, true, Expiration.byDeltaSeconds(12*60*60));
+                }
+            }
+
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "HTML Parse Error");
             return;
         }

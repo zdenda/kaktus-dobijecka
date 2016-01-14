@@ -11,11 +11,12 @@
 
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
     <application>YOUR_PROJECT_ID_HERE</application>
-    <version>4</version>
+    <version>5</version>
     <threadsafe>true</threadsafe>
 
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties" />
         <property name="gcm.api.key" value="YOUR_KEY_HERE" />
+        <property name="admin.email" value="YOUR_EMAIL_HERE@example.com" />
     </system-properties>
 </appengine-web-app>
