@@ -4,9 +4,6 @@ import com.google.android.gcm.server.Constants;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
-import com.google.appengine.api.memcache.Expiration;
-import com.google.appengine.api.memcache.MemcacheService;
-import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
@@ -18,6 +15,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +39,6 @@ public class CheckServlet extends HttpServlet {
     private static final String API_KEY = System.getProperty("gcm.api.key");
 
     private static final Logger log = Logger.getLogger(CheckServlet.class.getName());
-    private static final String EMAIL_SENT_KEY = "emailSentKey";
 
 
     @Override
@@ -53,11 +50,17 @@ public class CheckServlet extends HttpServlet {
         if (text == null || text.length() == 0) {
 
             // send notification email to admin, but only one email in 12 hours
-            MemcacheService memcache = MemcacheServiceFactory.getMemcacheService();
-            if (!memcache.contains(EMAIL_SENT_KEY)) {
-                if (Utils.sendEmail("admin", System.getProperty("admin.email"),
-                        "HTML Parse Error", "Hello,\n\nplease have a look at it.\n\nThank you,\nyour users")) {
-                    memcache.put(EMAIL_SENT_KEY, true, Expiration.byDeltaSeconds(12*60*60));
+            String recipient = System.getProperty("admin.email");
+            Calendar since = Calendar.getInstance();
+            since.add(Calendar.HOUR_OF_DAY, -12);
+
+            List<EmailLog> emailsSince = ofy().load().type(EmailLog.class)
+                    .filter("recipient", recipient).filter("date >", since.getTime()).list();
+
+            if (emailsSince.isEmpty()) {
+                if (Utils.sendEmail("admin", recipient, "HTML Parse Error",
+                        "Hello,\n\nplease have a look at it.\n\nThank you,\nyour users")) {
+                    ofy().save().entity(new EmailLog(recipient, new Date())).now();
                 }
             }
 
