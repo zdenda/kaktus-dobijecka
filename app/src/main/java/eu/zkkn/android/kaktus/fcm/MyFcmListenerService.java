@@ -1,40 +1,43 @@
-package eu.zkkn.android.kaktus.gcm;
+package eu.zkkn.android.kaktus.fcm;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Date;
+import java.util.Map;
 
 import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.LastNotification;
 import eu.zkkn.android.kaktus.Preferences;
 import eu.zkkn.android.kaktus.R;
 
-public class MyGcmListenerService extends GcmListenerService {
+
+public class MyFcmListenerService extends FirebaseMessagingService {
 
     private static final int NOTIFICATION_ID = 1;
 
-    public static final String GCM_MESSAGE_RECEIVED = "gcmMessageReceived";
+    public static final String FCM_MESSAGE_RECEIVED = "fcmMessageReceived";
 
     @Override
-    public void onMessageReceived(String from, Bundle data) {
-        super.onMessageReceived(from, data);
-        String message = data.getString("message");
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        String from = remoteMessage.getFrom();
+        Map<String, String> data = remoteMessage.getData();
+        String message = data.get("message");
         Log.d(Config.TAG, "From: " + from + ", Message: " + message);
         // save it as the last notification
         Preferences.setLastNotification(this,
                 new LastNotification.Notification(new Date(), message));
-        // Notify UI that a new GCM message was received.
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(GCM_MESSAGE_RECEIVED));
+        // Notify UI that a new FCM message was received.
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(FCM_MESSAGE_RECEIVED));
         showNotification(message);
     }
 

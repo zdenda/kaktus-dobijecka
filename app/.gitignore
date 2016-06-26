@@ -1,5 +1,6 @@
 /build
 *.apk
 
-# Config.java contains private IDs and keys
+# google-services.json and Config.java contains private IDs and keys
+google-services.json
 src/main/java/eu/zkkn/android/kaktus/Config.java

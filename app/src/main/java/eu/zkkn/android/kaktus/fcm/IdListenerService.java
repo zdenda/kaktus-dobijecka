@@ -1,17 +1,16 @@
-package eu.zkkn.android.kaktus.gcm;
+package eu.zkkn.android.kaktus.fcm;
 
-import android.app.IntentService;
 import android.content.Intent;
+import android.support.annotation.WorkerThread;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmPubSub;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import java.io.IOException;
 
@@ -21,63 +20,51 @@ import eu.zkkn.android.kaktus.Preferences;
 import eu.zkkn.android.kaktus.backend.registration.Registration;
 
 
-/**
- * Service for registration to receiving Google Cloud Messages
- */
-public class GcmRegistrationService extends IntentService {
+public class IdListenerService extends FirebaseInstanceIdService {
 
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
-
-    private static final String TAG = "GcmRegistrationService";
-    private static final String[] TOPICS = {"global"};
 
     private static Registration registration = null;
 
 
-    public GcmRegistrationService() {
-        super(TAG);
-    }
-
+    /**
+     * Called if InstanceID token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is also called
+     * when the InstanceID token is initially generated, so this is where
+     * you retrieve the token.
+     */
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public void onTokenRefresh() {
 
         try {
-            // In the (unlikely) event that multiple refresh operations occur simultaneously,
-            // ensure that they are processed sequentially.
-            synchronized (TAG) {
-                // Initially this call goes out to the network to retrieve the token,
-                // subsequent calls are local.
-                InstanceID instanceID = InstanceID.getInstance(this);
-                String token = instanceID.getToken(Config.GCM_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE);
-                Log.i(Config.TAG, "GCM Registration Token: " + token);
+            // Get updated InstanceID token.
+            String token = FirebaseInstanceId.getInstance().getToken();
+            Log.i(Config.TAG, "FCM Registration Token: " + token);
 
-                sendRegistrationToServer(token);
+            sendRegistrationToServer(token);
 
-                // Subscribe to topic channels, maybe in future
-                //subscribeTopics(token);
-
-                GcmHelper.saveGcmToken(this, token);
-            }
+            FcmHelper.saveFcmToken(this, token);
 
         } catch (Exception e) {
-            Log.d(Config.TAG, "Failed to complete GCM token refresh", e);
+            Log.d(Config.TAG, "Failed to complete FCM token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
-            Preferences.setGcmSentTokenToServer(this, false);
+            Preferences.setFcmSentTokenToServer(this, false);
         }
 
         // Notify UI that registration has completed.
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(REGISTRATION_COMPLETE));
-
     }
+
 
     /**
      * Persist registration to App Engine backend.
      *
      * @param token The new token.
      */
+    @WorkerThread
     private void sendRegistrationToServer(String token) throws IOException {
-        Log.d(Config.TAG, "Send GCM token to the backend server");
+        Log.d(Config.TAG, "Send FCM token to the backend server");
         if (registration == null) {
             Registration.Builder builder = new Registration.Builder(
                     AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
@@ -95,19 +82,6 @@ public class GcmRegistrationService extends IntentService {
 
         registration.register(token).execute();
 
-    }
-
-    /**
-     * Subscribe to any GCM topics of interest, as defined by the TOPICS constant.
-     *
-     * @param token GCM token
-     * @throws IOException if unable to reach the GCM PubSub service
-     */
-    private void subscribeTopics(String token) throws IOException {
-        GcmPubSub pubSub = GcmPubSub.getInstance(this);
-        for (String topic : TOPICS) {
-            pubSub.subscribe(token, "/topics/" + topic, null);
-        }
     }
 
 }

@@ -28,19 +28,19 @@ public class Preferences {
     public static final int SYNC_ENABLED = 2;
 
     /**
-     * GCM token
+     * FCM token
      */
-    private static final String PREF_KEY_GCM_TOKEN = "gcmToken";
+    private static final String PREF_KEY_FCM_TOKEN = "fcmToken";
 
     /**
-     * Boolean preference that indicates whether GCM token has been sent to the backend server
+     * Boolean preference that indicates whether FCM token has been sent to the backend server
      */
-    private static final String PREF_KEY_GCM_SENT_TOKEN_TO_SERVER = "gcmSentTokenToServer";
+    private static final String PREF_KEY_FCM_SENT_TOKEN_TO_SERVER = "fcmSentTokenToServer";
 
     /**
-     * App version when GCM token was retrieved
+     * App version when FCM token was retrieved
      */
-    private static final String PREF_KEY_GCM_APP_VERSION = "gcmAppVersion";
+    private static final String PREF_KEY_FCM_APP_VERSION = "fcmAppVersion";
 
     /**
      * Time when was the last notification received
@@ -77,28 +77,28 @@ public class Preferences {
         return sPreferences;
     }
 
-    public static void setGcmToken(Context context, String token) {
-        getPref(context).edit().putString(PREF_KEY_GCM_TOKEN, token).commit();
+    public static void setFcmToken(Context context, String token) {
+        getPref(context).edit().putString(PREF_KEY_FCM_TOKEN, token).commit();
     }
 
-    public static String getGcmToken(Context context) {
-        return getPref(context).getString(PREF_KEY_GCM_TOKEN, "");
+    public static String getFcmToken(Context context) {
+        return getPref(context).getString(PREF_KEY_FCM_TOKEN, "");
     }
 
-    public static void setGcmSentTokenToServer(Context context, boolean isSent) {
-        getPref(context).edit().putBoolean(PREF_KEY_GCM_SENT_TOKEN_TO_SERVER, isSent).commit();
+    public static void setFcmSentTokenToServer(Context context, boolean isSent) {
+        getPref(context).edit().putBoolean(PREF_KEY_FCM_SENT_TOKEN_TO_SERVER, isSent).commit();
     }
 
-    public static boolean isGcmSentTokenToServer(Context context) {
-        return getPref(context).getBoolean(PREF_KEY_GCM_SENT_TOKEN_TO_SERVER, false);
+    public static boolean isFcmSentTokenToServer(Context context) {
+        return getPref(context).getBoolean(PREF_KEY_FCM_SENT_TOKEN_TO_SERVER, false);
     }
 
-    public static void setGcmAppVersion(Context context, int version) {
-        getPref(context).edit().putInt(PREF_KEY_GCM_APP_VERSION, version).commit();
+    public static void setFcmAppVersion(Context context, int version) {
+        getPref(context).edit().putInt(PREF_KEY_FCM_APP_VERSION, version).commit();
     }
 
-    public static int getGcmAppVersion(Context context) {
-        return getPref(context).getInt(PREF_KEY_GCM_APP_VERSION, 0);
+    public static int getFcmAppVersion(Context context) {
+        return getPref(context).getInt(PREF_KEY_FCM_APP_VERSION, 0);
     }
 
     public static void setLastNotification(Context context, Notification notification) {

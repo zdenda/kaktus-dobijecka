@@ -19,8 +19,11 @@ public class Config {
     /**
      * This is the Project Number from the Google Developers Console
      * https://console.developers.google.com/project
+     *
+     * @deprecated Firebase Cloud Messaging uses project number from google-services.json
      */
-    public static final String GCM_SENDER_ID = "...";
+    // @Deprecated
+    // public static final String GCM_SENDER_ID = "...";
 
     /**
      * Facebook App Access Token

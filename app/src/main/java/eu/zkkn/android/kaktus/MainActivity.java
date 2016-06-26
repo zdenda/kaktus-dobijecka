@@ -19,16 +19,16 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.Date;
 
-import eu.zkkn.android.kaktus.gcm.GcmHelper;
-import eu.zkkn.android.kaktus.gcm.GcmRegistrationService;
-import eu.zkkn.android.kaktus.gcm.MyGcmListenerService;
+import eu.zkkn.android.kaktus.fcm.FcmHelper;
+import eu.zkkn.android.kaktus.fcm.IdListenerService;
+import eu.zkkn.android.kaktus.fcm.MyFcmListenerService;
 import eu.zkkn.android.kaktus.sync.SyncUtils;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private BroadcastReceiver mGcmRegistrationBroadcastReceiver;
-    private BroadcastReceiver mGcmMessageBroadcastReceiver;
+    private BroadcastReceiver mFcmRegistrationBroadcastReceiver;
+    private BroadcastReceiver mFcmMessageBroadcastReceiver;
     private TextView mTvStatus;
     private TextView mTvLastNotificationDate;
     private TextView mTvLastNotificationText;
@@ -44,14 +44,12 @@ public class MainActivity extends AppCompatActivity {
         mTvStatus = (TextView) findViewById(R.id.tv_status);
 
         if (checkPlayServices()) {
-            if (TextUtils.isEmpty(GcmHelper.loadGcmToken(this))) {
-                mTvStatus.setText(R.string.status_gcm_registration_in_progress);
-                // Start IntentService to register this application with GCM and
+            if (TextUtils.isEmpty(FcmHelper.loadFcmToken(this))) {
                 // register local broadcast receiver for result of the registration.
-                registerGcmRegistrationReceiver();
-                startService(new Intent(this, GcmRegistrationService.class));
+                registerFcmRegistrationReceiver();
+                mTvStatus.setText(R.string.status_fcm_registration_in_progress);
             } else {
-                mTvStatus.setText(R.string.status_gcm_registered);
+                mTvStatus.setText(R.string.status_fcm_registered);
             }
         } else {
             mTvStatus.setTextColor(Color.RED);
@@ -62,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         LastNotification.Notification notification = LastNotification.load(this);
         mTvLastNotificationDate = (TextView) findViewById(R.id.tv_lastNotificationDate);
         mTvLastNotificationText = (TextView) findViewById(R.id.tv_lastNotificationText);
-        registerGcmMessageReceiver();
+        registerFcmMessageReceiver();
 
         if (notification != null) {
             mTvLastNotificationDate.setText(Helper.formatDate(this, notification.date));
@@ -95,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unRegisterGcmRegistrationReceiver();
-        unregisterGcmMessageReceiver();
+        unRegisterFcmRegistrationReceiver();
+        unregisterFcmMessageReceiver();
     }
 
     @Override
@@ -129,28 +127,28 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void registerGcmRegistrationReceiver() {
-        mGcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
+    private void registerFcmRegistrationReceiver() {
+        mFcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (TextUtils.isEmpty(GcmHelper.loadGcmToken(context))) {
+                if (TextUtils.isEmpty(FcmHelper.loadFcmToken(context))) {
                     mTvStatus.setTextColor(Color.RED);
-                    mTvStatus.setText(R.string.status_gcm_registration_error);
+                    mTvStatus.setText(R.string.status_fcm_registration_error);
                 } else {
-                    mTvStatus.setText(R.string.status_gcm_registered);
+                    mTvStatus.setText(R.string.status_fcm_registered);
                 }
             }
         };
-        LocalBroadcastManager.getInstance(this).registerReceiver(mGcmRegistrationBroadcastReceiver,
-                new IntentFilter(GcmRegistrationService.REGISTRATION_COMPLETE));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mFcmRegistrationBroadcastReceiver,
+                new IntentFilter(IdListenerService.REGISTRATION_COMPLETE));
     }
 
-    private void unRegisterGcmRegistrationReceiver() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmRegistrationBroadcastReceiver);
+    private void unRegisterFcmRegistrationReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmRegistrationBroadcastReceiver);
     }
 
-    private void registerGcmMessageReceiver() {
-        mGcmMessageBroadcastReceiver = new BroadcastReceiver() {
+    private void registerFcmMessageReceiver() {
+        mFcmMessageBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 LastNotification.Notification notification = LastNotification.load(context);
@@ -160,12 +158,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        LocalBroadcastManager.getInstance(this).registerReceiver(mGcmMessageBroadcastReceiver,
-                new IntentFilter(MyGcmListenerService.GCM_MESSAGE_RECEIVED));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mFcmMessageBroadcastReceiver,
+                new IntentFilter(MyFcmListenerService.FCM_MESSAGE_RECEIVED));
     }
 
-    private void unregisterGcmMessageReceiver() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGcmMessageBroadcastReceiver);
+    private void unregisterFcmMessageReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmMessageBroadcastReceiver);
     }
 
     /**

@@ -1,4 +1,4 @@
-package eu.zkkn.android.kaktus.gcm;
+package eu.zkkn.android.kaktus.fcm;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -11,23 +11,23 @@ import eu.zkkn.android.kaktus.Preferences;
 /**
  *
  */
-public class GcmHelper {
+public class FcmHelper {
 
-    public static void saveGcmToken(Context context, String token) {
-        Preferences.setGcmToken(context, token);
-        Preferences.setGcmSentTokenToServer(context, true);
-        Preferences.setGcmAppVersion(context, getAppVersion(context));
+    public static void saveFcmToken(Context context, String token) {
+        Preferences.setFcmToken(context, token);
+        Preferences.setFcmSentTokenToServer(context, true);
+        Preferences.setFcmAppVersion(context, getAppVersion(context));
     }
 
     /**
-     * @return GCM Token if it has been sent to backend and is for current app version,
+     * @return FCM Token if it has been sent to backend and is for current app version,
      * otherwise return null
      */
     @Nullable
-    public static String loadGcmToken(Context context) {
-        String token = Preferences.getGcmToken(context);
-        if (Preferences.getGcmAppVersion(context) == getAppVersion(context)
-                && Preferences.isGcmSentTokenToServer(context)
+    public static String loadFcmToken(Context context) {
+        String token = Preferences.getFcmToken(context);
+        if (Preferences.getFcmAppVersion(context) == getAppVersion(context)
+                && Preferences.isFcmSentTokenToServer(context)
                 && !TextUtils.isEmpty(token)) {
             return token;
         }
