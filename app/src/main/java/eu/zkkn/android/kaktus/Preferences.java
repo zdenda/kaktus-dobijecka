@@ -1,5 +1,6 @@
 package eu.zkkn.android.kaktus;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -66,6 +67,11 @@ public class Preferences {
      * Text of the last post on Kaktus' Facebook page
      */
     private static final String PREF_KEY_LAST_FB_POST_TEXT = "lastKaktusFbPostText";
+
+    /**
+     * First run of app
+     */
+    private static final String PREF_KEY_FIRST_RUN = "firstRun";
 
 
     private static SharedPreferences sPreferences;
@@ -142,6 +148,14 @@ public class Preferences {
         // annotation check would return error if we didn't check returned value
         @SyncStatus int status = getPref(context).getInt(PREF_KEY_SYNCHRONIZATION_STATUS, SYNC_NOT_SET);
         return (status == SYNC_DISABLED || status == SYNC_ENABLED) ? status : SYNC_NOT_SET;
+    }
+
+    @SuppressLint("CommitPrefEdits") //use commit() to write data immediately
+    public static boolean isFirstRun(Context context) {
+        SharedPreferences preferences = getPref(context);
+        boolean firstRun = preferences.getBoolean(PREF_KEY_FIRST_RUN, true);
+        preferences.edit().putBoolean(PREF_KEY_FIRST_RUN, false).commit();
+        return firstRun;
     }
 
 }

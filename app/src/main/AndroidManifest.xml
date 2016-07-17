@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="eu.zkkn.android.kaktus" >
+    package="eu.zkkn.android.kaktus">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!--
       this permission should no longer be needed for GCM to work
         uses-permission android:name="android.permission.GET_ACCOUNTS" /
     -->
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"
-        android:maxSdkVersion="22"/><!-- this permission was removed in SDK 23 -->
+    <!-- this permission was removed in SDK 23 -->
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
+        android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <!-- for persistent GcmTaskService -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -44,7 +48,7 @@
         </service>
         <service
             android:name=".sync.AuthenticatorService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
@@ -54,12 +58,21 @@
         </service>
         <service
             android:name=".sync.SyncService"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
+            <meta-data
+                android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
+        </service>
+        <service
+            android:name=".fcm.SendTokenTaskService"
+            android:exported="true"
+            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
+            <intent-filter>
+                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
+            </intent-filter>
         </service>
     </application>
 
