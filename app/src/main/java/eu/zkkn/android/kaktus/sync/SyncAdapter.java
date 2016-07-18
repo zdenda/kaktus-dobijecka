@@ -77,7 +77,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             LastFbPost.save(getContext(), fbPost);
 
         } catch (IOException e) {
-            Log.e("SyncAdapter", e.getMessage());
+            Log.e("SyncAdapter", e.getMessage() != null ? e.getMessage() : "IOException");
         }
 
         Log.d(Config.TAG, "SyncAdapter.onPerformSync() end");
