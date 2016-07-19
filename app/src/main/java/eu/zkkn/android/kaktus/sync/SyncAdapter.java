@@ -65,7 +65,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         }
                     });
 
-            GenericUrl url = new GenericUrl("https://graph.facebook.com/v2.5/Kaktus/posts");
+            GenericUrl url = new GenericUrl("https://graph.facebook.com/v2.7/Kaktus/posts");
             url.put("access_token", Config.FB_ACCESS_TOKEN);
             url.put("limit", 1);
 
