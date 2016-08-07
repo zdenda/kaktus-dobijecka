@@ -1,6 +1,5 @@
 package eu.zkkn.android.kaktus;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -14,7 +13,6 @@ import java.util.Date;
 import eu.zkkn.android.kaktus.LastFbPost.FbPost;
 import eu.zkkn.android.kaktus.LastNotification.Notification;
 
-//TODO: Marshmallow has auto back up, so check which preferences shouldn't be backed up
 
 /**
  * App settings
@@ -37,11 +35,6 @@ public class Preferences {
      * Boolean preference that indicates whether FCM token has been sent to the backend server
      */
     private static final String PREF_KEY_FCM_SENT_TOKEN_TO_SERVER = "fcmSentTokenToServer";
-
-    /**
-     * App version when FCM token was retrieved
-     */
-    private static final String PREF_KEY_FCM_APP_VERSION = "fcmAppVersion";
 
     /**
      * Time when was the last notification received
@@ -68,17 +61,13 @@ public class Preferences {
      */
     private static final String PREF_KEY_LAST_FB_POST_TEXT = "lastKaktusFbPostText";
 
-    /**
-     * First run of app
-     */
-    private static final String PREF_KEY_FIRST_RUN = "firstRun";
-
 
     private static SharedPreferences sPreferences;
 
     private static SharedPreferences getPref(Context context) {
         if (sPreferences == null) {
-            sPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            sPreferences = PreferenceManager.getDefaultSharedPreferences(
+                    context.getApplicationContext());
         }
         return sPreferences;
     }
@@ -97,14 +86,6 @@ public class Preferences {
 
     public static boolean isFcmSentTokenToServer(Context context) {
         return getPref(context).getBoolean(PREF_KEY_FCM_SENT_TOKEN_TO_SERVER, false);
-    }
-
-    public static void setFcmAppVersion(Context context, int version) {
-        getPref(context).edit().putInt(PREF_KEY_FCM_APP_VERSION, version).commit();
-    }
-
-    public static int getFcmAppVersion(Context context) {
-        return getPref(context).getInt(PREF_KEY_FCM_APP_VERSION, 0);
     }
 
     public static void setLastNotification(Context context, Notification notification) {
@@ -148,14 +129,6 @@ public class Preferences {
         // annotation check would return error if we didn't check returned value
         @SyncStatus int status = getPref(context).getInt(PREF_KEY_SYNCHRONIZATION_STATUS, SYNC_NOT_SET);
         return (status == SYNC_DISABLED || status == SYNC_ENABLED) ? status : SYNC_NOT_SET;
-    }
-
-    @SuppressLint("CommitPrefEdits") //use commit() to write data immediately
-    public static boolean isFirstRun(Context context) {
-        SharedPreferences preferences = getPref(context);
-        boolean firstRun = preferences.getBoolean(PREF_KEY_FIRST_RUN, true);
-        preferences.edit().putBoolean(PREF_KEY_FIRST_RUN, false).commit();
-        return firstRun;
     }
 
 }
