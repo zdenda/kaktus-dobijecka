@@ -26,7 +26,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static eu.zkkn.android.kaktus.backend.OfyService.ofy;
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 
 /**
  * Checks Kaktus web whether Dobíječka is active
