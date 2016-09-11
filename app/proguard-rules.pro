@@ -20,7 +20,7 @@
 -keep class com.google.android.gms.gcm.** { *; }
 
 # Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
--keepclassmembers class * {
+-keepclasseswithmembers class * {
   @com.google.api.client.util.Key <fields>;
 }
 
