@@ -15,3 +15,14 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn com.google.android.gms.auth.*
+-keep class com.google.android.gms.gcm.** { *; }
+
+# Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+
+# Needed by Guava
+-dontwarn sun.misc.Unsafe

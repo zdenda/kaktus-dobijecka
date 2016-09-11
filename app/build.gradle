@@ -7,19 +7,26 @@ android {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 11
         targetSdkVersion 24
-        versionCode 12
-        versionName '0.4.4'
+        versionCode 13
+        versionName '0.4.5'
     }
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
+            //TODO: disable ProGuard for debug builds
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         beta {
             initWith debug //copy properties from debug
             applicationIdSuffix '.beta'
+            // enable ProGuard
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled false
+            // enable ProGuard
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
