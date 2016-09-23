@@ -24,5 +24,7 @@
   @com.google.api.client.util.Key <fields>;
 }
 
+-keepattributes EnclosingMethod
+
 # Needed by Guava
 -dontwarn sun.misc.Unsafe
