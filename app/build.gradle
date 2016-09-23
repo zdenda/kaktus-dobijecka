@@ -7,15 +7,12 @@ android {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 11
         targetSdkVersion 24
-        versionCode 13
+        versionCode 14
         versionName '0.4.5'
     }
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
-            //TODO: disable ProGuard for debug builds
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         beta {
             initWith debug //copy properties from debug
