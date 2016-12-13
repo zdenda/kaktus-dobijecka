@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.1'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 11
-        targetSdkVersion 24
-        versionCode 14
-        versionName '0.4.5'
+        targetSdkVersion 25
+        versionCode 15
+        versionName '0.4.6'
     }
     buildTypes {
         debug {
@@ -34,8 +34,10 @@ android {
 dependencies {
 
     // define versions used for multiple dependencies
-    def supportLibraryVersion = '24.2.1'
-    def playServicesVersion = '9.4.0'
+    def supportLibraryVersion = '25.0.1'
+    // Google Play services 10.0.x is the final release
+    // that includes full support for Android version 2.3.x
+    def playServicesVersion = '10.0.1'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(path: ':backend', configuration: 'android-endpoints')
