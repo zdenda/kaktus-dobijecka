@@ -46,6 +46,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setAutoCancel(true);
 
         Intent kaktusWeb = new Intent(Intent.ACTION_VIEW,
