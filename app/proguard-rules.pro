@@ -28,3 +28,7 @@
 
 # Needed by Guava
 -dontwarn sun.misc.Unsafe
+
+# switch off notes about duplicate class definitions
+-dontnote org.apache.http.**
+-dontnote android.net.http.*
