@@ -31,15 +31,21 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         String from = remoteMessage.getFrom();
         Map<String, String> data = remoteMessage.getData();
-        String message = data.get("message");
-        Log.d(Config.TAG, "From: " + from + ", Message: " + message);
-        // save it as the last notification
-        Preferences.setLastNotification(this,
-                new LastNotification.Notification(new Date(), message));
-        // Notify UI that a new FCM message was received.
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(FCM_MESSAGE_RECEIVED));
-        showNotification(message);
+        //Warning: App versions 0.4.6 (15) and bellow doesn't filter notifications
+        String type = data.get("type");
+        if ("notification".equals(type)) {
+            String message = data.get("message");
+            Log.d(Config.TAG, "From: " + from + ", Type: " + type + ", Message: " + message);
+            // save it as the last notification
+            Preferences.setLastNotification(this,
+                    new LastNotification.Notification(new Date(), message));
+            // Notify UI that a new FCM message was received.
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(FCM_MESSAGE_RECEIVED));
+            showNotification(message);
+        }
+
     }
+
 
     protected void showNotification(String message) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)

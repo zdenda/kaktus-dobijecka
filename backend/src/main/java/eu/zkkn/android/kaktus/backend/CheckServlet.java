@@ -43,6 +43,7 @@ public class CheckServlet extends HttpServlet {
     private static final Logger log = Logger.getLogger(CheckServlet.class.getName());
 
 
+    //TODO: check if there's some timeout for response (might be 60 seconds)
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -155,7 +156,7 @@ public class CheckServlet extends HttpServlet {
      *
      * @param message The message to send
      */
-    public void sendMessage(String message) throws IOException {
+    private void sendMessage(String message) throws IOException {
         if (message == null || message.trim().length() == 0) {
             log.warning("Not sending message because it is empty");
             return;
@@ -165,9 +166,12 @@ public class CheckServlet extends HttpServlet {
             message = message.substring(0, 1000) + "[...]";
         }
         Sender sender = new Sender(API_KEY, Endpoint.FCM);
-        //TODO: add time to live (probably 12 hours or less)
         //TODO: maybe use Notification instead of Data payload
-        Message msg = new Message.Builder().addData("message", message).build();
+        Message msg = new Message.Builder()
+                .addData("type", "notification")
+                .addData("message", message)
+                .timeToLive(10 * 60 * 60) //TTL 10 hours
+                .build();
         //TODO: increase/remove the limit
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(1000).list();
         for (RegistrationRecord record : records) {
@@ -177,7 +181,7 @@ public class CheckServlet extends HttpServlet {
                 log.info("Message sent to " + record.getRegId());
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
-                    // if the regId changed, we have to update the datastore
+                    // if the regId changed, we have to update it in the datastore
                     log.info("Registration Id changed for " + record.getRegId() + " updating to " + canonicalRegId);
                     record.setRegId(canonicalRegId);
                     ofy().save().entity(record).now();
