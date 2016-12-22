@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.1'
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 11
@@ -34,7 +34,7 @@ android {
 dependencies {
 
     // define versions used for multiple dependencies
-    def supportLibraryVersion = '25.0.1'
+    def supportLibraryVersion = '25.1.0'
     // Google Play services 10.0.x is the final release
     // that includes full support for Android version 2.3.x
     def playServicesVersion = '10.0.1'

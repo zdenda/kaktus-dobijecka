@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.42'
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.48'
     }
 }
 
@@ -22,14 +22,14 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.42'
-    compile 'com.google.appengine:appengine-endpoints:1.9.42'
-    compile 'com.google.appengine:appengine-endpoints-deps:1.9.42'
-    compile 'com.google.appengine:appengine-api-labs:1.9.42'
+    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.48'
+    compile 'com.google.appengine:appengine-endpoints:1.9.48'
+    compile 'com.google.appengine:appengine-endpoints-deps:1.9.48'
+    compile 'com.google.appengine:appengine-api-labs:1.9.48'
     compile 'javax.servlet:servlet-api:2.5'
     compile 'com.googlecode.objectify:objectify:5.1.13'
-    compile 'com.ganyo:gcm-server:1.0.2'
-    compile 'org.jsoup:jsoup:1.9.2'
+    compile 'com.ganyo:gcm-server:1.1.0'
+    compile 'org.jsoup:jsoup:1.10.1'
 }
 
 appengine {
@@ -41,5 +41,6 @@ appengine {
         getClientLibsOnBuild = true
         getDiscoveryDocsOnBuild = true
     }
+    httpAddress = '0.0.0.0'
     jvmFlags = ["-Ddatastore.backing_store=$rootDir/backend/local_db.bin"]
 }

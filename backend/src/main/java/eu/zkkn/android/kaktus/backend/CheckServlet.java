@@ -1,6 +1,7 @@
 package eu.zkkn.android.kaktus.backend;
 
 import com.google.android.gcm.server.Constants;
+import com.google.android.gcm.server.Endpoint;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
@@ -163,7 +164,7 @@ public class CheckServlet extends HttpServlet {
         if (message.length() > 1000) {
             message = message.substring(0, 1000) + "[...]";
         }
-        Sender sender = new Sender(API_KEY);
+        Sender sender = new Sender(API_KEY, Endpoint.FCM);
         //TODO: add time to live (probably 12 hours or less)
         //TODO: maybe use Notification instead of Data payload
         Message msg = new Message.Builder().addData("message", message).build();
