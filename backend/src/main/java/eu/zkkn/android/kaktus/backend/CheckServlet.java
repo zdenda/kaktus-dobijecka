@@ -35,6 +35,8 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  */
 public class CheckServlet extends HttpServlet {
 
+    private static final String KAKTUS_WEB_URL = "https://www.mujkaktus.cz/chces-pridat";
+
     /**
      * Api Keys can be obtained from the google cloud console
      */
@@ -127,7 +129,7 @@ public class CheckServlet extends HttpServlet {
      * @throws IOException
      */
     private String loadTextFromWeb() throws IOException {
-        Document document = Jsoup.connect("https://www.mujkaktus.cz/chces-pridat").timeout(0).get();
+        Document document = Jsoup.connect(KAKTUS_WEB_URL).timeout(0).get();
         Elements elements = document.select("div.wrapper > h2.uppercase + h3.uppercase.text-drawn");
 
         // there should be only one element
@@ -170,6 +172,7 @@ public class CheckServlet extends HttpServlet {
         Message msg = new Message.Builder()
                 .addData("type", "notification")
                 .addData("message", message)
+                .addData("uri", KAKTUS_WEB_URL)
                 .timeToLive(10 * 60 * 60) //TTL 10 hours
                 .build();
         //TODO: increase/remove the limit
