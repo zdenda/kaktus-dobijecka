@@ -11,7 +11,7 @@
 
     <string name="status_missing_google_play_services">Toto zařízení bohužel není podporováno. Aplikace vyžaduje Služby Google Play, které zde nejsou dostupné.</string>
     <string name="status_fcm_registered">Příjem upozornění na Kaktus dobíječku je aktivní.</string>
-    <string name="status_fcm_registration_in_progress">Probíhá přihlášení k odběru upozornění na Kaktus dobíječku …</string>
+    <string name="status_fcm_registration_in_progress">Probíhá přihlášení k odběru upozornění na Kaktus dobíječku…</string>
     <string name="status_fcm_registration_error">Registrace pro příjem upozornení se zatím nezdařila. Za chvíli to zkusíme znovu …</string>
 
 </resources>
