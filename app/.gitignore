@@ -1,6 +1,7 @@
 /build
 *.apk
 
-# google-services.json and Config.java contains private IDs and keys
+# Those files contain private IDs and keys
+firebase-crashreporting.json
 google-services.json
 src/main/java/eu/zkkn/android/kaktus/Config.java
