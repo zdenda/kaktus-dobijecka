@@ -2,16 +2,19 @@ package eu.zkkn.android.kaktus;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -32,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTvStatus;
     private TextView mTvLastNotificationDate;
     private TextView mTvLastNotificationText;
-    private TextView mTvLastFbPostDate;
-    private TextView mTvLastFbPostText;
 
 
     @Override
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mTvStatus = (TextView) findViewById(R.id.tv_status);
 
         if (checkPlayServices()) {
+
             if (TextUtils.isEmpty(FcmHelper.loadFcmToken(this))) {
                 mTvStatus.setText(R.string.status_fcm_registration_in_progress);
                 // register local broadcast receiver for result of the registration.
@@ -51,6 +53,21 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 mTvStatus.setText(R.string.status_fcm_registered);
             }
+
+            // Display FCM Token after one short and one long click on status message
+            mTvStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTvStatus.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            showFcmToken();
+                            return true;
+                        }
+                    });
+                }
+            });
+
         } else {
             mTvStatus.setTextColor(Color.RED);
             mTvStatus.setText(R.string.status_missing_google_play_services);
@@ -78,14 +95,14 @@ public class MainActivity extends AppCompatActivity {
         // Facebook
         //TODO: update on synchronization
         LastFbPost.FbPost fbPost = LastFbPost.load(this);
-        mTvLastFbPostDate = (TextView) findViewById(R.id.tv_lastFbPostDate);
-        mTvLastFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
+        TextView lastFbPostDate = (TextView) findViewById(R.id.tv_lastFbPostDate);
+        TextView lastFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
         if (fbPost != null) {
-            mTvLastFbPostDate.setText(Helper.formatDate(this, fbPost.date));
-            mTvLastFbPostText.setText(fbPost.text);
+            lastFbPostDate.setText(Helper.formatDate(this, fbPost.date));
+            lastFbPostText.setText(fbPost.text);
         } else {
-            mTvLastFbPostDate.setText(Helper.formatDate(this, new Date()));
-            mTvLastFbPostText.setText(R.string.lastFbPost_none);
+            lastFbPostDate.setText(Helper.formatDate(this, new Date()));
+            lastFbPostText.setText(R.string.lastFbPost_none);
         }
 
     }
@@ -164,6 +181,33 @@ public class MainActivity extends AppCompatActivity {
 
     private void unregisterFcmMessageReceiver() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmMessageBroadcastReceiver);
+    }
+
+    private void showFcmToken() {
+        final String title = getString(R.string.dialog_fcm_token_title);
+        final String token = FcmHelper.loadFcmToken(this);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(title);
+        builder.setMessage(Helper.formatHtml("%1$s <br/><br/><small>* %2$s</small>",
+                token, getString(R.string.dialog_fcm_token_warning)));
+        builder.setNeutralButton(R.string.dialog_fcm_token_button_copy_to_clipboard,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Helper.copyToClipboard(MainActivity.this, title, token);
+                    }
+                }
+        );
+        builder.setPositiveButton(R.string.dialog_fcm_token_button_ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }
+        );
+        builder.show();
     }
 
     /**

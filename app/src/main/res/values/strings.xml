@@ -14,4 +14,9 @@
     <string name="status_fcm_registration_in_progress">Probíhá přihlášení k odběru upozornění na Kaktus dobíječku…</string>
     <string name="status_fcm_registration_error">Registrace pro příjem upozornení se zatím nezdařila. Za chvíli to zkusíme znovu …</string>
 
+    <string name="dialog_fcm_token_title">FCM Token</string>
+    <string name="dialog_fcm_token_warning">Svůj token sdílejte jen s důvěryhodnými osobami!</string>
+    <string name="dialog_fcm_token_button_copy_to_clipboard">Kopírovat</string>
+    <string name="dialog_fcm_token_button_ok">OK</string>
+
 </resources>
