@@ -7,8 +7,8 @@ android {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 16
-        versionName '0.4.7'
+        versionCode 17
+        versionName '0.4.8'
     }
     buildTypes {
         debug {
@@ -34,7 +34,7 @@ android {
 dependencies {
 
     // define versions used for multiple dependencies
-    def supportLibraryVersion = '25.1.0'
+    def supportLibraryVersion = '25.1.1'
     // Google Play services 10.0.x is the final release
     // that includes full support for Android version 2.3.x
     def playServicesVersion = '10.0.1'
