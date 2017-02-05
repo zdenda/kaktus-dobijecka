@@ -73,7 +73,7 @@ public class Preferences {
     }
 
     public static void setFcmToken(Context context, String token) {
-        getPref(context).edit().putString(PREF_KEY_FCM_TOKEN, token).commit();
+        getPref(context).edit().putString(PREF_KEY_FCM_TOKEN, token).apply();
     }
 
     public static String getFcmToken(Context context) {
@@ -81,7 +81,7 @@ public class Preferences {
     }
 
     public static void setFcmSentTokenToServer(Context context, boolean isSent) {
-        getPref(context).edit().putBoolean(PREF_KEY_FCM_SENT_TOKEN_TO_SERVER, isSent).commit();
+        getPref(context).edit().putBoolean(PREF_KEY_FCM_SENT_TOKEN_TO_SERVER, isSent).apply();
     }
 
     public static boolean isFcmSentTokenToServer(Context context) {
@@ -90,7 +90,7 @@ public class Preferences {
 
     public static void setLastNotification(Context context, Notification notification) {
         getPref(context).edit().putLong(PREF_KEY_LAST_NOTIFICATION_DATE, notification.date.getTime())
-                .putString(PREF_KEY_LAST_NOTIFICATION_TEXT, notification.text).commit();
+                .putString(PREF_KEY_LAST_NOTIFICATION_TEXT, notification.text).apply();
     }
 
     public static Notification getLastNotification(Context context) {
@@ -106,7 +106,7 @@ public class Preferences {
 
     public static void setLastFbPost(Context context, FbPost fbPost) {
         getPref(context).edit().putLong(PREF_KEY_LAST_FB_POST_DATE, fbPost.date.getTime())
-                .putString(PREF_KEY_LAST_FB_POST_TEXT, fbPost.text).commit();
+                .putString(PREF_KEY_LAST_FB_POST_TEXT, fbPost.text).apply();
     }
 
     public static FbPost getLastFbPost(Context context) {
@@ -121,7 +121,7 @@ public class Preferences {
     }
 
     public static void setSyncStatus(Context context, @SyncStatus int status) {
-        getPref(context).edit().putInt(PREF_KEY_SYNCHRONIZATION_STATUS, status).commit();
+        getPref(context).edit().putInt(PREF_KEY_SYNCHRONIZATION_STATUS, status).apply();
     }
 
     @SyncStatus
