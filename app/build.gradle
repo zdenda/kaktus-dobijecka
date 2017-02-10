@@ -9,6 +9,8 @@ android {
         targetSdkVersion 25
         versionCode 17
         versionName '0.4.8'
+        testApplicationId "eu.zkkn.android.kaktus.test"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -49,6 +51,12 @@ dependencies {
     // Firebase crash reporting only for Beta and Release
     betaCompile "com.google.firebase:firebase-crash:$playServicesVersion"
     releaseCompile "com.google.firebase:firebase-crash:$playServicesVersion"
+
+    testCompile 'junit:junit:4.12'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    })
 
 }
 
