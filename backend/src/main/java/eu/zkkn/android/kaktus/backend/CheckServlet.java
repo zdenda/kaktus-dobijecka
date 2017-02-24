@@ -173,8 +173,6 @@ public class CheckServlet extends HttpServlet {
                 .addData("type", "notification")
                 .addData("message", message)
                 .addData("uri", KAKTUS_WEB_URL)
-                //TODO: don't limit time to live, just don't show notification in the app
-                .timeToLive(10 * 60 * 60) //TTL 10 hours
                 .build();
         //TODO: increase/remove the limit
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(1000).list();

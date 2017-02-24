@@ -15,6 +15,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.LastNotification;
@@ -48,8 +49,10 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             // Notify UI that a new FCM message was received.
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(FCM_MESSAGE_RECEIVED));
 
-            //TODO: only show notification if the message is fresh
-            showNotification(message, uri);
+            // show notification if the message is fresh
+            if (sentTime > (System.currentTimeMillis() - TimeUnit.HOURS.toMillis(12))) {
+                showNotification(message, uri);
+            }
         }
 
     }
