@@ -37,9 +37,15 @@ public class Preferences {
     private static final String PREF_KEY_FCM_SENT_TOKEN_TO_SERVER = "fcmSentTokenToServer";
 
     /**
+     * Time when was the last notification sent
+     */
+    private static final String PREF_KEY_LAST_NOTIFICATION_SENT_TIME = "lastNotificationDate";
+
+    /**
      * Time when was the last notification received
      */
-    private static final String PREF_KEY_LAST_NOTIFICATION_DATE = "lastNotificationDate";
+    private static final String PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME =
+            "lastNotificationReceivedTime";
 
     /**
      * Text of the last received notification
@@ -89,19 +95,23 @@ public class Preferences {
     }
 
     public static void setLastNotification(Context context, Notification notification) {
-        getPref(context).edit().putLong(PREF_KEY_LAST_NOTIFICATION_DATE, notification.date.getTime())
-                .putString(PREF_KEY_LAST_NOTIFICATION_TEXT, notification.text).apply();
+        getPref(context).edit()
+                .putLong(PREF_KEY_LAST_NOTIFICATION_SENT_TIME, notification.sent.getTime())
+                .putLong(PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME, notification.received.getTime())
+                .putString(PREF_KEY_LAST_NOTIFICATION_TEXT, notification.text)
+                .apply();
     }
 
     public static Notification getLastNotification(Context context) {
         SharedPreferences preferences = getPref(context);
-        Long unixTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_DATE, 0);
+        Long sentTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_SENT_TIME, 0);
+        Long receivedTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME, 0);
         String text = preferences.getString(PREF_KEY_LAST_NOTIFICATION_TEXT, null);
 
         // if there's no last notification
-        if (unixTimeMs == 0 || TextUtils.isEmpty(text)) return null;
+        if (sentTimeMs == 0 || TextUtils.isEmpty(text)) return null;
 
-        return new Notification(new Date(unixTimeMs), text);
+        return new Notification(new Date(sentTimeMs), new Date(receivedTimeMs), text);
     }
 
     public static void setLastFbPost(Context context, FbPost fbPost) {

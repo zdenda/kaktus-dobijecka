@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Kaktus Dobíječka</string>
 
+    <string name="generic_alert_button_ok">OK</string>
+
     <string name="action_sync_settings">Synchronizovat Facebook</string>
 
     <string name="lastNotification_header">Poslední upozornění</string>
@@ -18,5 +20,7 @@
     <string name="dialog_fcm_token_warning">Svůj token sdílejte jen s důvěryhodnými osobami!</string>
     <string name="dialog_fcm_token_button_copy_to_clipboard">Kopírovat</string>
     <string name="dialog_fcm_token_button_ok">OK</string>
+
+    <string name="dialog_notification_received_title">Přijato</string>
 
 </resources>

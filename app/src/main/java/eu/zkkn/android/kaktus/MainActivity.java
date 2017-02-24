@@ -74,18 +74,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Last notification
-        LastNotification.Notification notification = LastNotification.load(this);
         mTvLastNotificationDate = (TextView) findViewById(R.id.tv_lastNotificationDate);
         mTvLastNotificationText = (TextView) findViewById(R.id.tv_lastNotificationText);
+        refreshLastNotificationViews();
         registerFcmMessageReceiver();
-
-        if (notification != null) {
-            mTvLastNotificationDate.setText(Helper.formatDate(this, notification.date));
-            mTvLastNotificationText.setText(notification.text);
-        } else {
-            mTvLastNotificationDate.setText(Helper.formatDate(this, new Date()));
-            mTvLastNotificationText.setText(R.string.lastNotification_none);
-        }
 
         // if there's no settings for sync, enable it
         if (Preferences.getSyncStatus(this) == Preferences.SYNC_NOT_SET) {
@@ -144,6 +136,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void refreshLastNotificationViews() {
+        final LastNotification.Notification notification = LastNotification.load(this);
+        if (notification != null) {
+            mTvLastNotificationDate.setText(Helper.formatDate(this, notification.sent));
+            // long click on the sent date to show the received date
+            mTvLastNotificationDate.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Helper.showAlert(MainActivity.this,
+                            getString(R.string.dialog_notification_received_title),
+                            Helper.formatDate(MainActivity.this, notification.received));
+                    return true;
+                }
+            });
+            mTvLastNotificationText.setText(notification.text);
+        } else {
+            mTvLastNotificationDate.setText(Helper.formatDate(this, new Date()));
+            mTvLastNotificationText.setText(R.string.lastNotification_none);
+        }
+    }
+
     private void registerFcmRegistrationReceiver() {
         mFcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -168,11 +181,7 @@ public class MainActivity extends AppCompatActivity {
         mFcmMessageBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                LastNotification.Notification notification = LastNotification.load(context);
-                if (notification != null) {
-                    mTvLastNotificationDate.setText(Helper.formatDate(context, notification.date));
-                    mTvLastNotificationText.setText(notification.text);
-                }
+                refreshLastNotificationViews();
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(mFcmMessageBroadcastReceiver,

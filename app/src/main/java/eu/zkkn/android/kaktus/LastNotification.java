@@ -12,11 +12,13 @@ public class LastNotification {
 
     public static class Notification {
 
-        public Date date;
+        public Date sent;
+        public Date received;
         public String text;
 
-        public Notification(Date date, String text) {
-            this.date = date;
+        public Notification(Date sent, Date received, String text) {
+            this.sent = sent;
+            this.received = received;
             this.text = text;
         }
 

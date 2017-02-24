@@ -19,7 +19,6 @@ import java.util.Map;
 import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.LastNotification;
 import eu.zkkn.android.kaktus.MainActivity;
-import eu.zkkn.android.kaktus.Preferences;
 import eu.zkkn.android.kaktus.R;
 
 
@@ -31,20 +30,25 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        String from = remoteMessage.getFrom();
         Map<String, String> data = remoteMessage.getData();
         //Warning: App versions 0.4.6 (15) and bellow doesn't filter notifications nor support URI
         String type = data.get("type");
         if ("notification".equals(type)) {
+            long sentTime = remoteMessage.getSentTime();
             String message = data.get("message");
             String uri = data.get("uri");
-            Log.d(Config.TAG, "From: " + from + ", Type: " + type + ", Message: " + message
-                    + ", URI: " + uri);
+
+            Log.d(Config.TAG, "From: " + remoteMessage.getFrom() + ", Type: " + type + "Time: "
+                    + sentTime + ", Message: " + message + ", URI: " + uri);
+
             // save it as the last notification
-            Preferences.setLastNotification(this,
-                    new LastNotification.Notification(new Date(), message));
+            LastNotification.save(this, new LastNotification.Notification(
+                    new Date(sentTime), new Date(), message));
+
             // Notify UI that a new FCM message was received.
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(FCM_MESSAGE_RECEIVED));
+
+            //TODO: only show notification if the message is fresh
             showNotification(message, uri);
         }
 
