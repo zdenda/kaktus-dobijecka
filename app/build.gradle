@@ -7,8 +7,8 @@ android {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 17
-        versionName '0.4.8'
+        versionCode 18
+        versionName '0.4.9'
         testApplicationId "eu.zkkn.android.kaktus.test"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

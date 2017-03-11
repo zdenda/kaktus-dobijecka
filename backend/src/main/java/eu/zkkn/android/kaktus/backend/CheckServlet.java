@@ -126,7 +126,7 @@ public class CheckServlet extends HttpServlet {
      * The text must match a specific pattern.
      *
      * @return text or null if the text doesn't match specific pattern
-     * @throws IOException
+     * @throws IOException if the kaktus' web page could not be found or read
      */
     private String loadTextFromWeb() throws IOException {
         Document document = Jsoup.connect(KAKTUS_WEB_URL).timeout(0).get();
@@ -195,7 +195,7 @@ public class CheckServlet extends HttpServlet {
                     // if the device is no longer registered with Gcm, remove it from the datastore
                     ofy().delete().entity(record).now();
                 } else {
-                    log.warning("Error when sending message : " + error);
+                    log.warning("Error when sending message to Registration Id [" + record.getRegId() + "]: " + error);
                 }
             }
         }

@@ -16,6 +16,7 @@ public class RegistrationRecord {
     @Index
     private String regId;
     // you can add more fields...
+    //TODO: add date and InstanceID.getInstance(context).getId();
 
     public RegistrationRecord() {
     }
