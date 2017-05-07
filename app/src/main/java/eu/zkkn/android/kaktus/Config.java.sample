@@ -19,8 +19,10 @@ public class Config {
     /**
      * Facebook App Access Token
      * https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
-     * Use App Access Token, so that users do not have to log in
+     * Use App Access Token, so that users do not have to log in. Users don't grant any permissions
+     * to this FB App, so it shouldn't be a problem.
      */
+    //TODO: create proxy on backend between mobile app and FB API, so FB App Access Token wouldn't have to be here
     public static final String FB_ACCESS_TOKEN = "...";
 
 }
