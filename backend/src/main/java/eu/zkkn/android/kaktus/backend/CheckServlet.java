@@ -46,6 +46,7 @@ public class CheckServlet extends HttpServlet {
 
 
     //TODO: check if there's some timeout for response (might be 60 seconds)
+    // and if there is a limit use https://cloud.google.com/appengine/docs/standard/java/taskqueue/
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
