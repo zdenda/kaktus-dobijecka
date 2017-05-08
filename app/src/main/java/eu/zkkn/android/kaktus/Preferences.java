@@ -67,6 +67,11 @@ public class Preferences {
      */
     private static final String PREF_KEY_LAST_FB_POST_TEXT = "lastKaktusFbPostText";
 
+    /**
+     * URL of the image of the last post on Kaktus' Facebook page
+     */
+    private static final String PREF_KEY_LAST_FB_POST_IMAGE_URL = "lastKaktusFbPostImageUrl";
+
 
     private static SharedPreferences sPreferences;
 
@@ -115,19 +120,23 @@ public class Preferences {
     }
 
     public static void setLastFbPost(Context context, FbPost fbPost) {
-        getPref(context).edit().putLong(PREF_KEY_LAST_FB_POST_DATE, fbPost.date.getTime())
-                .putString(PREF_KEY_LAST_FB_POST_TEXT, fbPost.text).apply();
+        getPref(context).edit()
+                .putLong(PREF_KEY_LAST_FB_POST_DATE, fbPost.date.getTime())
+                .putString(PREF_KEY_LAST_FB_POST_TEXT, fbPost.text)
+                .putString(PREF_KEY_LAST_FB_POST_IMAGE_URL, fbPost.imageUrl)
+                .apply();
     }
 
     public static FbPost getLastFbPost(Context context) {
         SharedPreferences preferences = getPref(context);
         Long unixTimeMs = preferences.getLong(PREF_KEY_LAST_FB_POST_DATE, 0);
         String text = preferences.getString(PREF_KEY_LAST_FB_POST_TEXT, null);
+        String imageUrl = preferences.getString(PREF_KEY_LAST_FB_POST_IMAGE_URL, null);
 
         // if there's no last notification
         if (unixTimeMs == 0 || TextUtils.isEmpty(text)) return null;
 
-        return new FbPost(new Date(unixTimeMs), text);
+        return new FbPost(new Date(unixTimeMs), text, imageUrl);
     }
 
     public static void setSyncStatus(Context context, @SyncStatus int status) {

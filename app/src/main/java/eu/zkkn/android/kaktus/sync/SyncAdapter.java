@@ -7,6 +7,7 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -17,6 +18,7 @@ import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.json.JsonObjectParser;
+import com.google.api.client.util.ClassInfo;
 
 import java.io.IOException;
 
@@ -25,7 +27,7 @@ import eu.zkkn.android.kaktus.Helper;
 import eu.zkkn.android.kaktus.LastFbPost;
 import eu.zkkn.android.kaktus.LastFbPost.FbPost;
 import eu.zkkn.android.kaktus.model.FbApiResponse;
-import eu.zkkn.android.kaktus.model.FbApiResponsePost;
+import eu.zkkn.android.kaktus.model.FbApiPost;
 
 /**
  * Handle the transfer of data between a server and an
@@ -66,13 +68,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     });
 
             GenericUrl url = new GenericUrl("https://graph.facebook.com/v2.9/Kaktus/posts");
+            // limit Fb API field to only those field names which are in FbApiPost class,
+            url.put("fields", TextUtils.join(",", ClassInfo.of(FbApiPost.class).getNames()));
             url.put("access_token", Config.FB_ACCESS_TOKEN);
             url.put("limit", 1);
 
             HttpResponse response = requestFactory.buildGetRequest(url).execute();
             FbApiResponse fbApiResponse = response.parseAs(FbApiResponse.class);
-            FbApiResponsePost fbApiPost = fbApiResponse.posts[0];
-            FbPost fbPost = new FbPost(Helper.parseFbDate(fbApiPost.createdTime), fbApiPost.message);
+            FbApiPost fbApiPost = fbApiResponse.posts[0];
+            FbPost fbPost = new FbPost(Helper.parseFbDate(fbApiPost.createdTime), fbApiPost.message,
+                    Helper.imageUrlFromFbPostAttachment(fbApiPost));
             //TODO: use ContentProvider
             LastFbPost.save(getContext(), fbPost);
 

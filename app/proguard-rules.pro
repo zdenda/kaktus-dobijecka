@@ -32,3 +32,6 @@
 # switch off notes about duplicate class definitions
 -dontnote org.apache.http.**
 -dontnote android.net.http.*
+
+# Picasso doesn't need OkHttp, it can use HttpURLConnection to download images
+-dontwarn com.squareup.okhttp.**

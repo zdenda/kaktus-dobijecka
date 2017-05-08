@@ -17,6 +17,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import eu.zkkn.android.kaktus.model.FbApiAttachment;
+import eu.zkkn.android.kaktus.model.FbApiAttachments;
+import eu.zkkn.android.kaktus.model.FbApiImage;
+import eu.zkkn.android.kaktus.model.FbApiPost;
+import eu.zkkn.android.kaktus.model.FbApiStoryAttachmentMedia;
+
 /**
  * Collection of useful methods
  */
@@ -54,6 +60,30 @@ public class Helper {
         } catch (ParseException e) {
             return new Date();
         }
+    }
+
+    @Nullable
+    public static String imageUrlFromFbPostAttachment(FbApiPost fbApiPost) {
+        // test for every possible null and empty field, since FB API documentation doesn't say
+        // which field is mandatory and is always present in the response
+        //TODO: can we remove some null checks
+        // https://developers.facebook.com/docs/graph-api/reference/v2.9/post/
+        FbApiAttachments attachments = fbApiPost.attachments;
+        if (attachments != null) {
+            FbApiAttachment[] attachmentsData = attachments.attachments;
+            if (attachmentsData != null && attachmentsData.length > 0) {
+                FbApiAttachment attachment = attachmentsData[0];
+                FbApiStoryAttachmentMedia attachmentMedia = attachment.media;
+                if (attachmentMedia != null) {
+                    FbApiImage image = attachmentMedia.image;
+                    if (image != null) {
+                        return image.src;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

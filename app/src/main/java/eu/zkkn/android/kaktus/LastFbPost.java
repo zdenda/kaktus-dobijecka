@@ -14,10 +14,13 @@ public class LastFbPost {
 
         public Date date;
         public String text;
+        @Nullable
+        public String imageUrl;
 
-        public FbPost(Date date, String text) {
+        public FbPost(Date date, String text, @Nullable String imageUrl) {
             this.date = date;
             this.text = text;
+            this.imageUrl = imageUrl;
         }
 
     }

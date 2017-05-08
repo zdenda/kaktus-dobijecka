@@ -15,10 +15,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 
@@ -90,8 +92,14 @@ public class MainActivity extends AppCompatActivity {
         TextView lastFbPostDate = (TextView) findViewById(R.id.tv_lastFbPostDate);
         TextView lastFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
         if (fbPost != null) {
+            //TODO: add link to Facebook ("permalink_url")
             lastFbPostDate.setText(Helper.formatDate(this, fbPost.date));
             lastFbPostText.setText(fbPost.text);
+            if (fbPost.imageUrl != null) {
+                Picasso.with(this)
+                        .load(fbPost.imageUrl)
+                        .into((ImageView) findViewById(R.id.iv_lastBbPostImage));
+            }
         } else {
             lastFbPostDate.setText(Helper.formatDate(this, new Date()));
             lastFbPostText.setText(R.string.lastFbPost_none);
