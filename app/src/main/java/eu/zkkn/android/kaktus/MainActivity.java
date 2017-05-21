@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -34,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver mFcmRegistrationBroadcastReceiver;
     private BroadcastReceiver mFcmMessageBroadcastReceiver;
-    private TextView mTvStatus;
     private TextView mTvLastNotificationDate;
     private TextView mTvLastNotificationText;
+    private SemaphoreView mSemaphoreStatus;
 
 
     @Override
@@ -44,23 +43,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTvStatus = (TextView) findViewById(R.id.tv_status);
+        mSemaphoreStatus = (SemaphoreView) findViewById(R.id.tv_status);
 
+        //TODO: create parent Play Services Activity
         if (checkPlayServices()) {
 
             if (TextUtils.isEmpty(FcmHelper.loadFcmToken(this))) {
-                mTvStatus.setText(R.string.status_fcm_registration_in_progress);
+                mSemaphoreStatus.setInfo(R.string.status_fcm_registration_in_progress);
                 // register local broadcast receiver for result of the registration.
                 registerFcmRegistrationReceiver();
             } else {
-                mTvStatus.setText(R.string.status_fcm_registered);
+                mSemaphoreStatus.setOk(R.string.status_fcm_registered);
             }
 
             // Display FCM Token after one short and one long click on status message
-            mTvStatus.setOnClickListener(new View.OnClickListener() {
+            mSemaphoreStatus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mTvStatus.setOnLongClickListener(new View.OnLongClickListener() {
+                    mSemaphoreStatus.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
                             showFcmToken();
@@ -71,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
         } else {
-            mTvStatus.setTextColor(Color.RED);
-            mTvStatus.setText(R.string.status_missing_google_play_services);
+            mSemaphoreStatus.setError(R.string.status_missing_google_play_services);
         }
 
         // Last notification
@@ -170,10 +169,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (TextUtils.isEmpty(FcmHelper.loadFcmToken(context))) {
-                    mTvStatus.setTextColor(Color.RED);
-                    mTvStatus.setText(R.string.status_fcm_registration_error);
+                    mSemaphoreStatus.setError(R.string.status_fcm_registration_error);
                 } else {
-                    mTvStatus.setText(R.string.status_fcm_registered);
+                    mSemaphoreStatus.setOk(R.string.status_fcm_registered);
                 }
             }
         };
