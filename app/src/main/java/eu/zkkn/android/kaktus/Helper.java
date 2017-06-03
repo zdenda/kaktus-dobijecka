@@ -4,6 +4,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +14,9 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateFormat;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -128,6 +134,43 @@ public class Helper {
                 }
         );
         builder.show();
+    }
+
+    /**
+     * Sets the background color of {@link ImageView} to match the displayed bitmap
+     */
+    public static class BackgroundColorCallback implements Callback {
+
+        private ImageView mImageView;
+
+        public BackgroundColorCallback(ImageView imageView) {
+            mImageView = imageView;
+        }
+
+        @Override
+        public void onSuccess() {
+            Drawable drawable = mImageView.getDrawable();
+            if (!(drawable instanceof BitmapDrawable)) return;
+
+            //If the color in all corners is the same, use it as background for ImageView
+            Bitmap source = ((BitmapDrawable) drawable).getBitmap();
+            int maxX = source.getWidth() - 1;
+            int maxY = source.getHeight() - 1;
+            int corner1 = source.getPixel(0, 0);
+            int corner2 = source.getPixel(0, maxY);
+            int corner3 = source.getPixel(maxX, 0);
+            int corner4 = source.getPixel(maxX, maxY);
+
+            if (corner1 == corner2 && corner2 == corner3 && corner3 == corner4) {
+                mImageView.setBackgroundColor(corner1);
+            }
+        }
+
+        @Override
+        public void onError() {
+            // do nothing
+        }
+
     }
 
 }

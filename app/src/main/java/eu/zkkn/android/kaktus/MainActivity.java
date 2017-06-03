@@ -95,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
             lastFbPostDate.setText(Helper.formatDate(this, fbPost.date));
             lastFbPostText.setText(fbPost.text);
             if (fbPost.imageUrl != null) {
-                Picasso.with(this)
-                        .load(fbPost.imageUrl)
-                        .into((ImageView) findViewById(R.id.iv_lastBbPostImage));
+                ImageView imageView = (ImageView) findViewById(R.id.iv_lastBbPostImage);
+                Picasso.with(this).load(fbPost.imageUrl)
+                        .into(imageView, new Helper.BackgroundColorCallback(imageView));
             }
         } else {
             lastFbPostDate.setText(Helper.formatDate(this, new Date()));
