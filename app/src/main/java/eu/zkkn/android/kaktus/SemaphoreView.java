@@ -46,7 +46,7 @@ public class SemaphoreView extends AppCompatTextView {
 
     public void setText(@Type int type, CharSequence text) {
         super.setText(Helper.formatHtml(
-                "<font color=\"%1$s\">\u2B24</font> %2$s", COLORS[type%COLORS.length], text));
+                "<font color=\"%1$s\">\u25CF</font> %2$s", COLORS[type%COLORS.length], text));
     }
 
 }
