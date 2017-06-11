@@ -1,11 +1,10 @@
 package eu.zkkn.android.kaktus.fcm;
 
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -60,7 +59,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
     protected void showNotification(String message, String uri) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(message)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
@@ -79,8 +78,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
-        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
-                .notify(NOTIFICATION_ID, builder.build());
+        NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, builder.build());
     }
 
 }
