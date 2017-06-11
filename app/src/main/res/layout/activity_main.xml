@@ -70,14 +70,24 @@
                         android:text="@string/lastFbPost_header"
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                    <!-- TODO: yellow background might be ugly for some images -->
-                    <ImageView
-                        android:id="@+id/iv_lastBbPostImage"
+                    <FrameLayout
+                        android:id="@+id/fl_lastFbPostImage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/yellow"
-                        android:contentDescription="@null"
-                        android:scaleType="center" />
+                        android:visibility="gone"
+                        android:padding="4dp">
+
+                        <ImageView
+                            android:id="@+id/iv_lastFbPostImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerInside"
+                            android:contentDescription="@null" />
+
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/tv_lastFbPostDate"

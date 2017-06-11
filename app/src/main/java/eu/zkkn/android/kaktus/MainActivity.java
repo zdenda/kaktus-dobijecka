@@ -94,10 +94,13 @@ public class MainActivity extends AppCompatActivity {
             //TODO: add link to Facebook ("permalink_url")
             lastFbPostDate.setText(Helper.formatDate(this, fbPost.date));
             lastFbPostText.setText(fbPost.text);
+            View imageFrame = findViewById(R.id.fl_lastFbPostImage);
             if (fbPost.imageUrl != null) {
-                ImageView imageView = (ImageView) findViewById(R.id.iv_lastBbPostImage);
+                ImageView imageView = (ImageView) findViewById(R.id.iv_lastFbPostImage);
                 Picasso.with(this).load(fbPost.imageUrl)
-                        .into(imageView, new Helper.BackgroundColorCallback(imageView));
+                        .into(imageView, new Helper.BackgroundColorCallback(imageView, imageFrame));
+            } else {
+                imageFrame.setVisibility(View.GONE);
             }
         } else {
             lastFbPostDate.setText(Helper.formatDate(this, new Date()));

@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateFormat;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Callback;
@@ -137,22 +138,26 @@ public class Helper {
     }
 
     /**
-     * Sets the background color of {@link ImageView} to match the displayed bitmap
+     * Sets the background color of border for the {@link ImageView} to match the displayed bitmap
      */
     public static class BackgroundColorCallback implements Callback {
 
         private ImageView mImageView;
+        private View mFrame;
 
-        public BackgroundColorCallback(ImageView imageView) {
+        public BackgroundColorCallback(ImageView imageView, View frame) {
             mImageView = imageView;
+            mFrame = frame;
         }
 
         @Override
         public void onSuccess() {
+            mFrame.setVisibility(View.VISIBLE);
+
             Drawable drawable = mImageView.getDrawable();
             if (!(drawable instanceof BitmapDrawable)) return;
 
-            //If the color in all corners is the same, use it as background for ImageView
+            //If the color in all corners is the same, use it as background for border view
             Bitmap source = ((BitmapDrawable) drawable).getBitmap();
             int maxX = source.getWidth() - 1;
             int maxY = source.getHeight() - 1;
@@ -162,13 +167,14 @@ public class Helper {
             int corner4 = source.getPixel(maxX, maxY);
 
             if (corner1 == corner2 && corner2 == corner3 && corner3 == corner4) {
-                mImageView.setBackgroundColor(corner1);
+                mFrame.setBackgroundColor(corner1);
             }
+            //TODO: maybe hide the border when the corners have a different colors
         }
 
         @Override
         public void onError() {
-            // do nothing
+            mFrame.setVisibility(View.GONE);
         }
 
     }
