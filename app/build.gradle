@@ -17,13 +17,15 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
+            aaptOptions.cruncherEnabled = false
         }
         beta {
             initWith debug //copy properties from debug
             applicationIdSuffix '.beta'
-            // enable ProGuard
+            // enable ProGuard and PNG crunching
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            aaptOptions.cruncherEnabled = true
         }
         release {
             // enable ProGuard
@@ -58,6 +60,9 @@ dependencies {
     compile "com.google.android.gms:play-services-gcm:$playServicesVersion"
     compile "com.google.firebase:firebase-messaging:$playServicesVersion"
     // Firebase crash reporting only for Beta and Release
+    //TODO: Firebase 11.0.0 adds FirebaseCrash.setCrashCollectionEnabled(boolean enable)
+    // so it can be disabled for debug. It's even possible to disable it in the app's manifest.
+    // https://developers.google.com/android/reference/com/google/firebase/crash/FirebaseCrash.html#setCrashCollectionEnabled%28boolean%29
     betaCompile "com.google.firebase:firebase-crash:$playServicesVersion"
     releaseCompile "com.google.firebase:firebase-crash:$playServicesVersion"
     compile 'com.squareup.picasso:picasso:2.5.2'
