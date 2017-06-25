@@ -22,13 +22,17 @@ android {
         beta {
             initWith debug //copy properties from debug
             applicationIdSuffix '.beta'
-            // enable ProGuard and PNG crunching
+            // enable resources shrinking, ProGuard and PNG crunching
+            shrinkResources true
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // ProGuard optimization introduces certain risks, so test thoroughly and
+            // use it only for beta builds (for now)
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             aaptOptions.cruncherEnabled = true
         }
         release {
-            // enable ProGuard
+            // enable shrinking of code and resources
+            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
