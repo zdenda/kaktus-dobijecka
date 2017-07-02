@@ -1,114 +1,227 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            app:cardBackgroundColor="@color/cardBackground">
 
-            <android.support.v7.widget.CardView
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/a_iv1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/ic_logo"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_lastNotificationText" />
+
+                <TextView
+                    android:id="@+id/a_tv1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/lastNotification_header"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/a_iv1"
+                    app:layout_constraintRight_toRightOf="parent" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lastNotification_header"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                    <TextView
-                        android:id="@+id/tv_lastNotificationDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    <TextView
-                        android:id="@+id/tv_lastNotificationText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <eu.zkkn.android.kaktus.SemaphoreView
-                android:id="@+id/tv_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_lastNotificationDate"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    app:layout_constraintTop_toBottomOf="@+id/a_tv1"
+                    app:layout_constraintLeft_toRightOf="@+id/a_iv1"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="1. července 2017 23:59" />
 
-                    <TextView
-                        android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_lastNotificationText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_lastNotificationDate"
+                    tools:text="@string/lastNotification_none" />
+
+                <View
+                    android:id="@+id/a_v1"
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="16dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_lastNotificationText"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/fl_status" />
+
+                <FrameLayout
+                    android:id="@+id/fl_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="#61ffffff"
+                    app:layout_constraintTop_toBottomOf="@+id/a_v1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <eu.zkkn.android.kaktus.SemaphoreView
+                        android:id="@+id/tv_status"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lastFbPost_header"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
+                        android:layout_marginTop="4dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="4dp"
+                        tools:text="Info o stavu příjmu upozornění" />
 
-                    <FrameLayout
-                        android:id="@+id/fl_lastFbPostImage"
-                        android:layout_width="match_parent"
+                </FrameLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            app:cardBackgroundColor="@color/cardBackground">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:id="@+id/fl_lastFbPostImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/yellow"
+                    android:padding="4dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/iv_lastFbPostImage"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/yellow"
-                        android:visibility="gone"
-                        android:padding="4dp">
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@null"
+                        android:scaleType="centerInside" />
 
-                        <ImageView
-                            android:id="@+id/iv_lastFbPostImage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:adjustViewBounds="true"
-                            android:scaleType="centerInside"
-                            android:contentDescription="@null" />
+                </FrameLayout>
 
-                    </FrameLayout>
+                <TextView
+                    android:id="@+id/tv_lastFbPostText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    app:layout_constraintTop_toBottomOf="@+id/fl_lastFbPostImage"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    tools:text="@string/lastFbPost_none" />
 
-                    <TextView
-                        android:id="@+id/tv_lastFbPostDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                <ImageView
+                    android:id="@+id/b_iv1"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/ic_fb_logo"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_lastFbPostText"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_lastFbPostText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:id="@+id/b_tv1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/lastFbPost_header"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="?android:textColorPrimary"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_lastFbPostText"
+                    app:layout_constraintLeft_toRightOf="@+id/b_iv1"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_lastFbPostDate" />
 
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_lastFbPostDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    app:layout_constraintTop_toBottomOf="@+id/b_tv1"
+                    app:layout_constraintLeft_toRightOf="@+id/b_iv1"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:text="1. července 2017 23:59"/>
 
-            </android.support.v7.widget.CardView>
+            </android.support.constraint.ConstraintLayout>
 
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-    </ScrollView>
+    </LinearLayout>
 
-</FrameLayout>
+</ScrollView>

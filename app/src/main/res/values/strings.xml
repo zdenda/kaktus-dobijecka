@@ -5,10 +5,10 @@
 
     <string name="action_sync_settings">Synchronizovat Facebook</string>
 
-    <string name="lastNotification_header">Poslední upozornění</string>
+    <string name="lastNotification_header">Upozornění na dobíječku</string>
     <string name="lastNotification_none">Zatím nebylo přijato žádné upozornění.</string>
 
-    <string name="lastFbPost_header">Poslední příspěvek na Facebooku</string>
+    <string name="lastFbPost_header">Kaktus na Facebooku</string>
     <string name="lastFbPost_none">Zatím nebyl načten žádný příspěvek z Facebook stránky Kaktusu.</string>
 
     <string name="status_missing_google_play_services">Toto zařízení bohužel není podporováno. Aplikace vyžaduje Služby Google Play, které zde nejsou dostupné.</string>

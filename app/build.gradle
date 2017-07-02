@@ -8,9 +8,10 @@ android {
         minSdkVersion 11
         //noinspection OldTargetApi - TODO: test on Android O
         targetSdkVersion 25
-        versionCode 20
-        versionName '0.6.0'
+        versionCode 21
+        versionName '0.7.0'
         resConfigs "en", "cs"
+        vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -44,7 +45,7 @@ android {
 dependencies {
 
     // define versions used for multiple dependencies
-    def supportLibraryVersion = '25.3.1'
+    def supportLibraryVersion = '25.3.1' //TODO: Update to 25.4.0
     // Google Play services 10.0.x is the final release that includes full support for
     // Android version 2.3.x. Versions 10.2.x and later require a minimum Android API level of 14,
     // but this project has a minimum level of 11.
@@ -58,6 +59,7 @@ dependencies {
     })
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     compile "com.android.support:cardview-v7:$supportLibraryVersion"
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     //noinspection GradleDependency versions 10.2.x and up require a minimum Android API level of 14
     compile "com.google.android.gms:play-services-base:$playServicesVersion"
     //noinspection GradleDependency
