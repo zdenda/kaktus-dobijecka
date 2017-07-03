@@ -5,8 +5,10 @@ import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -26,14 +28,17 @@ import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.Helper;
 import eu.zkkn.android.kaktus.LastFbPost;
 import eu.zkkn.android.kaktus.LastFbPost.FbPost;
-import eu.zkkn.android.kaktus.model.FbApiResponse;
 import eu.zkkn.android.kaktus.model.FbApiPost;
+import eu.zkkn.android.kaktus.model.FbApiResponse;
 
 /**
  * Handle the transfer of data between a server and an
  * app, using the Android sync adapter framework.
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
+
+    public static final String FB_SYNC_FINISHED = "fbSyncFinished";
+
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -80,6 +85,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     Helper.imageUrlFromFbPostAttachment(fbApiPost));
             //TODO: use ContentProvider
             LastFbPost.save(getContext(), fbPost);
+
+            // Notify UI that a new FCM message was received.
+            LocalBroadcastManager.getInstance(getContext())
+                    .sendBroadcast(new Intent(FB_SYNC_FINISHED));
 
         } catch (IOException e) {
             Log.e("SyncAdapter", e.getMessage() != null ? e.getMessage() : "IOException");

@@ -72,6 +72,11 @@ public class Preferences {
      */
     private static final String PREF_KEY_LAST_FB_POST_IMAGE_URL = "lastKaktusFbPostImageUrl";
 
+    /**
+     * First call to determine firs run
+     */
+    private static final String PREF_KEY_FIRST = "firstCall-1";
+
 
     private static SharedPreferences sPreferences;
 
@@ -148,6 +153,18 @@ public class Preferences {
         // annotation check would return error if we didn't check returned value
         @SyncStatus int status = getPref(context).getInt(PREF_KEY_SYNCHRONIZATION_STATUS, SYNC_NOT_SET);
         return (status == SYNC_DISABLED || status == SYNC_ENABLED) ? status : SYNC_NOT_SET;
+    }
+
+    /**
+     * Check if this is the first time this function is called
+     * @param context Context
+     * @return true if this is the first time when this function was called, false otherwise
+     */
+    public static boolean isFirst(Context context) {
+        SharedPreferences preferences = getPref(context);
+        boolean first = preferences.getBoolean(PREF_KEY_FIRST, true);
+        preferences.edit().putBoolean(PREF_KEY_FIRST, false).apply();
+        return first;
     }
 
 }

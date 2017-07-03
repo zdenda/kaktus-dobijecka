@@ -45,6 +45,17 @@ public class SyncUtils {
     }
 
     /**
+     * Manually start synchronization
+     * @param context Context
+     */
+    public static void startSync(Context context) {
+        ContentResolver.requestSync(getAccount(context),
+                context.getString(R.string.provider),
+                new Bundle());
+    }
+
+
+    /**
      * Create a new dummy account for the sync adapter
      * @param context Context
      */

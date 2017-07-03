@@ -26,6 +26,7 @@ import java.util.Date;
 import eu.zkkn.android.kaktus.fcm.FcmHelper;
 import eu.zkkn.android.kaktus.fcm.MyFcmListenerService;
 import eu.zkkn.android.kaktus.fcm.SendTokenTaskService;
+import eu.zkkn.android.kaktus.sync.SyncAdapter;
 import eu.zkkn.android.kaktus.sync.SyncUtils;
 
 
@@ -33,9 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver mFcmRegistrationBroadcastReceiver;
     private BroadcastReceiver mFcmMessageBroadcastReceiver;
+    private BroadcastReceiver mFbSyncBroadcastReceiver;
     private TextView mTvLastNotificationDate;
     private TextView mTvLastNotificationText;
     private SemaphoreView mSemaphoreStatus;
+    private View mFbImageFrame;
+    private ImageView mIvFbImage;
+    private TextView mTvFbPostDate;
+    private TextView mTvFbPostText;
 
 
     @Override
@@ -80,31 +86,19 @@ public class MainActivity extends AppCompatActivity {
         refreshLastNotificationViews();
         registerFcmMessageReceiver();
 
+        // Facebook
+        mFbImageFrame = findViewById(R.id.fl_lastFbPostImage);
+        mIvFbImage = (ImageView) findViewById(R.id.iv_lastFbPostImage);
+        mTvFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
+        mTvFbPostDate = (TextView) findViewById(R.id.tv_lastFbPostDate);
+        refreshFbPostViews();
+        registerFbSyncReceiver();
+
         // if there's no settings for sync, enable it
         if (Preferences.getSyncStatus(this) == Preferences.SYNC_NOT_SET) {
             SyncUtils.enableSync(this);
-        }
-
-        // Facebook
-        //TODO: update on synchronization
-        LastFbPost.FbPost fbPost = LastFbPost.load(this);
-        TextView lastFbPostDate = (TextView) findViewById(R.id.tv_lastFbPostDate);
-        TextView lastFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
-        if (fbPost != null) {
-            //TODO: add link to Facebook ("permalink_url")
-            lastFbPostDate.setText(Helper.formatDate(this, fbPost.date));
-            lastFbPostText.setText(fbPost.text);
-            View imageFrame = findViewById(R.id.fl_lastFbPostImage);
-            if (fbPost.imageUrl != null) {
-                ImageView imageView = (ImageView) findViewById(R.id.iv_lastFbPostImage);
-                Picasso.with(this).load(fbPost.imageUrl)
-                        .into(imageView, new Helper.BackgroundColorCallback(imageView, imageFrame));
-            } else {
-                imageFrame.setVisibility(View.GONE);
-            }
-        } else {
-            lastFbPostDate.setText(Helper.formatDate(this, new Date()));
-            lastFbPostText.setText(R.string.lastFbPost_none);
+            // and start synchronization on the first run
+            if (Preferences.isFirst(this)) SyncUtils.startSync(this);
         }
 
     }
@@ -114,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unRegisterFcmRegistrationReceiver();
         unregisterFcmMessageReceiver();
+        unregisterFbSyncReceiver();
     }
 
     @Override
@@ -167,6 +162,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void refreshFbPostViews() {
+        LastFbPost.FbPost fbPost = LastFbPost.load(this);
+        if (fbPost != null) {
+            //TODO: add link to Facebook ("permalink_url")
+            mTvFbPostDate.setText(Helper.formatDate(this, fbPost.date));
+            mTvFbPostText.setText(fbPost.text);
+            if (fbPost.imageUrl != null) {
+                Picasso.with(this).load(fbPost.imageUrl).into(mIvFbImage,
+                        new Helper.BackgroundColorCallback(mIvFbImage, mFbImageFrame));
+            } else {
+                mFbImageFrame.setVisibility(View.GONE);
+            }
+        } else {
+            mTvFbPostDate.setText(Helper.formatDate(this, new Date()));
+            mTvFbPostText.setText(R.string.lastFbPost_none);
+        }
+    }
+
     private void registerFcmRegistrationReceiver() {
         mFcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -199,6 +212,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void unregisterFcmMessageReceiver() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmMessageBroadcastReceiver);
+    }
+
+    private void registerFbSyncReceiver() {
+        mFbSyncBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                refreshFbPostViews();
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mFbSyncBroadcastReceiver,
+                new IntentFilter(SyncAdapter.FB_SYNC_FINISHED));
+    }
+
+    private void unregisterFbSyncReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFbSyncBroadcastReceiver);
     }
 
     private void showFcmToken() {
