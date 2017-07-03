@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView mIvFbImage;
     private TextView mTvFbPostDate;
     private TextView mTvFbPostText;
+    private ViewSwitcher mVsFbRefresh;
 
 
     @Override
@@ -87,10 +89,23 @@ public class MainActivity extends AppCompatActivity {
         registerFcmMessageReceiver();
 
         // Facebook
+        //TODO: if sync is disabled, show some info
         mFbImageFrame = findViewById(R.id.fl_lastFbPostImage);
         mIvFbImage = (ImageView) findViewById(R.id.iv_lastFbPostImage);
         mTvFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
         mTvFbPostDate = (TextView) findViewById(R.id.tv_lastFbPostDate);
+        mVsFbRefresh = (ViewSwitcher) findViewById(R.id.vs_fbPostRefresh);
+        findViewById(R.id.ib_fbPostRefresh).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFbSyncEnabled()) {
+                    forceFbSync();
+                } else {
+                    showEnableFbSyncDialog();
+                }
+            }
+        });
+
         refreshFbPostViews();
         registerFbSyncReceiver();
 
@@ -98,7 +113,9 @@ public class MainActivity extends AppCompatActivity {
         if (Preferences.getSyncStatus(this) == Preferences.SYNC_NOT_SET) {
             SyncUtils.enableSync(this);
             // and start synchronization on the first run
-            if (Preferences.isFirst(this)) SyncUtils.startSync(this);
+            if (Preferences.isFirst(this)) {
+                forceFbSync();
+            }
         }
 
     }
@@ -115,9 +132,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.action_sync_settings)
-                .setChecked(Preferences.getSyncStatus(this) == Preferences.SYNC_ENABLED
-                        && SyncUtils.isSyncable(this)); //account could have been removed in system settings
+        menu.findItem(R.id.action_sync_settings).setChecked(isFbSyncEnabled());
         return true;
     }
 
@@ -139,6 +154,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private boolean isFbSyncEnabled() {
+        return Preferences.getSyncStatus(this) == Preferences.SYNC_ENABLED
+                && SyncUtils.isSyncable(this); //account could have been removed in system settings
+    }
+
+    private void forceFbSync() {
+        mVsFbRefresh.setDisplayedChild(1);
+        SyncUtils.startSync(this);
     }
 
     private void refreshLastNotificationViews() {
@@ -164,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshFbPostViews() {
         LastFbPost.FbPost fbPost = LastFbPost.load(this);
+        mVsFbRefresh.setDisplayedChild(0);
         if (fbPost != null) {
             //TODO: add link to Facebook ("permalink_url")
             mTvFbPostDate.setText(Helper.formatDate(this, fbPost.date));
@@ -227,6 +254,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void unregisterFbSyncReceiver() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mFbSyncBroadcastReceiver);
+    }
+
+    private void showEnableFbSyncDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_sync_title);
+        builder.setMessage(R.string.dialog_sync_message);
+        builder.setPositiveButton(R.string.generic_alert_button_ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SyncUtils.enableSync(MainActivity.this);
+                        invalidateOptionsMenu(); //refresh sync checkbox in the menu
+                        forceFbSync();
+                    }
+                }
+        );
+        builder.setNegativeButton(R.string.generic_alert_button_cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }
+        );
+        builder.show();
     }
 
     private void showFcmToken() {

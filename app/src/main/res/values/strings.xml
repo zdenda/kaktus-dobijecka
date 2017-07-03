@@ -2,6 +2,7 @@
     <string name="app_name">Kaktus Dobíječka</string>
 
     <string name="generic_alert_button_ok">OK</string>
+    <string name="generic_alert_button_cancel">Storno</string>
 
     <string name="action_sync_settings">Synchronizovat Facebook</string>
 
@@ -10,11 +11,12 @@
 
     <string name="lastFbPost_header">Kaktus na Facebooku</string>
     <string name="lastFbPost_none">Zatím nebyl načten žádný příspěvek z Facebook stránky Kaktusu.</string>
+    <string name="lastFbPost_refresh">Obnovit</string>
 
     <string name="status_missing_google_play_services">Toto zařízení bohužel není podporováno. Aplikace vyžaduje Služby Google Play, které zde nejsou dostupné.</string>
-    <string name="status_fcm_registered">Příjem upozornění na Kaktus dobíječku je aktivní.</string>
-    <string name="status_fcm_registration_in_progress">Probíhá přihlášení k odběru upozornění na Kaktus dobíječku…</string>
-    <string name="status_fcm_registration_error">Registrace pro příjem upozornení se zatím nezdařila. Za chvíli to zkusíme znovu …</string>
+    <string name="status_fcm_registered">Příjem upozornění je aktivní.</string>
+    <string name="status_fcm_registration_in_progress">Probíhá přihlášení k odběru upozornění …</string>
+    <string name="status_fcm_registration_error">Registrace pro příjem upozornení se zatím nepodařila. Za chvíli to zkusíme znovu …</string>
 
     <string name="dialog_fcm_token_title">FCM Token</string>
     <string name="dialog_fcm_token_warning">Svůj token sdílejte jen s důvěryhodnými osobami!</string>
@@ -22,5 +24,8 @@
     <string name="dialog_fcm_token_button_ok">OK</string>
 
     <string name="dialog_notification_received_title">Přijato</string>
+
+    <string name="dialog_sync_title">Synchronizovat Facebook</string>
+    <string name="dialog_sync_message">Chcete zapnout synchronizaci příspěvků ze stránky Kaktusu na Facebooku?</string>
 
 </resources>
