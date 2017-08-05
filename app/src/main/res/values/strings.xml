@@ -28,4 +28,6 @@
     <string name="dialog_sync_title">Synchronizovat Facebook</string>
     <string name="dialog_sync_message">Chcete zapnout synchronizaci příspěvků ze stránky Kaktusu na Facebooku?</string>
 
+    <string name="notification_action_view">Zobrazit</string>
+
 </resources>

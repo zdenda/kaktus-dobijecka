@@ -3,6 +3,7 @@ package eu.zkkn.android.kaktus.fcm;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -57,7 +58,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     }
 
 
-    protected void showNotification(String message, String uri) {
+    protected void showNotification(String message, @Nullable String uri) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(getString(R.string.app_name))
@@ -65,18 +66,19 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setAutoCancel(true);
 
-        Intent intent = null;
-        if (!TextUtils.isEmpty(uri)) {
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-        }
-        // start MainActivity if URI is empty or intent can't be resolved
-        if (intent == null || intent.resolveActivity(getPackageManager()) == null) {
-            intent = new Intent(this, MainActivity.class);
-        }
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
+
+        // add action if URI is not empty and intent for that URI can be resolved
+        Intent action = null;
+        if (!TextUtils.isEmpty(uri)) {
+            action = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        }
+        if (action != null && action.resolveActivity(getPackageManager()) != null) {
+            builder.addAction(R.drawable.ic_open, getString(R.string.notification_action_view),
+                    PendingIntent.getActivity(this, 0, action, 0));
+        }
 
         NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, builder.build());
     }

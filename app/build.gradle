@@ -8,8 +8,8 @@ android {
         minSdkVersion 11
         //noinspection OldTargetApi - TODO: test on Android O
         targetSdkVersion 25
-        versionCode 21
-        versionName '0.7.0'
+        versionCode 22
+        versionName '0.8.0'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
