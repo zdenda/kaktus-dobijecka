@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.ib_fbPostRefresh).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: what if there's no internet connection
                 if (isFbSyncEnabled()) {
                     forceFbSync();
                 } else {
@@ -145,8 +146,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_sync_settings) {
             if (!item.isChecked()) {
+                //TODO: start sync
                 SyncUtils.enableSync(this);
             } else {
+                //TODO: hide progress bar
                 SyncUtils.disableSync(this);
             }
             invalidateOptionsMenu();
