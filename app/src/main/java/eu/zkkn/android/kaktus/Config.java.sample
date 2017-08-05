@@ -8,13 +8,23 @@ public class Config {
     /**
      * Debug log tag
      */
-    public static final String TAG = "DobijeckabLog";
+    public static final String TAG = "DobijeckaLog";
 
     /**
      * Backend base URL. It corresponds to Project ID
      * For example: https://<ProjectID>.appspot.com/
      */
     public static final String BACKEND_ROOT_URL = "http://localhost:8080/";
+
+    /**
+     * URL to Kaktus dobijecka's web
+     */
+    public static final String KAKTUS_DOBIJCECKA_URL = "https://www.mujkaktus.cz/chces-pridat";
+
+    /**
+     * URL to Kaktus' Facebook page
+     */
+    public static final String KAKTUS_FACEBOOK_URL = "https://www.facebook.com/kaktus";
 
     /**
      * Facebook App Access Token

@@ -38,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver mFcmMessageBroadcastReceiver;
     private BroadcastReceiver mFbSyncBroadcastReceiver;
     private FirebaseAnalyticsHelper mFirebaseAnalytics;
+    private View mLastNotification;
     private TextView mTvLastNotificationDate;
     private TextView mTvLastNotificationText;
     private SemaphoreView mSemaphoreStatus;
+    private View mFbPost;
     private View mFbImageFrame;
     private ImageView mIvFbImage;
     private TextView mTvFbPostDate;
@@ -69,10 +71,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Display FCM Token after one short and one long click on status message
-            mSemaphoreStatus.setOnClickListener(new View.OnClickListener() {
+            final View statusLayout = findViewById(R.id.fl_status);
+            statusLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mSemaphoreStatus.setOnLongClickListener(new View.OnLongClickListener() {
+                    statusLayout.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
                             showFcmToken();
@@ -87,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Last notification
+        mLastNotification = findViewById(R.id.cv_notification);
         mTvLastNotificationDate = (TextView) findViewById(R.id.tv_lastNotificationDate);
         mTvLastNotificationText = (TextView) findViewById(R.id.tv_lastNotificationText);
         refreshLastNotificationViews();
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Facebook
         //TODO: if sync is disabled, show some info
+        mFbPost = findViewById(R.id.cv_fbPost);
         mFbImageFrame = findViewById(R.id.fl_lastFbPostImage);
         mIvFbImage = (ImageView) findViewById(R.id.iv_lastFbPostImage);
         mTvFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
@@ -192,17 +197,36 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             mTvLastNotificationText.setText(notification.text);
+            mLastNotification.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewUri(MainActivity.this, notification.uri != null ?
+                            notification.uri : Config.KAKTUS_DOBIJCECKA_URL);
+                }
+            });
         } else {
             mTvLastNotificationDate.setText(Helper.formatDate(this, new Date()));
             mTvLastNotificationText.setText(R.string.lastNotification_none);
+            mLastNotification.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewUri(MainActivity.this, Config.KAKTUS_DOBIJCECKA_URL);
+                }
+            });
         }
     }
 
     private void refreshFbPostViews() {
-        LastFbPost.FbPost fbPost = LastFbPost.load(this);
+        mFbPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewUri(MainActivity.this, Config.KAKTUS_FACEBOOK_URL);
+            }
+        });
         mVsFbRefresh.setDisplayedChild(0);
+        LastFbPost.FbPost fbPost = LastFbPost.load(this);
         if (fbPost != null) {
-            //TODO: add link to Facebook ("permalink_url")
+            //TODO: add link to specific Facebook post ("permalink_url")
             mTvFbPostDate.setText(Helper.formatDate(this, fbPost.date));
             mTvFbPostText.setText(fbPost.text);
             if (fbPost.imageUrl != null) {

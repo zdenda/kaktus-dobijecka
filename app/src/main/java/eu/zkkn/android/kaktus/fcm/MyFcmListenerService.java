@@ -43,7 +43,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
             // save it as the last notification
             LastNotification.save(this, new LastNotification.Notification(
-                    new Date(sentTime), new Date(), message));
+                    new Date(sentTime), new Date(), message, uri));
 
             // Notify UI that a new FCM message was received.
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(FCM_MESSAGE_RECEIVED));

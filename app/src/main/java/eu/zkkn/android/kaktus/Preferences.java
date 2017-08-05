@@ -53,6 +53,11 @@ public class Preferences {
     private static final String PREF_KEY_LAST_NOTIFICATION_TEXT = "lastNotificationText";
 
     /**
+     * URI for the last received notification
+     */
+    private static final String PREF_KEY_LAST_NOTIFICATION_URI = "lastNotificationUri";
+
+    /**
      * Preference that indicates whether synchronization is enabled
      */
     private static final String PREF_KEY_SYNCHRONIZATION_STATUS = "synchronizationEnabled";
@@ -109,6 +114,7 @@ public class Preferences {
                 .putLong(PREF_KEY_LAST_NOTIFICATION_SENT_TIME, notification.sent.getTime())
                 .putLong(PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME, notification.received.getTime())
                 .putString(PREF_KEY_LAST_NOTIFICATION_TEXT, notification.text)
+                .putString(PREF_KEY_LAST_NOTIFICATION_URI, notification.uri)
                 .apply();
     }
 
@@ -117,11 +123,12 @@ public class Preferences {
         Long sentTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_SENT_TIME, 0);
         Long receivedTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME, 0);
         String text = preferences.getString(PREF_KEY_LAST_NOTIFICATION_TEXT, null);
+        String uri = preferences.getString(PREF_KEY_LAST_NOTIFICATION_URI, null);
 
         // if there's no last notification
         if (sentTimeMs == 0 || TextUtils.isEmpty(text)) return null;
 
-        return new Notification(new Date(sentTimeMs), new Date(receivedTimeMs), text);
+        return new Notification(new Date(sentTimeMs), new Date(receivedTimeMs), text, uri);
     }
 
     public static void setLastFbPost(Context context, FbPost fbPost) {
