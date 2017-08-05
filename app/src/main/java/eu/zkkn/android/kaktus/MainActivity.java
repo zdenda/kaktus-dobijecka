@@ -20,6 +20,7 @@ import android.widget.ViewSwitcher;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver mFcmRegistrationBroadcastReceiver;
     private BroadcastReceiver mFcmMessageBroadcastReceiver;
     private BroadcastReceiver mFbSyncBroadcastReceiver;
+    private FirebaseAnalyticsHelper mFirebaseAnalytics;
     private TextView mTvLastNotificationDate;
     private TextView mTvLastNotificationText;
     private SemaphoreView mSemaphoreStatus;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mFirebaseAnalytics = new FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(this));
 
         mSemaphoreStatus = (SemaphoreView) findViewById(R.id.tv_status);
 
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.ib_fbPostRefresh).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mFirebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_FB_REFRESH);
                 //TODO: what if there's no internet connection
                 if (isFbSyncEnabled()) {
                     forceFbSync();
@@ -148,9 +153,11 @@ public class MainActivity extends AppCompatActivity {
             if (!item.isChecked()) {
                 //TODO: start sync
                 SyncUtils.enableSync(this);
+                mFirebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_SYNC_ON);
             } else {
                 //TODO: hide progress bar
                 SyncUtils.disableSync(this);
+                mFirebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_SYNC_OFF);
             }
             invalidateOptionsMenu();
             return true;

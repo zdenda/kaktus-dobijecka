@@ -64,6 +64,7 @@ dependencies {
     compile "com.google.android.gms:play-services-base:$playServicesVersion"
     //noinspection GradleDependency
     compile "com.google.android.gms:play-services-gcm:$playServicesVersion"
+    compile "com.google.firebase:firebase-core:$playServicesVersion"
     compile "com.google.firebase:firebase-messaging:$playServicesVersion"
     // Firebase crash reporting only for Beta and Release
     //TODO: Firebase 11.0.0 adds FirebaseCrash.setCrashCollectionEnabled(boolean enable)
