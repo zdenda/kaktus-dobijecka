@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         if (fbPost != null) {
             //TODO: add link to specific Facebook post ("permalink_url")
             mTvFbPostDate.setText(Helper.formatDate(this, fbPost.date));
+            //TODO: click on this TextView doesn't open the web browser
             mTvFbPostText.setText(fbPost.text);
             if (fbPost.imageUrl != null) {
                 Picasso.with(this).load(fbPost.imageUrl).into(mIvFbImage,

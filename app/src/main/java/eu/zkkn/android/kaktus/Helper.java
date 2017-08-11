@@ -37,11 +37,11 @@ import eu.zkkn.android.kaktus.model.FbApiStoryAttachmentMedia;
  */
 public class Helper {
 
-    public static final long MIN_IN_S = 60;
-    public static final long HOUR_IN_S = MIN_IN_S * 60;
+    private static final long MIN_IN_S = 60;
+    private static final long HOUR_IN_S = MIN_IN_S * 60;
     public static final long DAY_IN_S = HOUR_IN_S * 24;
 
-    public static final String FB_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
+    private static final String FB_DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     /**
      * Formats the date as a string with date and time. It respect the localization of device.
@@ -143,6 +143,7 @@ public class Helper {
     public static void viewUri(Context context, @NonNull String uri) {
         context = context.getApplicationContext();
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (intent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(intent);
         }
