@@ -59,6 +59,7 @@ public class SendTokenTaskService extends GcmTaskService {
             String token = FirebaseInstanceId.getInstance().getToken();
             Log.i(Config.TAG, "FCM Registration Token: " + token);
 
+            //TODO: send test FCM to make sure the device can receive our messages
             sendRegistrationToServer(token);
 
             FcmHelper.saveFcmToken(this, token);

@@ -5,9 +5,9 @@ import com.google.android.gcm.server.Endpoint;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
-import com.google.appengine.labs.repackaged.org.json.JSONArray;
-import com.google.appengine.labs.repackaged.org.json.JSONException;
-import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import com.google.appengine.repackaged.org.json.JSONArray;
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -176,7 +176,7 @@ public class CheckServlet extends HttpServlet {
                 .addData("uri", KAKTUS_WEB_URL)
                 .build();
         //TODO: increase/remove the limit
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(1000).list();
+        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(2000).list();
         for (RegistrationRecord record : records) {
             //TODO: maybe use Topic or Group Messaging
             Result result = sender.send(msg, record.getRegId(), 5);
