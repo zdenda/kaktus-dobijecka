@@ -4,5 +4,6 @@
         <url>/cron/check</url>
         <description>Check Kaktus page</description>
         <schedule>every 1 hours</schedule>
+        <!-- we can specify target version number <target>13</target> -->
     </cron>
 </cronentries>

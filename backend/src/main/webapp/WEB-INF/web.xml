@@ -10,6 +10,16 @@
             <role-name>admin</role-name>
         </auth-constraint>
     </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>tasks</web-resource-name>
+            <url-pattern>/tasks/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
 
     <filter>
         <filter-name>ObjectifyFilter</filter-name>
@@ -37,6 +47,7 @@
         <url-pattern>/_ah/spi/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Cron -->
     <servlet>
         <servlet-name>CheckServlet</servlet-name>
         <servlet-class>eu.zkkn.android.kaktus.backend.CheckServlet</servlet-class>
@@ -46,7 +57,19 @@
         <url-pattern>/cron/check</url-pattern>
     </servlet-mapping>
 
+    <!-- Tasks -->
+    <servlet>
+        <servlet-name>FcmSender</servlet-name>
+        <servlet-class>eu.zkkn.android.kaktus.backend.FcmSender</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FcmSender</servlet-name>
+        <url-pattern>/tasks/fcm-sender</url-pattern>
+    </servlet-mapping>
+
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
 </web-app>

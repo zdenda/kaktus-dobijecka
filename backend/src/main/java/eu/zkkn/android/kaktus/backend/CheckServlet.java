@@ -1,10 +1,5 @@
 package eu.zkkn.android.kaktus.backend;
 
-import com.google.android.gcm.server.Constants;
-import com.google.android.gcm.server.Endpoint;
-import com.google.android.gcm.server.Message;
-import com.google.android.gcm.server.Result;
-import com.google.android.gcm.server.Sender;
 import com.google.appengine.repackaged.org.json.JSONArray;
 import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONObject;
@@ -23,6 +18,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,22 +31,16 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  */
 public class CheckServlet extends HttpServlet {
 
-    private static final String KAKTUS_WEB_URL = "https://www.mujkaktus.cz/chces-pridat";
+    public static final String KAKTUS_WEB_URL = "https://www.mujkaktus.cz/chces-pridat";
 
-    /**
-     * Api Keys can be obtained from the google cloud console
-     */
-    private static final String API_KEY = System.getProperty("gcm.api.key");
-
-    private static final Logger log = Logger.getLogger(CheckServlet.class.getName());
+    private static final Logger LOG = Logger.getLogger(CheckServlet.class.getName());
 
 
-    //TODO: check if there's some timeout for response (might be 60 seconds)
-    // and if there is a limit use https://cloud.google.com/appengine/docs/standard/java/taskqueue/
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         String text = loadTextFromWeb();
+        LOG.info("Text: " + text);
 
         // return error if there's no text
         if (text == null || text.length() == 0) {
@@ -92,7 +82,8 @@ public class CheckServlet extends HttpServlet {
 
         // if change was detected, send GCM notifications
         if (sendNotifications) {
-            sendMessage(text);
+            LOG.info("Send notifications!");
+            FcmSender.sendFcmToAll(text);
         }
 
         // send JSON response
@@ -129,6 +120,7 @@ public class CheckServlet extends HttpServlet {
      * @return text or null if the text doesn't match specific pattern
      * @throws IOException if the kaktus' web page could not be found or read
      */
+    @Nullable
     private String loadTextFromWeb() throws IOException {
         Document document = Jsoup.connect(KAKTUS_WEB_URL).timeout(0).get();
         Elements elements = document.select("div.wrapper > h2.uppercase + h3.uppercase.text-drawn");
@@ -152,54 +144,6 @@ public class CheckServlet extends HttpServlet {
         }
 
         return text;
-    }
-
-    /**
-     * Send to the first 10 devices (You can modify this to send to any number of devices or a specific device)
-     *
-     * @param message The message to send
-     */
-    private void sendMessage(String message) throws IOException {
-        if (message == null || message.trim().length() == 0) {
-            log.warning("Not sending message because it is empty");
-            return;
-        }
-        // crop longer messages
-        if (message.length() > 1000) {
-            message = message.substring(0, 1000) + "[...]";
-        }
-        Sender sender = new Sender(API_KEY, Endpoint.FCM);
-        //TODO: maybe use Notification instead of Data payload
-        Message msg = new Message.Builder()
-                .addData("type", "notification")
-                .addData("message", message)
-                .addData("uri", KAKTUS_WEB_URL)
-                .build();
-        //TODO: increase/remove the limit
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(2000).list();
-        for (RegistrationRecord record : records) {
-            //TODO: maybe use Topic or Group Messaging
-            Result result = sender.send(msg, record.getRegId(), 5);
-            if (result.getMessageId() != null) {
-                log.info("Message sent to " + record.getRegId());
-                String canonicalRegId = result.getCanonicalRegistrationId();
-                if (canonicalRegId != null) {
-                    // if the regId changed, we have to update it in the datastore
-                    log.info("Registration Id changed for " + record.getRegId() + " updating to " + canonicalRegId);
-                    record.setRegId(canonicalRegId);
-                    ofy().save().entity(record).now();
-                }
-            } else {
-                String error = result.getErrorCodeName();
-                if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
-                    log.warning("Registration Id " + record.getRegId() + " no longer registered with GCM, removing from datastore");
-                    // if the device is no longer registered with Gcm, remove it from the datastore
-                    ofy().delete().entity(record).now();
-                } else {
-                    log.warning("Error when sending message to Registration Id [" + record.getRegId() + "]: " + error);
-                }
-            }
-        }
     }
 
     private void saveParseResult(String text) {

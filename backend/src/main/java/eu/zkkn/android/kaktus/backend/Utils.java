@@ -6,6 +6,7 @@ import com.google.appengine.api.utils.SystemProperty;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+import javax.annotation.Nonnull;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -40,6 +41,15 @@ public class Utils {
             // ignore exceptions and return false
         }
         return false;
+    }
+
+    static String cropText(@Nonnull String text, int maxLength) {
+        text = text.trim();
+        // if the text is longer than the limit, crop it and add the three dots symbol at the end
+        if (text.length() > maxLength) {
+            text = text.substring(0, maxLength - 1) + "\u2026";
+        }
+        return text;
     }
 
 }

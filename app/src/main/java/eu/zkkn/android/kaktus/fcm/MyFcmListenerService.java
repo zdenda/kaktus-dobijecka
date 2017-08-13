@@ -31,6 +31,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        //TODO: with the new Task Queue sender the same message can be in some rare circumstances sent multiple times
         Map<String, String> data = remoteMessage.getData();
         //Warning: App versions 0.4.6 (15) and bellow doesn't filter notifications nor support URI
         String type = data.get("type");
