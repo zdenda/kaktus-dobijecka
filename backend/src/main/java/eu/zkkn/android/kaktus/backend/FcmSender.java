@@ -5,11 +5,12 @@ import com.google.android.gcm.server.Endpoint;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
+import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -80,11 +81,17 @@ public class FcmSender extends HttpServlet {
                 .addData("uri", CheckServlet.KAKTUS_WEB_URL)
                 .build();
 
-        //TODO: increase/remove the limit
-        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10_000).list();
+        QueryResultIterator<RegistrationRecord> records =
+                ofy().load().type(RegistrationRecord.class).iterator();
+
+        int totalRecords = 0;
         int successCounter = 0;
         int errorCounter = 0;
-        for (RegistrationRecord record : records) {
+
+        while (records.hasNext()) {
+            totalRecords++;
+            RegistrationRecord record = records.next();
+
             Result result = trySendMessage(sender, msg, record.getRegId());
 
             if (result != null && result.getMessageId() != null) {
@@ -92,7 +99,8 @@ public class FcmSender extends HttpServlet {
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update it in the datastore
-                    LOG.info("Registration Id changed for " + record.getRegId() + " updating to " + canonicalRegId);
+                    LOG.info(String.format("Registration Id changed for %s updating to %s",
+                            record.getRegId(), canonicalRegId));
                     record.setRegId(canonicalRegId);
                     ofy().save().entity(record).now();
                 }
@@ -102,16 +110,19 @@ public class FcmSender extends HttpServlet {
                 if (result == null) continue;
                 String error = result.getErrorCodeName();
                 if (Constants.ERROR_NOT_REGISTERED.equals(error)) {
-                    LOG.warning("Registration Id " + record.getRegId() + " no longer registered with GCM, removing from datastore");
                     // if the device is no longer registered with Gcm, remove it from the datastore
+                    LOG.warning(String.format("Registration Id %s no longer registered with GCM, removing from datastore",
+                            record.getRegId()));
                     ofy().delete().entity(record).now();
                 } else {
-                    LOG.warning("Error when sending message to Registration Id [" + record.getRegId() + "]: " + error);
+                    LOG.warning(String.format("Error when sending message to Registration Id [%s]: %s",
+                            record.getRegId(), error));
                 }
             }
         }
 
-        LOG.info("Total devices: " + records.size() + " [success: " + successCounter + ", error: " + errorCounter + "]");
+        LOG.info(String.format(Locale.US, "Total devices: %d [success: %d, error: %d]",
+                totalRecords, successCounter, errorCounter));
 
     }
 
@@ -122,7 +133,8 @@ public class FcmSender extends HttpServlet {
             //TODO: maybe use Topic or Group Messaging
             result = sender.send(msg, registrationId, 5);
         } catch (IOException e) {
-            LOG.warning("Message couldn't be sent: " + e.getClass().getName() + " " + e.getMessage());
+            LOG.warning(String.format("Message couldn't be sent: %s %s",
+                    e.getClass().getName(), e.getMessage()));
         }
         return result;
     }
