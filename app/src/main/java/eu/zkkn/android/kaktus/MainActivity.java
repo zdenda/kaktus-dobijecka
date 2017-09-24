@@ -89,6 +89,38 @@ public class MainActivity extends AppCompatActivity {
             mSemaphoreStatus.setError(R.string.status_missing_google_play_services);
         }
 
+        // Donation
+        final View donation = findViewById(R.id.cv_donation);
+        String number = String.format("%s\u00A0%s\u00A0%s", Config.DONATION_NUMBER.substring(0, 3),
+                Config.DONATION_NUMBER.substring(3, 6), Config.DONATION_NUMBER.substring(6, 9));
+        ((TextView) findViewById(R.id.tv_donationText)).setText(
+                getString(R.string.donation_text, number));
+        final Intent kaktusAppIntent = Helper.getAppIntent(MainActivity.this, Config.KAKTUS_APP_ID);
+        findViewById(R.id.ib_donation_hide).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFirebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_HIDE_DONATION);
+                Preferences.setDonationHidden(MainActivity.this, true);
+                donation.setVisibility(View.GONE);
+            }
+        });
+        findViewById(R.id.bt_donate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFirebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_DONATE);
+                Helper.copyToClipboard(MainActivity.this, Config.DONATION_NUMBER);
+                startActivity(kaktusAppIntent);
+
+            }
+        });
+        // hide donation box if user hid it, no notification has ben received,
+        // or the official Kaktus app is not installed
+        if (Preferences.isDonationHidden(this)
+                || LastNotification.load(this) == null
+                || kaktusAppIntent == null) {
+            donation.setVisibility(View.GONE);
+        }
+
         // Last notification
         mLastNotification = findViewById(R.id.cv_notification);
         mTvLastNotificationDate = (TextView) findViewById(R.id.tv_lastNotificationDate);

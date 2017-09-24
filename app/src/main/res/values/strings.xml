@@ -6,6 +6,11 @@
 
     <string name="action_sync_settings">Synchronizovat Facebook</string>
 
+    <string name="donation_header">Podpořte Kaktus Dobíječku</string>
+    <string name="donation_text">Máš díky dobíječce tolik kreditu, že nevíš co s ním? \u263a Co takhle ho trochu darovat na podporu téhle appky?\n\nPosílat ho můžete přes oficiální Kaktus appku. V menu vyberte položku \"Poslat\u00A0kredit\" a zadejte telefonní číslo %s.\n\nKaždá koruna se počítá! Díky!!!</string>
+    <string name="donation_button_hide">Skrýt</string>
+    <string name="donation_button_donate">Kopírovat tel. číslo a\notevřít Kaktus appku</string>
+
     <string name="lastNotification_header">Upozornění na dobíječku</string>
     <string name="lastNotification_none">Zatím nebylo přijato žádné upozornění.</string>
 

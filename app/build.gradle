@@ -6,10 +6,12 @@ android {
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 11
-        //noinspection OldTargetApi - TODO: test on Android O
+        //TODO: Android Oreo: wait until they fix the mess in notifications
+        // https://issuetracker.google.com/issues/65726322
+        //noinspection OldTargetApi
         targetSdkVersion 25
-        versionCode 23
-        versionName '0.8.1'
+        versionCode 24
+        versionName '0.9.0'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"

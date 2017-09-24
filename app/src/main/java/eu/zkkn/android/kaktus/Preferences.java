@@ -82,6 +82,11 @@ public class Preferences {
      */
     private static final String PREF_KEY_FIRST = "firstCall-1";
 
+    /**
+     * Don't show the donation message anymore
+     */
+    private static final String PREF_KEY_HIDE_DONATION = "hideDonation";
+
 
     private static SharedPreferences sPreferences;
 
@@ -172,6 +177,14 @@ public class Preferences {
         boolean first = preferences.getBoolean(PREF_KEY_FIRST, true);
         preferences.edit().putBoolean(PREF_KEY_FIRST, false).apply();
         return first;
+    }
+
+    public static boolean isDonationHidden(Context context) {
+        return getPref(context).getBoolean(PREF_KEY_HIDE_DONATION, false);
+    }
+
+    public static void setDonationHidden(Context context, boolean hide) {
+        getPref(context).edit().putBoolean(PREF_KEY_HIDE_DONATION, hide).apply();
     }
 
 }

@@ -27,6 +27,16 @@ public class Config {
     public static final String KAKTUS_FACEBOOK_URL = "https://www.facebook.com/kaktus";
 
     /**
+     * Package name of Kaktus' app
+     */
+    public static final String KAKTUS_APP_ID = "com.zentity.tmcz.kaktus";
+
+    /**
+     * The phone number for donations
+     */
+    public static final String DONATION_NUMBER = "000000000";
+
+    /**
      * Facebook App Access Token
      * https://developers.facebook.com/docs/facebook-login/access-tokens#apptokens
      * Use App Access Token, so that users do not have to log in. Users don't grant any permissions

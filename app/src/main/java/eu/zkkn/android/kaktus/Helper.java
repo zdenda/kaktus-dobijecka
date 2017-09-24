@@ -118,6 +118,10 @@ public class Helper {
         return spanned;
     }
 
+    public static void copyToClipboard(Context context, String text) {
+        copyToClipboard(context, text, text);
+    }
+
     public static void copyToClipboard(Context context, String label, String text) {
         ClipboardManager clipboard =
                 (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -147,6 +151,11 @@ public class Helper {
         if (intent.resolveActivity(context.getPackageManager()) != null) {
             context.startActivity(intent);
         }
+    }
+
+    @Nullable
+    public static Intent getAppIntent(Context context, String packageName) {
+        return context.getPackageManager().getLaunchIntentForPackage(packageName);
     }
 
     /**

@@ -12,13 +12,16 @@ import java.lang.annotation.RetentionPolicy;
 public class FirebaseAnalyticsHelper {
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({EVENT_SYNC_OFF, EVENT_SYNC_ON, EVENT_FB_REFRESH, EVENT_DOBIJECKA_WEB, EVENT_KAKTUS_FB})
+    @IntDef({EVENT_SYNC_OFF, EVENT_SYNC_ON, EVENT_FB_REFRESH, EVENT_DOBIJECKA_WEB, EVENT_KAKTUS_FB,
+            EVENT_HIDE_DONATION, EVENT_DONATE})
     public @interface Event {}
     public static final int EVENT_SYNC_OFF = 1;
     public static final int EVENT_SYNC_ON = 2;
     public static final int EVENT_FB_REFRESH = 3;
     public static final int EVENT_DOBIJECKA_WEB = 4;
     public static final int EVENT_KAKTUS_FB = 5;
+    public static final int EVENT_HIDE_DONATION = 6;
+    public static final int EVENT_DONATE = 7;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -61,6 +64,18 @@ public class FirebaseAnalyticsHelper {
                 params.putString(FirebaseAnalytics.Param.ITEM_ID, "main_fb_post");
                 params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "CardView");
                 params.putString(FirebaseAnalytics.Param.ITEM_NAME, "kaktus_fb");
+                break;
+            case EVENT_HIDE_DONATION:
+                name = FirebaseAnalytics.Event.SELECT_CONTENT;
+                params.putString(FirebaseAnalytics.Param.ITEM_ID, "main_donation_hide");
+                params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Button");
+                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "hide");
+                break;
+            case EVENT_DONATE:
+                name = FirebaseAnalytics.Event.SELECT_CONTENT;
+                params.putString(FirebaseAnalytics.Param.ITEM_ID, "main_donation_send");
+                params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Button");
+                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "make_donation");
                 break;
             default:
                 throw new RuntimeException("Unsupported Firebase Analytics Event ID: " + event);
