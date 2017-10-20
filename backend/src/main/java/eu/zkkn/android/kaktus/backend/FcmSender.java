@@ -10,6 +10,8 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -88,6 +90,9 @@ public class FcmSender extends HttpServlet {
         int successCounter = 0;
         int errorCounter = 0;
 
+        List<RegistrationRecord> updateEntities = new ArrayList<>();
+        List<Long> deleteIds = new ArrayList<>();
+
         while (records.hasNext()) {
             totalRecords++;
             RegistrationRecord record = records.next();
@@ -99,10 +104,10 @@ public class FcmSender extends HttpServlet {
                 String canonicalRegId = result.getCanonicalRegistrationId();
                 if (canonicalRegId != null) {
                     // if the regId changed, we have to update it in the datastore
-                    LOG.info(String.format("Registration Id changed for %s updating to %s",
+                    LOG.info(String.format("Registration ID changed for %s updating to %s",
                             record.getRegId(), canonicalRegId));
                     record.setRegId(canonicalRegId);
-                    ofy().save().entity(record).now();
+                    updateEntities.add(record);
                 }
                 successCounter++;
             } else {
@@ -111,15 +116,21 @@ public class FcmSender extends HttpServlet {
                 String error = result.getErrorCodeName();
                 if (Constants.ERROR_NOT_REGISTERED.equals(error)) {
                     // if the device is no longer registered with Gcm, remove it from the datastore
-                    LOG.warning(String.format("Registration Id %s no longer registered with GCM, removing from datastore",
+                    LOG.warning(String.format("Registration ID %s no longer registered with GCM, removing from datastore",
                             record.getRegId()));
-                    ofy().delete().entity(record).now();
+                    deleteIds.add(record.id);
                 } else {
-                    LOG.warning(String.format("Error when sending message to Registration Id [%s]: %s",
+                    LOG.warning(String.format("Error when sending message to Registration ID [%s]: %s",
                             record.getRegId(), error));
                 }
             }
         }
+
+        // do the postponed update/delete for changed/deleted entities
+        LOG.info(String.format(Locale.US, "Update %d records.", updateEntities.size()));
+        ofy().save().entities(updateEntities).now();
+        LOG.info(String.format(Locale.US, "Delete %d records.", deleteIds.size()));
+        ofy().delete().type(RegistrationRecord.class).ids(deleteIds).now();
 
         LOG.info(String.format(Locale.US, "Total devices: %d [success: %d, error: %d]",
                 totalRecords, successCounter, errorCounter));
