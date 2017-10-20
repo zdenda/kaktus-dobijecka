@@ -40,6 +40,7 @@ appengine {
     endpoints {
         getClientLibsOnBuild = true
         getDiscoveryDocsOnBuild = true
+        googleClientVersion = '1.23.0' //fix for build error, try to remove it
     }
     httpAddress = '0.0.0.0'
     jvmFlags = ["-Ddatastore.backing_store=$rootDir/backend/local_db.bin"]
