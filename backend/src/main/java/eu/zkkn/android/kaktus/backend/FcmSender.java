@@ -124,11 +124,17 @@ public class FcmSender extends HttpServlet {
                             record.getRegId(), error));
                 }
             }
+
+            // give the datastore some break
+            Utils.sleep(10);
+
         }
 
         // do the postponed update/delete for changed/deleted entities
         LOG.info(String.format(Locale.US, "Update %d records.", updateEntities.size()));
         ofy().save().entities(updateEntities).now();
+        // give the datastore some break
+        Utils.sleep(10_000);
         LOG.info(String.format(Locale.US, "Delete %d records.", deleteIds.size()));
         ofy().delete().type(RegistrationRecord.class).ids(deleteIds).now();
 

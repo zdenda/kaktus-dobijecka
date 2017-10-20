@@ -52,4 +52,38 @@ public class Utils {
         return text;
     }
 
+
+    /**
+     * Waits a given number of milliseconds (of uptimeMillis) before returning.
+     * Similar to {@link java.lang.Thread#sleep(long)}, but does not throw
+     * {@link InterruptedException}; {@link Thread#interrupt()} events are
+     * deferred until the next interruptible operation.  Does not return until
+     * at least the specified number of milliseconds has elapsed.
+     *
+     * Copied from Android SystemClock.sleep()
+     *
+     * @param ms to sleep before returning, in milliseconds of uptime.
+     */
+    public static void sleep(long ms) {
+        long start = System.currentTimeMillis();
+        long duration = ms;
+        boolean interrupted = false;
+        do {
+            try {
+                Thread.sleep(duration);
+            }
+            catch (InterruptedException e) {
+                interrupted = true;
+            }
+            duration = start + ms - System.currentTimeMillis();
+        } while (duration > 0);
+
+        if (interrupted) {
+            // Important: we don't want to quietly eat an interrupt() event,
+            // so we make sure to re-interrupt the thread so that the next
+            // call to Thread.sleep() or Object.wait() will be interrupted.
+            Thread.currentThread().interrupt();
+        }
+    }
+
 }
