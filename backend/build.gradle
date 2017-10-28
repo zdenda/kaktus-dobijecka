@@ -1,17 +1,23 @@
 // If you would like more information on the gradle-appengine-plugin please refer to the github page
 // https://github.com/GoogleCloudPlatform/gradle-appengine-plugin
 
+//TODO: Migrate to App ENgine Endpoint v2 before August 2, 2018
+//https://cloud.google.com/endpoints/docs/frameworks/legacy/v1/java/
+//https://cloud.google.com/endpoints/docs/frameworks/legacy/v1/java/migrating
+//https://cloud.google.com/endpoints/docs/frameworks/legacy/v1/java/migrating-android
+//https://github.com/GoogleCloudPlatform/android-docs-samples/tree/master/endpoints-frameworks
+
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.56'
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.59'
     }
 }
 
 repositories {
-    jcenter();
+    jcenter()
 }
 
 apply plugin: 'java'
@@ -22,14 +28,18 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.58'
-    compile 'com.google.appengine:appengine-endpoints:1.9.58'
-    compile 'com.google.appengine:appengine-endpoints-deps:1.9.58'
-    compile 'com.google.appengine:appengine-api-labs:1.9.58'
+
+    def appEngineSdkVersion = '1.9.59'
+
+    appengineSdk "com.google.appengine:appengine-java-sdk:$appEngineSdkVersion"
+    compile "com.google.appengine:appengine-endpoints:$appEngineSdkVersion"
+    compile "com.google.appengine:appengine-endpoints-deps:$appEngineSdkVersion"
+    compile "com.google.appengine:appengine-api-labs:$appEngineSdkVersion"
+    compile 'com.google.api-client:google-api-client:1.23.0'
     compile 'javax.servlet:servlet-api:2.5'
     compile 'com.googlecode.objectify:objectify:5.1.21'
     compile 'com.ganyo:gcm-server:1.1.0'
-    compile 'org.jsoup:jsoup:1.10.3'
+    compile 'org.jsoup:jsoup:1.11.1'
 }
 
 appengine {

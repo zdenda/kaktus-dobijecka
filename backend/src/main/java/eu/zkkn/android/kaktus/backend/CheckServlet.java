@@ -122,7 +122,9 @@ public class CheckServlet extends HttpServlet {
      */
     @Nullable
     private String loadTextFromWeb() throws IOException {
-        Document document = Jsoup.connect(KAKTUS_WEB_URL).timeout(0).get();
+        //TODO: jsoup (v1.11.1) stopped treating zero as an infinite timeout.
+        // App Engine request has to return within 60 seconds
+        Document document = Jsoup.connect(KAKTUS_WEB_URL).timeout(59 * 1000).get();
         Elements elements = document.select("div.wrapper > h2.uppercase + h3.uppercase.text-drawn");
 
         // there should be only one element

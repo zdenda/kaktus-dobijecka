@@ -2,16 +2,17 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '27.0.0'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
+        //noinspection MinSdkTooLow
         minSdkVersion 11
         //TODO: Android Oreo: wait until they fix the mess in notifications
         // https://issuetracker.google.com/issues/65726322
         //noinspection OldTargetApi
         targetSdkVersion 25
-        versionCode 24
-        versionName '0.9.0'
+        versionCode 25
+        versionName '0.9.1'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -47,6 +48,9 @@ android {
 dependencies {
 
     // define versions used for multiple dependencies
+
+    // Support library v26: The minimum SDK version has been increased to 14,
+    // but this project has a minimum level of 11.
     def supportLibraryVersion = '25.4.0'
     // Google Play services 10.0.x is the final release that includes full support for
     // Android version 2.3.x. Versions 10.2.x and later require a minimum Android API level of 14,
@@ -66,19 +70,23 @@ dependencies {
     compile "com.google.android.gms:play-services-base:$playServicesVersion"
     //noinspection GradleDependency
     compile "com.google.android.gms:play-services-gcm:$playServicesVersion"
+    //noinspection GradleDependency
     compile "com.google.firebase:firebase-core:$playServicesVersion"
+    //noinspection GradleDependency
     compile "com.google.firebase:firebase-messaging:$playServicesVersion"
     // Firebase crash reporting only for Beta and Release
     //TODO: Firebase 11.0.0 adds FirebaseCrash.setCrashCollectionEnabled(boolean enable)
     // so it can be disabled for debug. It's even possible to disable it in the app's manifest.
     // https://developers.google.com/android/reference/com/google/firebase/crash/FirebaseCrash.html#setCrashCollectionEnabled%28boolean%29
+    //noinspection GradleDependency
     betaCompile "com.google.firebase:firebase-crash:$playServicesVersion"
+    //noinspection GradleDependency
     releaseCompile "com.google.firebase:firebase-crash:$playServicesVersion"
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:3.0.1', {
+        //exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     })
 
