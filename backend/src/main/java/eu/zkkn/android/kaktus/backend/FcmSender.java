@@ -5,8 +5,8 @@ import com.google.android.gcm.server.Endpoint;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
-import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.RetryOptions;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 import java.io.IOException;
@@ -44,7 +44,9 @@ public class FcmSender extends HttpServlet {
 
     public static void sendFcmToAll(String message) {
         QueueFactory.getDefaultQueue().add(
-                TaskOptions.Builder.withUrl("/tasks/fcm-sender").param(PARAM_MESSAGE_NAME, message));
+                TaskOptions.Builder.withUrl("/tasks/fcm-sender")
+                        .param(PARAM_MESSAGE_NAME, message)
+                        .retryOptions(RetryOptions.Builder.withTaskRetryLimit(3)));
     }
 
 
@@ -83,19 +85,16 @@ public class FcmSender extends HttpServlet {
                 .addData("uri", CheckServlet.KAKTUS_WEB_URL)
                 .build();
 
-        QueryResultIterator<RegistrationRecord> records =
-                ofy().load().type(RegistrationRecord.class).iterator();
+        //TODO: use FCM topic instead of sending the message to each device separately
+        List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).list();
 
-        int totalRecords = 0;
         int successCounter = 0;
         int errorCounter = 0;
 
         List<RegistrationRecord> updateEntities = new ArrayList<>();
         List<Long> deleteIds = new ArrayList<>();
 
-        while (records.hasNext()) {
-            totalRecords++;
-            RegistrationRecord record = records.next();
+        for (RegistrationRecord record : records) {
 
             Result result = trySendMessage(sender, msg, record.getRegId());
 
@@ -125,21 +124,18 @@ public class FcmSender extends HttpServlet {
                 }
             }
 
-            // give the datastore some break
-            Utils.sleep(10);
-
         }
 
         // do the postponed update/delete for changed/deleted entities
         LOG.info(String.format(Locale.US, "Update %d records.", updateEntities.size()));
         ofy().save().entities(updateEntities).now();
         // give the datastore some break
-        Utils.sleep(10_000);
+        Utils.sleep(5_000);
         LOG.info(String.format(Locale.US, "Delete %d records.", deleteIds.size()));
         ofy().delete().type(RegistrationRecord.class).ids(deleteIds).now();
 
         LOG.info(String.format(Locale.US, "Total devices: %d [success: %d, error: %d]",
-                totalRecords, successCounter, errorCounter));
+                records.size(), successCounter, errorCounter));
 
     }
 
@@ -147,7 +143,6 @@ public class FcmSender extends HttpServlet {
     private Result trySendMessage(Sender sender, Message msg, String registrationId) {
         Result result = null;
         try {
-            //TODO: maybe use Topic or Group Messaging
             result = sender.send(msg, registrationId, 5);
         } catch (IOException e) {
             LOG.warning(String.format("Message couldn't be sent: %s %s",

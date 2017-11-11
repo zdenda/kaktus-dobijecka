@@ -1,6 +1,5 @@
 package eu.zkkn.android.kaktus.backend;
 
-
 import com.google.appengine.api.utils.SystemProperty;
 
 import java.io.UnsupportedEncodingException;
@@ -13,6 +12,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
 
 public class Utils {
 
