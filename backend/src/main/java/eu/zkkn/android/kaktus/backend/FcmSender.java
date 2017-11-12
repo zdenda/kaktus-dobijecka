@@ -1,7 +1,6 @@
 package eu.zkkn.android.kaktus.backend;
 
 import com.google.android.gcm.server.Constants;
-import com.google.android.gcm.server.Endpoint;
 import com.google.android.gcm.server.Message;
 import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
@@ -77,7 +76,7 @@ public class FcmSender extends HttpServlet {
      */
     private void sendMessage(@Nonnull String message) {
 
-        Sender sender = new Sender(API_KEY, Endpoint.FCM);
+        Sender sender = new Sender(API_KEY);
 
         Message msg = new Message.Builder()
                 .addData("type", "notification")

@@ -38,8 +38,8 @@ dependencies {
     compile 'com.google.api-client:google-api-client:1.23.0'
     compile 'javax.servlet:servlet-api:2.5'
     compile 'com.googlecode.objectify:objectify:5.1.21'
-    compile 'com.ganyo:gcm-server:1.1.0'
     compile 'org.jsoup:jsoup:1.11.1'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 appengine {
