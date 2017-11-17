@@ -11,7 +11,7 @@
 
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
     <application>YOUR_PROJECT_ID_HERE</application>
-    <version>17</version>
+    <version>18</version>
     <threadsafe>true</threadsafe>
 
     <system-properties>

@@ -15,8 +15,10 @@ public class RegistrationRecord {
 
     @Index
     private String regId;
-    // you can add more fields...
-    //TODO: add date and InstanceID.getInstance(context).getId();
+
+    @Index
+    private Boolean topicNotifications;
+
 
     public RegistrationRecord() {
     }
@@ -28,4 +30,13 @@ public class RegistrationRecord {
     public void setRegId(String regId) {
         this.regId = regId;
     }
+
+    public Boolean isTopicNotifications() {
+        return topicNotifications;
+    }
+
+    public void setTopicNotifications(boolean topicNotifications) {
+        this.topicNotifications = topicNotifications;
+    }
+
 }

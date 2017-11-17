@@ -37,15 +37,16 @@ public class MyFcmListenerService extends FirebaseMessagingService {
         String type = data.get("type");
         if ("notification".equals(type)) {
             long sentTime = remoteMessage.getSentTime();
+            String from = remoteMessage.getFrom();
             String message = data.get("message");
             String uri = data.get("uri");
 
-            Log.d(Config.TAG, "From: " + remoteMessage.getFrom() + ", Type: " + type + "Time: "
+            Log.d(Config.TAG, "From: " + from + ", Type: " + type + "Time: "
                     + sentTime + ", Message: " + message + ", URI: " + uri);
 
             // save it as the last notification
             LastNotification.save(this, new LastNotification.Notification(
-                    new Date(sentTime), new Date(), message, uri));
+                    new Date(sentTime), new Date(), message, uri, from));
 
             // Notify UI that a new FCM message was received.
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(FCM_MESSAGE_RECEIVED));

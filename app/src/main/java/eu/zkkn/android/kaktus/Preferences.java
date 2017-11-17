@@ -37,6 +37,11 @@ public class Preferences {
     private static final String PREF_KEY_FCM_SENT_TOKEN_TO_SERVER = "fcmSentTokenToServer";
 
     /**
+     * Boolean preference that indicates whether the device is subscribed to topic "notifications"
+     */
+    private static final String PREF_KEY_FCM_TOPIC_NOTIFICATIONS = "fcmTopicNotifications";
+
+    /**
      * Time when was the last notification sent
      */
     private static final String PREF_KEY_LAST_NOTIFICATION_SENT_TIME = "lastNotificationDate";
@@ -56,6 +61,11 @@ public class Preferences {
      * URI for the last received notification
      */
     private static final String PREF_KEY_LAST_NOTIFICATION_URI = "lastNotificationUri";
+
+    /**
+     * Sender of the last received notification
+     */
+    private static final String PREF_KEY_LAST_NOTIFICATION_FROM = "lastNotificationFrom";
 
     /**
      * Preference that indicates whether synchronization is enabled
@@ -114,12 +124,21 @@ public class Preferences {
         return getPref(context).getBoolean(PREF_KEY_FCM_SENT_TOKEN_TO_SERVER, false);
     }
 
+    public static void setSubscribedToNotifications(Context context, boolean isSubscribed) {
+        getPref(context).edit().putBoolean(PREF_KEY_FCM_TOPIC_NOTIFICATIONS, isSubscribed).apply();
+    }
+
+    public static boolean isSubscribedToNotifications(Context context) {
+        return getPref(context).getBoolean(PREF_KEY_FCM_TOPIC_NOTIFICATIONS, false);
+    }
+
     public static void setLastNotification(Context context, Notification notification) {
         getPref(context).edit()
                 .putLong(PREF_KEY_LAST_NOTIFICATION_SENT_TIME, notification.sent.getTime())
                 .putLong(PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME, notification.received.getTime())
                 .putString(PREF_KEY_LAST_NOTIFICATION_TEXT, notification.text)
                 .putString(PREF_KEY_LAST_NOTIFICATION_URI, notification.uri)
+                .putString(PREF_KEY_LAST_NOTIFICATION_FROM, notification.from)
                 .apply();
     }
 
@@ -129,11 +148,12 @@ public class Preferences {
         Long receivedTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME, 0);
         String text = preferences.getString(PREF_KEY_LAST_NOTIFICATION_TEXT, null);
         String uri = preferences.getString(PREF_KEY_LAST_NOTIFICATION_URI, null);
+        String from = preferences.getString(PREF_KEY_LAST_NOTIFICATION_FROM, null);
 
         // if there's no last notification
         if (sentTimeMs == 0 || TextUtils.isEmpty(text)) return null;
 
-        return new Notification(new Date(sentTimeMs), new Date(receivedTimeMs), text, uri);
+        return new Notification(new Date(sentTimeMs), new Date(receivedTimeMs), text, uri, from);
     }
 
     public static void setLastFbPost(Context context, FbPost fbPost) {

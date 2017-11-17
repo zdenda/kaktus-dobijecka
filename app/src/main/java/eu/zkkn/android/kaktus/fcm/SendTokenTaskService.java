@@ -16,6 +16,7 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 
@@ -28,6 +29,8 @@ import eu.zkkn.android.kaktus.backend.registration.Registration;
 public class SendTokenTaskService extends GcmTaskService {
 
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
+
+    private static final String FCM_TOPIC_NOTIFICATIONS = "notifications";
 
     private static final String TAG = "SendTokenTaskService";
     private static Registration registration = null;
@@ -58,6 +61,9 @@ public class SendTokenTaskService extends GcmTaskService {
             // Get updated InstanceID token.
             String token = FirebaseInstanceId.getInstance().getToken();
             Log.i(Config.TAG, "FCM Registration Token: " + token);
+
+            // subscribe to notifications
+            FirebaseMessaging.getInstance().subscribeToTopic(FCM_TOPIC_NOTIFICATIONS);
 
             //TODO: send test FCM to make sure the device can receive our messages
             sendRegistrationToServer(token);
@@ -104,7 +110,7 @@ public class SendTokenTaskService extends GcmTaskService {
                     });
             registration = builder.build();
         }
-        registration.register(token).execute();
+        registration.registerTopicNotifications(token).execute();
     }
 
 

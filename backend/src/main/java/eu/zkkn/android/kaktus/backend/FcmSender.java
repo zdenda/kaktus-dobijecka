@@ -82,18 +82,35 @@ public class FcmSender extends HttpServlet {
                 .addData("type", "notification")
                 .addData("message", Utils.cropText(message, 1000))
                 .addData("uri", CheckServlet.KAKTUS_WEB_URL)
+                //.dryRun(true)
                 .build();
+
+        // Send message to topic "notifications"
+        String topicTo = Constants.TOPIC_PREFIX + "notifications";
+        LOG.info("Send message to topic: " + topicTo);
+        Result topicResult = trySendMessage(sender, msg, topicTo);
+        if (topicResult == null || topicResult.getMessageId() == null) {
+            LOG.severe("Error when sending message to " + topicTo);
+        }
+        if (topicResult != null) LOG.info(topicResult.toString());
 
         //TODO: use FCM topic instead of sending the message to each device separately
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).list();
 
         int successCounter = 0;
+        int topicCounter = 0;
         int errorCounter = 0;
 
         List<RegistrationRecord> updateEntities = new ArrayList<>();
         List<Long> deleteIds = new ArrayList<>();
 
         for (RegistrationRecord record : records) {
+
+            // skip if device is registered for notifications topic
+            if (Boolean.TRUE.equals(record.isTopicNotifications())) {
+                topicCounter++;
+                continue;
+            }
 
             Result result = trySendMessage(sender, msg, record.getRegId());
 
@@ -133,8 +150,8 @@ public class FcmSender extends HttpServlet {
         LOG.info(String.format(Locale.US, "Delete %d records.", deleteIds.size()));
         ofy().delete().type(RegistrationRecord.class).ids(deleteIds).now();
 
-        LOG.info(String.format(Locale.US, "Total devices: %d [success: %d, error: %d]",
-                records.size(), successCounter, errorCounter));
+        LOG.info(String.format(Locale.US, "Total devices: %d [success: %d, topic: %d, error: %d]",
+                records.size(), successCounter, topicCounter, errorCounter));
 
     }
 

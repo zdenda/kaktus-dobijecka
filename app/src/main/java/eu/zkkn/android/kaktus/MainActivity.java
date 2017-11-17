@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         if (checkPlayServices()) {
 
             if (TextUtils.isEmpty(FcmHelper.loadFcmToken(this))) {
+                if (FcmHelper.missingSubscriptionToNotifications(this)) {
+                    SendTokenTaskService.runSendTokenTask(this);
+                }
                 mSemaphoreStatus.setInfo(R.string.status_fcm_registration_in_progress);
                 // register local broadcast receiver for result of the registration.
                 registerFcmRegistrationReceiver();
@@ -224,7 +227,11 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onLongClick(View v) {
                     Helper.showAlert(MainActivity.this,
                             getString(R.string.dialog_notification_received_title),
-                            Helper.formatDate(MainActivity.this, notification.received));
+                            String.format("%s (%s)",
+                                    Helper.formatDate(MainActivity.this, notification.received),
+                                    notification.from
+                            )
+                    );
                     return true;
                 }
             });

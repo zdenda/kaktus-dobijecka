@@ -16,12 +16,15 @@ public class LastNotification {
         public Date received;
         public String text;
         public @Nullable String uri;
+        public @Nullable String from;
 
-        public Notification(Date sent, Date received, String text, @Nullable String uri) {
+        public Notification(Date sent, Date received, String text, @Nullable String uri,
+                            @Nullable String from) {
             this.sent = sent;
             this.received = received;
             this.text = text;
             this.uri = uri;
+            this.from = from;
         }
 
     }

@@ -39,6 +39,7 @@ public class RegistrationEndpoint {
      */
     // force path, otherwise it would be "registerDevice/{regId}", which causes problem for Jetty (App Engine on localhost).
     // regId might contain colon (":") and jetty returns error 404 if colon is in URL path
+    @Deprecated
     @ApiMethod(name = "register", path = "registerDevice")
     public void registerDevice(@Named("regId") String regId) {
         if (findRecord(regId) != null) {
@@ -51,20 +52,21 @@ public class RegistrationEndpoint {
     }
 
     /**
-     * Unregister a device from the backend
+     * Register a device and set flag for notifications topic
      *
-     * @param regId The Google Cloud Messaging registration Id to remove
+     * @param token The Firebase Cloud Messaging token (Registration ID in old GCM terminology)
      */
-    // force path, otherwise it would be "registerDevice/{regId}", which causes problem for Jetty (App Engine on localhost).
-    // regId might contain colon (":") and jetty returns error 404 if colon is in URL path
-    @ApiMethod(name = "unregister", path = "unregisterDevice")
-    public void unregisterDevice(@Named("regId") String regId) {
-        RegistrationRecord record = findRecord(regId);
+    // force path, otherwise it would be "registerTopicNotifications/{token}", which causes problem for Jetty (App Engine on localhost).
+    // token might contain colon (":") and jetty returns error 404 if colon is in URL path
+    @ApiMethod(name = "registerTopicNotifications", path = "registerTopicNotifications")
+    public void registerTopicNotifications(@Named("token") String token) {
+        RegistrationRecord record = findRecord(token);
         if (record == null) {
-            log.info("Device " + regId + " not registered, skipping unregister");
-            return;
+            record = new RegistrationRecord();
+            record.setRegId(token);
         }
-        ofy().delete().entity(record).now();
+        record.setTopicNotifications(true);
+        ofy().save().entity(record).now();
     }
 
     private RegistrationRecord findRecord(String regId) {

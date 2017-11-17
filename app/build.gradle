@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '27.0.0'
+    buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         //noinspection MinSdkTooLow
@@ -12,7 +12,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 25
         versionCode 25
-        versionName '0.9.1'
+        versionName '0.10.0'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
