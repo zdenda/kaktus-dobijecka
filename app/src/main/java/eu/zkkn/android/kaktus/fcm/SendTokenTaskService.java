@@ -20,6 +20,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 
+import eu.zkkn.android.kaktus.BuildConfig;
 import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.Helper;
 import eu.zkkn.android.kaktus.Preferences;
@@ -64,6 +65,11 @@ public class SendTokenTaskService extends GcmTaskService {
 
             // subscribe to notifications
             FirebaseMessaging.getInstance().subscribeToTopic(FCM_TOPIC_NOTIFICATIONS);
+
+            // and also to debug notifications if this is a debug build
+            if (BuildConfig.DEBUG) {
+                FirebaseMessaging.getInstance().subscribeToTopic("notifications-debug");
+            }
 
             //TODO: send test FCM to make sure the device can receive our messages
             sendRegistrationToServer(token);

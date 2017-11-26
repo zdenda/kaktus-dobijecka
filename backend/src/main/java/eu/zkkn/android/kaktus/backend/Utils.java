@@ -43,6 +43,14 @@ public class Utils {
         return false;
     }
 
+    /**
+     * To determine whether your code is running in production or in the local development server
+     * @return true if this run on a production server; false otherwise
+     */
+    public static boolean isProduction() {
+        return SystemProperty.Environment.Value.Production == SystemProperty.environment.value();
+    }
+
     static String cropText(@Nonnull String text, int maxLength) {
         text = text.trim();
         // if the text is longer than the limit, crop it and add the three dots symbol at the end

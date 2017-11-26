@@ -85,12 +85,13 @@ public class FcmSender extends HttpServlet {
                 //.dryRun(true)
                 .build();
 
-        // Send message to topic "notifications"
-        String topicTo = Constants.TOPIC_PREFIX + "notifications";
-        LOG.info("Send message to topic: " + topicTo);
-        Result topicResult = trySendMessage(sender, msg, topicTo);
+        // Send message to topic for notifications
+        String topicName = Utils.isProduction() ? "notifications" : "notifications-debug";
+        String topicFullName = Constants.TOPIC_PREFIX + topicName;
+        LOG.info("Send message to topic: " + topicFullName);
+        Result topicResult = trySendMessage(sender, msg, topicFullName);
         if (topicResult == null || topicResult.getMessageId() == null) {
-            LOG.severe("Error when sending message to " + topicTo);
+            LOG.severe("Error when sending message to " + topicFullName);
         }
         if (topicResult != null) LOG.info(topicResult.toString());
 
