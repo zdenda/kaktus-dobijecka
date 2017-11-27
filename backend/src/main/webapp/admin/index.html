@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Kaktus Dobíječka - Notifications</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <form action="send-notifications" method="post">
+        <h2 class="form-signin-heading">Send Notifications</h2>
+        <label for="inputMessage" class="sr-only">Message</label>
+        <input type="text" id="inputMessage" name="message" class="form-control"
+               placeholder="Message" required autofocus>
+        <label for="inputKey" class="sr-only">FCM Server key</label>
+        <input type="text" id="inputKey" name="key" class="form-control"
+               placeholder="FCM Server key" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+    </form>
+
+</div> <!-- /container -->
+
+</body>
+</html>

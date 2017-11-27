@@ -3,6 +3,18 @@
 
     <security-constraint>
         <web-resource-collection>
+            <web-resource-name>admin</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
             <web-resource-name>cron</web-resource-name>
             <url-pattern>/cron/*</url-pattern>
         </web-resource-collection>
@@ -45,6 +57,15 @@
     <servlet-mapping>
         <servlet-name>SystemServiceServlet</servlet-name>
         <url-pattern>/_ah/spi/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ManualNotificationsServlet</servlet-name>
+        <servlet-class>eu.zkkn.android.kaktus.backend.ManualNotificationsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManualNotificationsServlet</servlet-name>
+        <url-pattern>/admin/send-notifications</url-pattern>
     </servlet-mapping>
 
     <!-- Cron -->
