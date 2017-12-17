@@ -82,6 +82,7 @@ public class FcmSender extends HttpServlet {
                 .addData("type", "notification")
                 .addData("message", Utils.cropText(message, 1000))
                 .addData("uri", CheckServlet.KAKTUS_WEB_URL)
+                .priority(Message.Priority.HIGH)
                 //.dryRun(true)
                 .build();
 
