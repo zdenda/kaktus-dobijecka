@@ -1,8 +1,8 @@
 /build
 backend.iml
 
-# appengine-web.xml contains private IDs and keys
-/src/main/webapp/WEB-INF/appengine-web.xml
+# appengine-settings.gradle contains private IDs and keys
+appengine-settings.gradle
 
 # local_db.bin can't be under /build directory because every new build would delete it
 local_db.bin

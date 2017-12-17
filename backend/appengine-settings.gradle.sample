@@ -1,0 +1,7 @@
+// App Engine Settings Variables
+
+ext {
+    projectId = 'YOUR_APP_ENGINE_PROJECT_ID'
+    adminEmail = 'YOUR_EMAIL@example.com'
+    fcmServerKey = 'YOUR_FCM_SERVER_KEY'
+}

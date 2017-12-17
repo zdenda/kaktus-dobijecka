@@ -1,8 +1,14 @@
+// Android Application build file
+
+// Android app
 apply plugin: 'com.android.application'
+// App Engine Endpoints Framework client plugin
+apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
+
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.2'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         //noinspection MinSdkTooLow
@@ -58,11 +64,14 @@ dependencies {
     def playServicesVersion = '10.0.1'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(path: ':backend', configuration: 'android-endpoints')
-    // Android Studio 2.3 doesn't auto import this backend dependency
-    compile('com.google.api-client:google-api-client-android:1.20.0', {
+
+    // App Engine Endpoints Framework v2
+    endpointsServer project(path: ':backend', configuration: 'endpoints')
+    //compile 'com.google.api-client:google-api-client:1.23.0'
+    compile('com.google.api-client:google-api-client-android:1.23.0', {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     })
+
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     compile "com.android.support:cardview-v7:$supportLibraryVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'

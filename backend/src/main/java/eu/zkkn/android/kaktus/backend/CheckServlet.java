@@ -1,9 +1,7 @@
 package eu.zkkn.android.kaktus.backend;
 
-import com.google.appengine.repackaged.org.json.JSONArray;
-import com.google.appengine.repackaged.org.json.JSONException;
-import com.google.appengine.repackaged.org.json.JSONObject;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -35,7 +33,7 @@ public class CheckServlet extends HttpServlet {
 
     private static final Logger LOG = Logger.getLogger(CheckServlet.class.getName());
 
-
+    @SuppressWarnings("unchecked") //TODO: remove
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -87,29 +85,24 @@ public class CheckServlet extends HttpServlet {
         }
 
         // send JSON response
-        try {
-            JSONObject jsonResponse = new JSONObject();
-            jsonResponse.put("result", text);
-            jsonResponse.put("notifications", sendNotifications);
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("result", text);
+        jsonResponse.put("notifications", sendNotifications);
 
-            DateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            JSONArray jsonPrevious = new JSONArray();
-            for (ParseResult parseResult : previousResults) {
-                JSONObject jsonResult = new JSONObject();
-                jsonResult.put("date", isoFormat.format(parseResult.getDate()));
-                jsonResult.put("text", parseResult.getText());
-                jsonPrevious.put(jsonResult);
-            }
-            jsonResponse.put("previous", jsonPrevious);
-
-
-            resp.setContentType("application/json; charset=UTF-8");
-            jsonResponse.write(resp.getWriter());
-
-        } catch (JSONException e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        DateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        JSONArray jsonPrevious = new JSONArray();
+        for (ParseResult parseResult : previousResults) {
+            JSONObject jsonResult = new JSONObject();
+            jsonResult.put("date", isoFormat.format(parseResult.getDate()));
+            jsonResult.put("text", parseResult.getText());
+            jsonPrevious.add(jsonResult);
         }
+        jsonResponse.put("previous", jsonPrevious);
+
+        resp.setContentType("application/json; charset=UTF-8");
+        jsonResponse.writeJSONString(resp.getWriter());
+
     }
 
 

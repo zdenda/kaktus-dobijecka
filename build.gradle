@@ -5,12 +5,15 @@ buildscript {
         jcenter()
     }
     dependencies {
+        // include this dependency when using Endpoints Framework v2
+        classpath 'com.google.guava:guava:19.0'
         // The new version seems to have problems with App Engine Endpoints
         // https://issuetracker.google.com/issues/68300857
         //noinspection GradleDependency
         classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'com.google.gms:google-services:3.1.2'
         classpath 'com.google.firebase:firebase-plugins:1.1.1'
+        classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:1.0.2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

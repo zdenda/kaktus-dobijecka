@@ -1,18 +1,11 @@
-// If you would like more information on the gradle-appengine-plugin please refer to the github page
-// https://github.com/GoogleCloudPlatform/gradle-appengine-plugin
-
-//TODO: Migrate to App ENgine Endpoint v2 before August 2, 2018
-//https://cloud.google.com/endpoints/docs/frameworks/legacy/v1/java/
-//https://cloud.google.com/endpoints/docs/frameworks/legacy/v1/java/migrating
-//https://cloud.google.com/endpoints/docs/frameworks/legacy/v1/java/migrating-android
-//https://github.com/GoogleCloudPlatform/android-docs-samples/tree/master/endpoints-frameworks
+// App Engine Backend build file
 
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.59'
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.3.4'
     }
 }
 
@@ -22,36 +15,44 @@ repositories {
 
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'appengine'
+
+apply plugin: 'com.google.cloud.tools.appengine'
+apply plugin: 'com.google.cloud.tools.endpoints-framework-server'
+
+apply from: 'appengine-settings.gradle'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
 
-    def appEngineSdkVersion = '1.9.59'
-
-    appengineSdk "com.google.appengine:appengine-java-sdk:$appEngineSdkVersion"
-    compile "com.google.appengine:appengine-endpoints:$appEngineSdkVersion"
-    compile "com.google.appengine:appengine-endpoints-deps:$appEngineSdkVersion"
-    compile "com.google.appengine:appengine-api-labs:$appEngineSdkVersion"
-    compile 'com.google.api-client:google-api-client:1.23.0'
+    compile 'com.google.endpoints:endpoints-framework:2.0.9'
     compile 'javax.servlet:servlet-api:2.5'
     compile 'com.googlecode.objectify:objectify:5.1.21'
     compile 'org.jsoup:jsoup:1.11.1'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
+
+}
+
+
+war {
+    filesMatching('WEB-INF/appengine-web.xml') {
+        expand 'application': projectId, 'fcmKey': fcmServerKey, 'email': adminEmail
+    }
 }
 
 appengine {
-    downloadSdk = true
-    appcfg {
-        oauth2 = true
+    run {
+        host = '0.0.0.0'
+        //TODO: this doesn't work, so the jvmFlag has to be used instead
+        //datastorePath = "$rootDir/backend/local_db.bin"
+        jvmFlags = ["-Ddatastore.backing_store=$rootDir/backend/local_db.bin".toString()]
     }
-    endpoints {
-        getClientLibsOnBuild = true
-        getDiscoveryDocsOnBuild = true
-        googleClientVersion = '1.23.0' //fix for build error, try to remove it
+    deploy {
+        project = projectId
+        version = 20
+        // keep the old version running, do the switch manually in administration
+        stopPreviousVersion = false
+        promote = false
     }
-    httpAddress = '0.0.0.0'
-    jvmFlags = ["-Ddatastore.backing_store=$rootDir/backend/local_db.bin"]
 }

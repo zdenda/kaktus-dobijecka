@@ -9,10 +9,9 @@ package eu.zkkn.android.kaktus.backend;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.config.Named;
 
 import java.util.logging.Logger;
-
-import javax.inject.Named;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -27,7 +26,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  * authentication! If this app is deployed, anyone can access this endpoint! If
  * you'd like to add authentication, take a look at the documentation.
  */
-@Api(name = "registration", version = "v1", namespace = @ApiNamespace(ownerDomain = "backend.kaktus.android.zkkn.eu", ownerName = "backend.kaktus.android.zkkn.eu", packagePath = ""))
+@Api(name = "registration", version = "v1", namespace = @ApiNamespace(ownerDomain = "backend.kaktus.android.zkkn.eu", ownerName = "backend.kaktus.android.zkkn.eu"))
 public class RegistrationEndpoint {
 
     private static final Logger log = Logger.getLogger(RegistrationEndpoint.class.getName());
