@@ -26,14 +26,13 @@ targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
 
-    compile 'com.google.endpoints:endpoints-framework:2.0.9'
-    compile 'javax.servlet:servlet-api:2.5'
-    compile 'com.googlecode.objectify:objectify:5.1.21'
-    compile 'org.jsoup:jsoup:1.11.1'
-    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'com.google.endpoints:endpoints-framework:2.0.9'
+    implementation 'javax.servlet:servlet-api:2.5'
+    implementation 'com.googlecode.objectify:objectify:5.1.21'
+    implementation 'org.jsoup:jsoup:1.11.1'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 }
-
 
 war {
     filesMatching('WEB-INF/appengine-web.xml') {
