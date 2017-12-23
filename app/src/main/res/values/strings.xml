@@ -7,7 +7,7 @@
     <string name="action_sync_settings">Synchronizovat Facebook</string>
 
     <string name="donation_header">Podpořte Kaktus Dobíječku</string>
-    <string name="donation_text">Máš díky dobíječce tolik kreditu, že nevíš co s ním? \u263a Co takhle ho trochu darovat na podporu téhle appky?\n\nPosílat ho můžete přes oficiální Kaktus appku. V menu vyberte položku \"Poslat\u00A0kredit\" a zadejte telefonní číslo %s.\n\nKaždá koruna se počítá! Díky!!!</string>
+    <string name="donation_text">Slouží ti tahle appka dobře a máš díky dobíječce tolik kreditu, že nevíš co s ním? \u263a Co takhle ho trochu darovat na její podporu?\n\nPosílat ho můžete přes oficiální Kaktus appku. V menu vyberte položku \"Poslat\u00A0kredit\" a zadejte telefonní číslo %s.\n\nKaždá koruna se počítá! Díky!!!</string>
     <string name="donation_button_hide">Skrýt</string>
     <string name="donation_button_donate">Kopírovat tel. číslo a\notevřít Kaktus appku</string>
 
@@ -34,5 +34,10 @@
     <string name="dialog_sync_message">Chcete zapnout synchronizaci příspěvků ze stránky Kaktusu na Facebooku?</string>
 
     <string name="notification_action_view">Zobrazit</string>
+
+    <string name="activity_about_name">O aplikaci</string>
+    <string name="about_close">Zavřít</string>
+    <string name="about_version">Verze: %s</string>
+    <string name="about_sources_link"><u><a href="https://goo.gl/c1wV3W">Zdrojové kódy</a></u></string>
 
 </resources>

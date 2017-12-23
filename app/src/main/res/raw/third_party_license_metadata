@@ -1,0 +1,36 @@
+0:46 appcompat-v7
+48:46 cardview-v7
+96:47 play-services-gcm
+145:47 play-services-iid
+194:47 play-services-base
+243:47 firebase-core
+292:47 firebase-messaging
+341:47 play-services-oss-licenses
+390:46 animated-vector-drawable
+438:46 support-vector-drawable
+486:47 firebase-analytics
+535:47 firebase-analytics-impl
+584:47 firebase-iid
+633:47 firebase-common
+682:47 play-services-tasks
+731:47 play-services-basement
+780:46 support-v4
+828:46 support-fragment
+876:46 support-core-ui
+924:46 support-media-compat
+972:46 support-core-utils
+1020:46 support-compat
+1068:46 support-annotations
+1116:1481 darts_clone
+2599:1558 RE2
+4159:731 UTF
+4892:1602 JSR 305
+6496:680 STL
+7178:1732 Protobuf Nano
+8912:19442 ICU4C
+28356:2500 zlib
+30858:243 tz database
+31103:3182 PCRE
+34287:11358 safeparcel
+45647:11358 CCTZ
+57007:46 jsr305

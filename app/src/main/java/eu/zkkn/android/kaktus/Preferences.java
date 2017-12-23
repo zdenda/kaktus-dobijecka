@@ -94,6 +94,7 @@ public class Preferences {
 
     /**
      * Don't show the donation message anymore
+     * It is not used currently
      */
     private static final String PREF_KEY_HIDE_DONATION = "hideDonation";
 

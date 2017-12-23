@@ -13,7 +13,7 @@ public class FirebaseAnalyticsHelper {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({EVENT_SYNC_OFF, EVENT_SYNC_ON, EVENT_FB_REFRESH, EVENT_DOBIJECKA_WEB, EVENT_KAKTUS_FB,
-            EVENT_HIDE_DONATION, EVENT_DONATE})
+            EVENT_HIDE_DONATION, EVENT_DONATE, EVENT_DONATE_ABOUT})
     public @interface Event {}
     public static final int EVENT_SYNC_OFF = 1;
     public static final int EVENT_SYNC_ON = 2;
@@ -22,6 +22,7 @@ public class FirebaseAnalyticsHelper {
     public static final int EVENT_KAKTUS_FB = 5;
     public static final int EVENT_HIDE_DONATION = 6;
     public static final int EVENT_DONATE = 7;
+    public static final int EVENT_DONATE_ABOUT = 8;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -74,6 +75,12 @@ public class FirebaseAnalyticsHelper {
             case EVENT_DONATE:
                 name = FirebaseAnalytics.Event.SELECT_CONTENT;
                 params.putString(FirebaseAnalytics.Param.ITEM_ID, "main_donation_send");
+                params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Button");
+                params.putString(FirebaseAnalytics.Param.ITEM_NAME, "make_donation");
+                break;
+            case EVENT_DONATE_ABOUT:
+                name = FirebaseAnalytics.Event.SELECT_CONTENT;
+                params.putString(FirebaseAnalytics.Param.ITEM_ID, "about_donation_send");
                 params.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "Button");
                 params.putString(FirebaseAnalytics.Param.ITEM_NAME, "make_donation");
                 break;
