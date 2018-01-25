@@ -50,7 +50,7 @@ appengine {
     }
     deploy {
         project = projectId
-        version = 21
+        version = 22
         // keep the old version running, do the switch manually in administration
         stopPreviousVersion = false
         promote = false
