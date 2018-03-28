@@ -72,7 +72,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         }
                     });
 
-            GenericUrl url = new GenericUrl("https://graph.facebook.com/v2.9/Kaktus/posts");
+            GenericUrl url = new GenericUrl("https://graph.facebook.com/v2.12/Kaktus/posts");
             // limit Fb API field to only those field names which are in FbApiPost class,
             url.put("fields", TextUtils.join(",", ClassInfo.of(FbApiPost.class).getNames()));
             url.put("access_token", Config.FB_ACCESS_TOKEN);

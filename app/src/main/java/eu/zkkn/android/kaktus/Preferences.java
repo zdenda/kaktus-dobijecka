@@ -171,8 +171,8 @@ public class Preferences {
         String text = preferences.getString(PREF_KEY_LAST_FB_POST_TEXT, null);
         String imageUrl = preferences.getString(PREF_KEY_LAST_FB_POST_IMAGE_URL, null);
 
-        // if there's no last notification
-        if (unixTimeMs == 0 || TextUtils.isEmpty(text)) return null;
+        // if there's no last notification (it has no text nor image)
+        if (unixTimeMs == 0 || (TextUtils.isEmpty(text) && TextUtils.isEmpty(imageUrl))) return null;
 
         return new FbPost(new Date(unixTimeMs), text, imageUrl);
     }

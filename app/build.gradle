@@ -17,8 +17,8 @@ android {
         // https://issuetracker.google.com/issues/65726322
         //noinspection OldTargetApi
         targetSdkVersion 25
-        versionCode 26
-        versionName '0.11.0'
+        versionCode 27
+        versionName '0.11.1'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
