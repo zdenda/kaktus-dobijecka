@@ -2,6 +2,8 @@
 
 // Android app
 apply plugin: 'com.android.application'
+// Firebase Crashlytics
+apply plugin: 'io.fabric'
 // App Engine Endpoints Framework client plugin
 apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 
@@ -17,8 +19,8 @@ android {
         // https://issuetracker.google.com/issues/65726322
         //noinspection OldTargetApi
         targetSdkVersion 25
-        versionCode 27
-        versionName '0.11.1'
+        versionCode 28
+        versionName '0.11.2'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -83,14 +85,8 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$playServicesVersion"
     //noinspection GradleDependency
     implementation "com.google.firebase:firebase-messaging:$playServicesVersion"
-    // Firebase crash reporting only for Beta and Release
-    //TODO: Firebase 11.0.0 adds FirebaseCrash.setCrashCollectionEnabled(boolean enable)
-    // so it can be disabled for debug. It's even possible to disable it in the app's manifest.
-    // https://developers.google.com/android/reference/com/google/firebase/crash/FirebaseCrash.html#setCrashCollectionEnabled%28boolean%29
-    //noinspection GradleDependency
-    betaImplementation "com.google.firebase:firebase-crash:$playServicesVersion"
-    //noinspection GradleDependency
-    releaseImplementation "com.google.firebase:firebase-crash:$playServicesVersion"
+    // For full functionality, Crashlytics requires use of firebase-core version 11.4.2 or greater.
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     testImplementation 'junit:junit:4.12'
@@ -102,4 +98,3 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.firebase-crash'
