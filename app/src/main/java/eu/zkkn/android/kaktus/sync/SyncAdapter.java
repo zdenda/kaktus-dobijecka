@@ -1,6 +1,5 @@
 package eu.zkkn.android.kaktus.sync;
 
-
 import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
@@ -31,6 +30,7 @@ import eu.zkkn.android.kaktus.LastFbPost.FbPost;
 import eu.zkkn.android.kaktus.model.FbApiPost;
 import eu.zkkn.android.kaktus.model.FbApiResponse;
 
+
 /**
  * Handle the transfer of data between a server and an
  * app, using the Android sync adapter framework.
@@ -38,6 +38,9 @@ import eu.zkkn.android.kaktus.model.FbApiResponse;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final String FB_SYNC_FINISHED = "fbSyncFinished";
+
+    private static final String GRAPH_API_VERSION = "v3.0";
+    private static final String FB_PAGE_NAME = "Kaktus";
 
 
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -72,7 +75,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         }
                     });
 
-            GenericUrl url = new GenericUrl("https://graph.facebook.com/v2.12/Kaktus/posts");
+            GenericUrl url = new GenericUrl("https://graph.facebook.com/"
+                    + GRAPH_API_VERSION + "/" + FB_PAGE_NAME + "/posts");
             // limit Fb API field to only those field names which are in FbApiPost class,
             url.put("fields", TextUtils.join(",", ClassInfo.of(FbApiPost.class).getNames()));
             url.put("access_token", Config.FB_ACCESS_TOKEN);
