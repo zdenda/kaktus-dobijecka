@@ -16,6 +16,8 @@ public class OfyHelper implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         // This will be invoked as part of a warmup request,
         // or the first user request if no warmup request.
+
+        // For Objectify v6: ObjectifyService.init();
         ObjectifyService.register(RegistrationRecord.class);
         ObjectifyService.register(ParseResult.class);
         ObjectifyService.register(EmailLog.class);
