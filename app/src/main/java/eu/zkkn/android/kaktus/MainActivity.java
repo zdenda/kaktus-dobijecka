@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFirebaseAnalytics = new FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(this));
 
-        mSemaphoreStatus = (SemaphoreView) findViewById(R.id.tv_status);
+        mSemaphoreStatus = findViewById(R.id.tv_status);
 
         //TODO: create parent Play Services Activity
         if (checkPlayServices()) {
@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Last notification
         mLastNotification = findViewById(R.id.cv_notification);
-        mTvLastNotificationDate = (TextView) findViewById(R.id.tv_lastNotificationDate);
-        mTvLastNotificationText = (TextView) findViewById(R.id.tv_lastNotificationText);
+        mTvLastNotificationDate = findViewById(R.id.tv_lastNotificationDate);
+        mTvLastNotificationText = findViewById(R.id.tv_lastNotificationText);
         refreshLastNotificationViews();
         registerFcmMessageReceiver();
 
@@ -103,10 +103,10 @@ public class MainActivity extends AppCompatActivity {
         //TODO: if sync is disabled, show some info
         mFbPost = findViewById(R.id.cv_fbPost);
         mFbImageFrame = findViewById(R.id.fl_lastFbPostImage);
-        mIvFbImage = (ImageView) findViewById(R.id.iv_lastFbPostImage);
-        mTvFbPostText = (TextView) findViewById(R.id.tv_lastFbPostText);
-        mTvFbPostDate = (TextView) findViewById(R.id.tv_lastFbPostDate);
-        mVsFbRefresh = (ViewSwitcher) findViewById(R.id.vs_fbPostRefresh);
+        mIvFbImage = findViewById(R.id.iv_lastFbPostImage);
+        mTvFbPostText = findViewById(R.id.tv_lastFbPostText);
+        mTvFbPostDate = findViewById(R.id.tv_lastFbPostDate);
+        mVsFbRefresh = findViewById(R.id.vs_fbPostRefresh);
         findViewById(R.id.ib_fbPostRefresh).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

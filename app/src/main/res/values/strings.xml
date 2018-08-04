@@ -40,4 +40,6 @@
     <string name="about_version">Verze: %s</string>
     <string name="about_sources_link"><u><a href="https://goo.gl/c1wV3W">Zdrojové kódy</a></u></string>
 
+    <string name="notification_channel_name">Upozornění na dobíječku</string>
+
 </resources>

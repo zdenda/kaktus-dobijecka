@@ -20,14 +20,14 @@ import java.util.concurrent.TimeUnit;
 import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.LastNotification;
 import eu.zkkn.android.kaktus.MainActivity;
+import eu.zkkn.android.kaktus.NotificationHelper;
 import eu.zkkn.android.kaktus.R;
 
 
 public class MyFcmListenerService extends FirebaseMessagingService {
 
-    private static final int NOTIFICATION_ID = 1;
-
     public static final String FCM_MESSAGE_RECEIVED = "fcmMessageReceived";
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -61,9 +61,8 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
 
     protected void showNotification(String message, @Nullable String uri) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(getString(R.string.app_name))
+        NotificationCompat.Builder builder = NotificationHelper
+                .getDefaultBuilder(this, NotificationHelper.DOBIJECKA_CHANNEL_ID)
                 .setContentText(message)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setAutoCancel(true);
@@ -82,7 +81,8 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                     PendingIntent.getActivity(this, 0, action, 0));
         }
 
-        NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, builder.build());
+        NotificationHelper.notify(this, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
+                builder.build());
     }
 
 }
