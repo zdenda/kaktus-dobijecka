@@ -28,6 +28,14 @@
 
 # Needed by Guava
 -dontwarn sun.misc.Unsafe
+-dontwarn com.google.errorprone.annotations.CanIgnoreReturnValue
+-dontwarn com.google.errorprone.annotations.concurrent.LazyInit
+-dontwarn com.google.errorprone.annotations.ForOverride
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn afu.org.checkerframework.**
+-dontwarn org.checkerframework.**
+-dontwarn com.google.errorprone.**
+-dontwarn java.lang.ClassValue
 
 # switch off notes about duplicate class definitions
 -dontnote org.apache.http.**

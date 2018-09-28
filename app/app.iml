@@ -98,6 +98,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/checkBetaClasspath" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/checkDebugClasspath" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/checkReleaseClasspath" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/compatible_screen_manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental-classes" />
@@ -118,6 +119,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/proguard-rules" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/reload-dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res_stripped" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/resources" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shader_assets" />
@@ -127,6 +129,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/reports" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 28 Platform" jdkType="Android SDK" />
@@ -141,14 +144,12 @@
     <orderEntry type="library" name="Gradle: com.android.support:drawerlayout-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:coordinatorlayout-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:cardview-v7-28.0.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.squareup:javawriter:2.1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-1.1.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-iid-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:swiperefreshlayout-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-license-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:livedata-1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client-android:1.25.0@jar" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: javax.inject:javax.inject:1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.j2objc:j2objc-annotations:1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:versionedparcelable-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.http-client:google-http-client:1.25.0@jar" level="project" />
@@ -156,7 +157,6 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:beta-1.2.10" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:20.0@jar" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:monitor-1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.25.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-iid-license-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:loader-28.0.0" level="project" />
@@ -172,9 +172,7 @@
     <orderEntry type="library" name="Gradle: com.android.support.constraint:constraint-layout-solver:1.1.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-impl-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: net.sf.kxml:kxml2:2.3.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:customview-28.0.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:runner-1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-iid-license-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-28.0.0" level="project" />
@@ -192,7 +190,6 @@
     <orderEntry type="library" name="Gradle: com.android.support:documentfile-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:cursoradapter-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:asynclayoutinflater-28.0.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test.espresso:espresso-core-3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-basement-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.1@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-28.0.0" level="project" />
@@ -201,11 +198,8 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-messaging-license-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:print-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-analytics-12.0.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test.espresso:espresso-idling-resource-3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.picasso:picasso:2.5.2@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:crashlytics-2.9.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-integration:1.3@jar" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-library:1.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-fragment-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-base-12.0.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:common:1.1.1@jar" level="project" />
@@ -214,5 +208,14 @@
     <orderEntry type="library" name="Gradle: com.crashlytics.sdk.android:answers-1.4.3" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-28.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7-28.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.squareup:javawriter:2.1.1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: javax.inject:javax.inject:1@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:monitor-1.0.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.sf.kxml:kxml2:2.3.0@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:runner-1.0.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test.espresso:espresso-core-3.0.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test.espresso:espresso-idling-resource-3.0.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-integration:1.3@jar" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-library:1.3@jar" level="project" />
   </component>
 </module>

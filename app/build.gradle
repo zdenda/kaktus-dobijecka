@@ -17,8 +17,8 @@ android {
         // Android P (SDK 28) is still in beta
         //noinspection OldTargetApi
         targetSdkVersion 27
-        versionCode 30
-        versionName '0.12.0'
+        versionCode 31
+        versionName '0.12.1'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
