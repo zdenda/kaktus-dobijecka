@@ -34,6 +34,8 @@ public class AboutActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.tv_version)).setText(
                 getString(R.string.about_version, BuildConfig.VERSION_NAME));
+        ((TextView) findViewById(R.id.tv_privacy_policy_link)).setMovementMethod(
+                LinkMovementMethod.getInstance());
         ((TextView) findViewById(R.id.tv_sources_link)).setMovementMethod(
                 LinkMovementMethod.getInstance());
 

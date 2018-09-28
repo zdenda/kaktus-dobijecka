@@ -66,13 +66,32 @@
             tools:text="Verze: 1.0.0" />
 
         <TextView
+            android:id="@+id/tv_privacy_policy_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:autoLink="none"
+            android:text="@string/about_privacy_link"
+            android:textColor="@color/background"
+            android:textColorLink="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_version"
+            tools:text="Ochrana soukromí"
+            tools:textColor="@color/colorPrimaryDark" />
+
+        <TextView
             android:id="@+id/tv_sources_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
             android:autoLink="none"
             android:text="@string/about_sources_link"
             android:textColor="@color/background"
@@ -80,13 +99,15 @@
             app:layout_constraintBottom_toTopOf="@+id/ll_donation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_version" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_privacy_policy_link"
+            tools:text="Zdrojové kódy"
+            tools:textColor="@color/colorPrimaryDark" />
 
         <LinearLayout
             android:id="@+id/ll_donation"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_marginTop="32dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="32dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -107,8 +128,8 @@
                 android:id="@+id/tv_donationText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textIsSelectable="true"
@@ -121,8 +142,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:text="@string/donation_button_donate"
                 android:textColor="@color/colorPrimaryDark" />
 
