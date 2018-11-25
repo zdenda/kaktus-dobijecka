@@ -86,6 +86,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         //exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
