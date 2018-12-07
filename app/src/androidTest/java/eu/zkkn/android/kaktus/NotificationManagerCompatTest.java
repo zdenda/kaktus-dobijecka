@@ -16,6 +16,11 @@
 
 package eu.zkkn.android.kaktus;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
@@ -24,6 +29,7 @@ import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
+
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.MediumTest;
 import android.support.test.filters.SdkSuppress;
@@ -37,11 +43,6 @@ import org.junit.runner.RunWith;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -163,21 +164,30 @@ public class NotificationManagerCompatTest {
             mPlatformNotificationManager.createNotificationChannelGroup(group);
             mPlatformNotificationManager.createNotificationChannel(channel);
 
-            // get group by its ID was added in SDK 28, so get list and check if the group is there
-            assertTrue(mPlatformNotificationManager.getNotificationChannelGroups().contains(group));
+            // get group by its ID was added in SDK 28
+            if (Build.VERSION.SDK_INT >= 28) {
+                assertNotNull(mPlatformNotificationManager.getNotificationChannelGroup(groupId));
+            } else {
+                assertTrue(mPlatformNotificationManager.getNotificationChannelGroups()
+                        .contains(group));
+            }
             assertNotNull(mPlatformNotificationManager.getNotificationChannel(groupChannelId));
         }
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
-        NotificationChannelGroup resultGroup = notificationManager.getNotificationChannelGroup(groupId);
-        NotificationChannel resultChannel = notificationManager.getNotificationChannel(groupChannelId);
+        NotificationChannelGroup resultGroup =
+                notificationManager.getNotificationChannelGroup(groupId);
+        NotificationChannel resultChannel =
+                notificationManager.getNotificationChannel(groupChannelId);
 
 
         if (Build.VERSION.SDK_INT >= 26) {
             assertNotNull(resultGroup);
             assertEquals(groupId, resultGroup.getId());
             assertEquals(groupName, resultGroup.getName());
-            if (Build.VERSION.SDK_INT >= 28) assertEquals(groupDescription, resultGroup.getDescription());
+            if (Build.VERSION.SDK_INT >= 28) {
+                assertEquals(groupDescription, resultGroup.getDescription());
+            }
             assertNotNull(resultChannel);
             assertEquals(groupChannelId, resultChannel.getId());
             assertEquals(groupChannelName, resultChannel.getName());
@@ -208,7 +218,9 @@ public class NotificationManagerCompatTest {
         notificationManager.createNotificationChannel(new NotificationChannel(channelId,
                 channelName, NotificationManagerCompat.IMPORTANCE_DEFAULT));
 
-        NotificationChannel channel = mPlatformNotificationManager.getNotificationChannel(channelId);
+        NotificationChannel channel =
+                mPlatformNotificationManager.getNotificationChannel(channelId);
+
         assertNotNull(channel);
         assertEquals(channelId, channel.getId());
         assertEquals(channelName, channel.getName());
@@ -246,7 +258,8 @@ public class NotificationManagerCompatTest {
         assertTrue(result.shouldShowLights());
         assertEquals(channelLightColor, result.getLightColor());
         assertEquals(Uri.EMPTY, result.getSound());
-        assertEquals(audioAttributes.getContentType(), result.getAudioAttributes().getContentType());
+        assertEquals(audioAttributes.getContentType(),
+                result.getAudioAttributes().getContentType());
         assertEquals(audioAttributes.getUsage(), result.getAudioAttributes().getUsage());
     }
 
@@ -340,7 +353,7 @@ public class NotificationManagerCompatTest {
         NotificationChannelGroup groupOne = new NotificationChannelGroup(groupOneId,
                 "groupOneName");
         NotificationChannel channelGroupOne = new NotificationChannel(channelGroupOneId,
-                "channelGroupOneName", NotificationManagerCompat.IMPORTANCE_NONE);
+                "channelGroupOneName", NotificationManagerCompat.IMPORTANCE_MIN);
         channelGroupOne.setGroup(groupOneId);
 
         String channelGroupTwoId = genUniqueId(TYPE_CHANNEL);
@@ -348,7 +361,7 @@ public class NotificationManagerCompatTest {
         NotificationChannelGroup groupTwo = new NotificationChannelGroup(genUniqueId(TYPE_GROUP),
                 "groupTwoName");
         NotificationChannel channelGroupTwo = new NotificationChannel(channelGroupTwoId,
-                "channelGroupTwoName", NotificationManagerCompat.IMPORTANCE_MAX);
+                "channelGroupTwoName", NotificationManagerCompat.IMPORTANCE_DEFAULT);
         channelGroupTwo.setGroup(groupTwo.getId());
         NotificationChannel secondChannelGroupTwo = new NotificationChannel(
                 secondChannelGroupTwoId, "secondChannelGroupTwoName",
@@ -385,7 +398,8 @@ public class NotificationManagerCompatTest {
                 groupTwo.getId());
         assertNotNull(resultTwo);
         assertEquals(groupTwo.getName(), resultTwo.getName());
-        //assertEquals(Arrays.asList(channelGroupTwo, secondChannelGroupTwo), resultTwo.getChannels());
+        //assertEquals(Arrays.asList(channelGroupTwo, secondChannelGroupTwo),
+        //        resultTwo.getChannels());
 
         assertTrue(mPlatformNotificationManager.getNotificationChannels().containsAll(channels));
     }
@@ -419,8 +433,13 @@ public class NotificationManagerCompatTest {
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannelGroup group = new NotificationChannelGroup(groupId, "groupName");
             mPlatformNotificationManager.createNotificationChannelGroup(group);
-            // get group by its ID was added in SDK 28, so get list and check if the group is there
-            assertTrue(mPlatformNotificationManager.getNotificationChannelGroups().contains(group));
+            // get group by its ID was added in SDK 28
+            if (Build.VERSION.SDK_INT >= 28) {
+                assertNotNull(mPlatformNotificationManager.getNotificationChannelGroup(groupId));
+            } else {
+                assertTrue(mPlatformNotificationManager.getNotificationChannelGroups()
+                        .contains(group));
+            }
         }
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
@@ -435,7 +454,7 @@ public class NotificationManagerCompatTest {
 
     @Test
     public void testGetNotificationChannels() {
-        // create a channel, so we can delete it later
+        // create a channel, so we can get it later
         if (Build.VERSION.SDK_INT >= 26) {
             String channelId = genUniqueId(TYPE_CHANNEL);
             mPlatformNotificationManager.createNotificationChannel(new NotificationChannel(
@@ -458,13 +477,18 @@ public class NotificationManagerCompatTest {
 
     @Test
     public void testGetNotificationChannelGroups() {
-        // create a group, so we can delete it later
+        // create a group, so we can get it later
         if (Build.VERSION.SDK_INT >= 26) {
             String groupId = genUniqueId(TYPE_GROUP);
             NotificationChannelGroup group = new NotificationChannelGroup(groupId, "groupName");
             mPlatformNotificationManager.createNotificationChannelGroup(group);
-            // get group by its ID was added in SDK 28, so get list and check if the group is there
-            assertTrue(mPlatformNotificationManager.getNotificationChannelGroups().contains(group));
+            // get group by its ID was added in SDK 28
+            if (Build.VERSION.SDK_INT >= 28) {
+                assertNotNull(mPlatformNotificationManager.getNotificationChannelGroup(groupId));
+            } else {
+                assertTrue(mPlatformNotificationManager.getNotificationChannelGroups()
+                        .contains(group));
+            }
         }
 
         List<NotificationChannelGroup> groups = NotificationManagerCompat.from(mContext)
