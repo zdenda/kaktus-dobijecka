@@ -1,10 +1,12 @@
 package eu.zkkn.android.kaktus.fcm;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import eu.zkkn.android.kaktus.Preferences;
+
 
 /**
  *

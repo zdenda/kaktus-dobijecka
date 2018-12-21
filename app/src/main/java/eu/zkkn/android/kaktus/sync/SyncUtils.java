@@ -7,8 +7,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.Helper;

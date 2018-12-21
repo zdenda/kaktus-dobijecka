@@ -3,12 +3,13 @@ package eu.zkkn.android.kaktus;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.IntDef;
 import android.text.TextUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
+
+import androidx.annotation.IntDef;
 
 import eu.zkkn.android.kaktus.LastFbPost.FbPost;
 import eu.zkkn.android.kaktus.LastNotification.Notification;

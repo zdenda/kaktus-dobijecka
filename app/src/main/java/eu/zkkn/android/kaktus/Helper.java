@@ -10,9 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateFormat;
@@ -26,11 +23,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import eu.zkkn.android.kaktus.model.FbApiAttachment;
 import eu.zkkn.android.kaktus.model.FbApiAttachments;
 import eu.zkkn.android.kaktus.model.FbApiImage;
 import eu.zkkn.android.kaktus.model.FbApiPost;
 import eu.zkkn.android.kaktus.model.FbApiStoryAttachmentMedia;
+
 
 /**
  * Collection of useful methods

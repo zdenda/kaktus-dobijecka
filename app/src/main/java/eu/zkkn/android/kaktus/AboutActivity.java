@@ -1,7 +1,6 @@
 package eu.zkkn.android.kaktus;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
@@ -9,6 +8,8 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 //TODO add licences (needs play services v11.2.0)
 // https://developers.google.com/android/guides/opensource

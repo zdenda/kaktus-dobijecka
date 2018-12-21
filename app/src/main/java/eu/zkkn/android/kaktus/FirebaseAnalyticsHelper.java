@@ -1,12 +1,13 @@
 package eu.zkkn.android.kaktus;
 
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import androidx.annotation.IntDef;
 
 
 public class FirebaseAnalyticsHelper {

@@ -2,8 +2,6 @@ package eu.zkkn.android.kaktus.fcm;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.WorkerThread;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GcmNetworkManager;
@@ -19,6 +17,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
+
+import androidx.annotation.WorkerThread;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import eu.zkkn.android.kaktus.BuildConfig;
 import eu.zkkn.android.kaktus.Config;

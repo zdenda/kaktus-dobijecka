@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -22,6 +21,8 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.util.ClassInfo;
 
 import java.io.IOException;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.Helper;

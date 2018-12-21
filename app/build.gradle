@@ -17,12 +17,12 @@ android {
         // I don't have any Android P (SDK 28) device to test on
         //noinspection OldTargetApi
         targetSdkVersion 27
-        versionCode 31
-        versionName '0.12.1'
+        versionCode 32
+        versionName '0.13.0'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
@@ -53,22 +53,24 @@ android {
 
 dependencies {
 
-    // define versions used for multiple dependencies
-    def supportLibraryVersion = '28.0.0'
-
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // App Engine Endpoints Framework v2
     endpointsServer project(path: ':backend', configuration: 'endpoints')
+
+    // To avoid conflicts with ListenableFuture
+    api 'com.google.guava:guava:27.0.1-android'
+
     //compile 'com.google.api-client:google-api-client:1.27.0'
     implementation('com.google.api-client:google-api-client-android:1.27.0', {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     })
 
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$supportLibraryVersion"
-    implementation "com.android.support:support-v4:$supportLibraryVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.core:core:1.1.0-alpha03'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
 
     // Firebase Core v15 started requesting a new permission:
     // com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
@@ -87,8 +89,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.1', {
         //exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     })
