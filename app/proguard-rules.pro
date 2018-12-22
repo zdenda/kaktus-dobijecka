@@ -19,6 +19,9 @@
 -dontwarn com.google.android.gms.auth.*
 -keep class com.google.android.gms.gcm.** { *; }
 
+-dontwarn org.apache.commons.codec.binary.**
+-keep class org.apache.commons.codec.binary.** { *; }
+
 # Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
 -keepclasseswithmembers class * {
   @com.google.api.client.util.Key <fields>;
