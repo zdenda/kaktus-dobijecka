@@ -11,7 +11,7 @@ import java.util.Date;
 
 import androidx.annotation.IntDef;
 
-import eu.zkkn.android.kaktus.LastFbPost.FbPost;
+import eu.zkkn.android.kaktus.FacebookPostsRepository.FbPost;
 import eu.zkkn.android.kaktus.LastNotification.Notification;
 
 
@@ -160,9 +160,9 @@ public class Preferences {
 
     public static void setLastFbPost(Context context, FbPost fbPost) {
         getPref(context).edit()
-                .putLong(PREF_KEY_LAST_FB_POST_DATE, fbPost.date.getTime())
-                .putString(PREF_KEY_LAST_FB_POST_TEXT, fbPost.text)
-                .putString(PREF_KEY_LAST_FB_POST_IMAGE_URL, fbPost.imageUrl)
+                .putLong(PREF_KEY_LAST_FB_POST_DATE, fbPost.getDate().getTime())
+                .putString(PREF_KEY_LAST_FB_POST_TEXT, fbPost.getText())
+                .putString(PREF_KEY_LAST_FB_POST_IMAGE_URL, fbPost.getImageUrl())
                 .apply();
     }
 

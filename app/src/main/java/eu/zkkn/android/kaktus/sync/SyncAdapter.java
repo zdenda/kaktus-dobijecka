@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,12 +21,11 @@ import com.google.api.client.util.ClassInfo;
 
 import java.io.IOException;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import eu.zkkn.android.kaktus.Config;
+import eu.zkkn.android.kaktus.FacebookPostsRepository;
+import eu.zkkn.android.kaktus.FacebookPostsRepository.FbPost;
 import eu.zkkn.android.kaktus.Helper;
-import eu.zkkn.android.kaktus.LastFbPost;
-import eu.zkkn.android.kaktus.LastFbPost.FbPost;
+import eu.zkkn.android.kaktus.R;
 import eu.zkkn.android.kaktus.model.FbApiPost;
 import eu.zkkn.android.kaktus.model.FbApiResponse;
 
@@ -37,8 +35,6 @@ import eu.zkkn.android.kaktus.model.FbApiResponse;
  * app, using the Android sync adapter framework.
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
-
-    public static final String FB_SYNC_FINISHED = "fbSyncFinished";
 
     private static final String GRAPH_API_VERSION = "v3.0";
     private static final String FB_PAGE_NAME = "Kaktus";
@@ -64,6 +60,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         Log.d(Config.TAG, "SyncAdapter.onPerformSync()");
 
+        FacebookPostsRepository.INSTANCE.setLoadingLastFacebookPost();
+
         try {
 
             HttpRequestFactory requestFactory = AndroidHttp.newCompatibleTransport()
@@ -88,15 +86,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             FbApiPost fbApiPost = fbApiResponse.posts[0];
             FbPost fbPost = new FbPost(Helper.parseFbDate(fbApiPost.createdTime), fbApiPost.message,
                     Helper.imageUrlFromFbPostAttachment(fbApiPost));
-            //TODO: use ContentProvider
-            LastFbPost.save(getContext(), fbPost);
 
-            // Notify UI that a new FCM message was received.
-            LocalBroadcastManager.getInstance(getContext())
-                    .sendBroadcast(new Intent(FB_SYNC_FINISHED));
+            FacebookPostsRepository.INSTANCE.saveLastPost(getContext(), fbPost);
 
         } catch (IOException e) {
+            //TODO better error handling
             Log.e("SyncAdapter", e.getMessage() != null ? e.getMessage() : "IOException");
+            FacebookPostsRepository.INSTANCE.setErrorLastFacebookPost(
+                    getContext().getString(R.string.lastFbPost_error));
         }
 
         Log.d(Config.TAG, "SyncAdapter.onPerformSync() end");

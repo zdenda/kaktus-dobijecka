@@ -24,37 +24,45 @@ import java.util.Date;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
+import eu.zkkn.android.kaktus.FacebookPostsRepository.FbPost;
 import eu.zkkn.android.kaktus.fcm.FcmHelper;
 import eu.zkkn.android.kaktus.fcm.MyFcmListenerService;
 import eu.zkkn.android.kaktus.fcm.SendTokenTaskService;
-import eu.zkkn.android.kaktus.sync.SyncAdapter;
-import eu.zkkn.android.kaktus.sync.SyncUtils;
+
+import static eu.zkkn.android.kaktus.FacebookPostsRepository.Data.Status;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver mFcmRegistrationBroadcastReceiver;
     private BroadcastReceiver mFcmMessageBroadcastReceiver;
-    private BroadcastReceiver mFbSyncBroadcastReceiver;
     private FirebaseAnalyticsHelper mFirebaseAnalytics;
+
+    private MainViewModel mViewModel;
+
     private View mLastNotification;
     private TextView mTvLastNotificationDate;
     private TextView mTvLastNotificationText;
     private SemaphoreView mSemaphoreStatus;
-    private View mFbPost;
     private View mFbImageFrame;
     private ImageView mIvFbImage;
     private TextView mTvFbPostDate;
     private TextView mTvFbPostText;
     private ViewSwitcher mVsFbRefresh;
+    private TextView mTvFbError;
+    private View mfbErrorDivider;
+    private View mFbError;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
         mFirebaseAnalytics = new FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(this));
 
@@ -102,35 +110,39 @@ public class MainActivity extends AppCompatActivity {
 
         // Facebook
         //TODO: if sync is disabled, show some info
-        mFbPost = findViewById(R.id.cv_fbPost);
-        mFbImageFrame = findViewById(R.id.fl_lastFbPostImage);
-        mIvFbImage = findViewById(R.id.iv_lastFbPostImage);
-        mTvFbPostText = findViewById(R.id.tv_lastFbPostText);
-        mTvFbPostDate = findViewById(R.id.tv_lastFbPostDate);
-        mVsFbRefresh = findViewById(R.id.vs_fbPostRefresh);
+        findViewById(R.id.iv_fbIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.viewUri(MainActivity.this, Config.KAKTUS_FACEBOOK_URL);
+            }
+        });
         findViewById(R.id.ib_fbPostRefresh).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFirebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_FB_REFRESH);
                 //TODO: what if there's no internet connection
-                if (isFbSyncEnabled()) {
-                    forceFbSync();
+                if (mViewModel.isFbSyncEnabled()) {
+                    mViewModel.refreshLastFacebookPost();
                 } else {
                     showEnableFbSyncDialog();
                 }
             }
         });
+        mFbImageFrame = findViewById(R.id.fl_lastFbPostImage);
+        mIvFbImage = findViewById(R.id.iv_lastFbPostImage);
+        mTvFbPostText = findViewById(R.id.tv_lastFbPostText);
+        mTvFbPostDate = findViewById(R.id.tv_lastFbPostDate);
+        mVsFbRefresh = findViewById(R.id.vs_fbPostRefresh);
+        mfbErrorDivider = findViewById(R.id.v_fbErrorDivider);
+        mFbError = findViewById(R.id.fl_fbError);
+        mTvFbError = findViewById(R.id.tv_fbError);
 
-        refreshFbPostViews();
-        registerFbSyncReceiver();
+        mViewModel.getLastFacebookPost().observe(this, setupLastFacebookPostObserver());
+
 
         // if there's no settings for sync, enable it
         if (Preferences.getSyncStatus(this) == Preferences.SYNC_NOT_SET) {
-            SyncUtils.enableSync(this);
-            // and start synchronization on the first run
-            if (Preferences.isFirst(this)) {
-                forceFbSync();
-            }
+            mViewModel.enableFbSync();
         }
 
     }
@@ -140,14 +152,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unRegisterFcmRegistrationReceiver();
         unregisterFcmMessageReceiver();
-        unregisterFbSyncReceiver();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.action_sync_settings).setChecked(isFbSyncEnabled());
+        menu.findItem(R.id.action_sync_settings).setChecked(mViewModel.isFbSyncEnabled());
         return true;
     }
 
@@ -159,12 +170,10 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_sync_settings:
                 if (!item.isChecked()) {
-                    //TODO: start sync
-                    SyncUtils.enableSync(this);
+                    mViewModel.enableFbSync();
                     mFirebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_SYNC_ON);
                 } else {
-                    //TODO: hide progress bar
-                    SyncUtils.disableSync(this);
+                    mViewModel.disableFbSync();
                     mFirebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_SYNC_OFF);
                 }
                 invalidateOptionsMenu();
@@ -175,17 +184,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-
-    private boolean isFbSyncEnabled() {
-        return Preferences.getSyncStatus(this) == Preferences.SYNC_ENABLED
-                && SyncUtils.isSyncable(this); //account could have been removed in system settings
-    }
-
-    private void forceFbSync() {
-        mVsFbRefresh.setDisplayedChild(1);
-        SyncUtils.startSync(this);
     }
 
     private void refreshLastNotificationViews() {
@@ -226,34 +224,54 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void refreshFbPostViews() {
-        mFbPost.setOnClickListener(new View.OnClickListener() {
+    private Observer<FacebookPostsRepository.Data> setupLastFacebookPostObserver() {
+        return new Observer<FacebookPostsRepository.Data>() {
+
             @Override
-            public void onClick(View v) {
-                Helper.viewUri(MainActivity.this, Config.KAKTUS_FACEBOOK_URL);
+            public void onChanged(FacebookPostsRepository.Data data) {
+                Log.d("ZKLog", "onChanged(FbPost)");
+
+                // Loading
+                mVsFbRefresh.setDisplayedChild(Status.LOADING == data.getStatus() ? 1 : 0);
+
+                // Error
+                if (Status.ERROR == data.getStatus()) {
+                    mTvFbError.setText(data.getMessage());
+                    mfbErrorDivider.setVisibility(View.VISIBLE);
+                    mFbError.setVisibility(View.VISIBLE);
+                } else {
+                    mfbErrorDivider.setVisibility(View.GONE);
+                    mFbError.setVisibility(View.GONE);
+                }
+
+                // Empty
+                if (Status.EMPTY == data.getStatus() || data.getData() == null) {
+                    mTvFbPostDate.setText(Helper.formatDate(MainActivity.this, new Date()));
+                    mTvFbPostText.setText(R.string.lastFbPost_none);
+
+                    // Success
+                } else {
+
+                    FbPost fbPost = data.getData();
+                    //TODO: add link to specific Facebook post ("permalink_url")
+                    mTvFbPostDate.setText(Helper.formatDate(MainActivity.this, fbPost.getDate()));
+                    //TODO: click on this TextView doesn't open the web browser
+                    if (!TextUtils.isEmpty(fbPost.getText())) {
+                        mTvFbPostText.setText(fbPost.getText());
+                    } else {
+                        mTvFbPostText.setVisibility(View.GONE);
+                    }
+                    if (fbPost.getImageUrl() != null) {
+                        Picasso.with(MainActivity.this).load(fbPost.getImageUrl()).into(mIvFbImage,
+                                new Helper.BackgroundColorCallback(mIvFbImage, mFbImageFrame));
+                    } else {
+                        mFbImageFrame.setVisibility(View.GONE);
+                    }
+
+                }
+
             }
-        });
-        mVsFbRefresh.setDisplayedChild(0);
-        LastFbPost.FbPost fbPost = LastFbPost.load(this);
-        if (fbPost != null) {
-            //TODO: add link to specific Facebook post ("permalink_url")
-            mTvFbPostDate.setText(Helper.formatDate(this, fbPost.date));
-            //TODO: click on this TextView doesn't open the web browser
-            if (!TextUtils.isEmpty(fbPost.text)) {
-                mTvFbPostText.setText(fbPost.text);
-            } else {
-                mTvFbPostText.setVisibility(View.GONE);
-            }
-            if (fbPost.imageUrl != null) {
-                Picasso.with(this).load(fbPost.imageUrl).into(mIvFbImage,
-                        new Helper.BackgroundColorCallback(mIvFbImage, mFbImageFrame));
-            } else {
-                mFbImageFrame.setVisibility(View.GONE);
-            }
-        } else {
-            mTvFbPostDate.setText(Helper.formatDate(this, new Date()));
-            mTvFbPostText.setText(R.string.lastFbPost_none);
-        }
+        };
     }
 
     private void registerFcmRegistrationReceiver() {
@@ -290,21 +308,6 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmMessageBroadcastReceiver);
     }
 
-    private void registerFbSyncReceiver() {
-        mFbSyncBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                refreshFbPostViews();
-            }
-        };
-        LocalBroadcastManager.getInstance(this).registerReceiver(mFbSyncBroadcastReceiver,
-                new IntentFilter(SyncAdapter.FB_SYNC_FINISHED));
-    }
-
-    private void unregisterFbSyncReceiver() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFbSyncBroadcastReceiver);
-    }
-
     private void showEnableFbSyncDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_sync_title);
@@ -313,9 +316,9 @@ public class MainActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SyncUtils.enableSync(MainActivity.this);
-                        invalidateOptionsMenu(); //refresh sync checkbox in the menu
-                        forceFbSync();
+                        mViewModel.enableFbSync();
+                        //refresh sync checkbox in the menu
+                        invalidateOptionsMenu();
                     }
                 }
         );

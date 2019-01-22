@@ -42,5 +42,6 @@
     <string name="about_privacy_link"><u><a href="https://goo.gl/44Fs19">Ochrana soukromí</a></u></string>
 
     <string name="notification_channel_name">Upozornění na dobíječku</string>
+    <string name="lastFbPost_error">Při načítání došlo k chybě</string>
 
 </resources>

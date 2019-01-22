@@ -1,6 +1,5 @@
 package eu.zkkn.android.kaktus.sync;
 
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
@@ -15,6 +14,7 @@ import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.Helper;
 import eu.zkkn.android.kaktus.Preferences;
 import eu.zkkn.android.kaktus.R;
+
 
 /**
  * Static helper methods for working with the sync framework.
@@ -45,6 +45,11 @@ public class SyncUtils {
         Preferences.setSyncStatus(context, Preferences.SYNC_DISABLED);
     }
 
+    public static boolean isSyncEnabled(Context context) {
+        return Preferences.getSyncStatus(context) == Preferences.SYNC_ENABLED
+                && SyncUtils.isSyncable(context); //account could have been removed in system settings
+    }
+
     /**
      * Manually start synchronization
      * @param context Context
@@ -53,6 +58,13 @@ public class SyncUtils {
         ContentResolver.requestSync(getAccount(context),
                 context.getString(R.string.provider),
                 new Bundle());
+    }
+
+    public static boolean isSyncActive(Context context) {
+        Account account = getAccount(context);
+        String authority = getAuthority(context);
+        return ContentResolver.isSyncActive(account, authority)
+                || ContentResolver.isSyncPending(account, authority);
     }
 
 
@@ -113,13 +125,18 @@ public class SyncUtils {
         //ContentResolver.setIsSyncable(account, authority, 0);
     }
 
-    public static boolean isSyncable(Context context) {
+    private static boolean isSyncable(Context context) {
         return 0 < ContentResolver.getIsSyncable(getAccount(context), context.getString(R.string.provider));
     }
 
     @NonNull
     private static Account getAccount(Context context) {
         return new Account("Kaktus (Facebook)", context.getString(R.string.account_type));
+    }
+
+    @NonNull
+    private static String getAuthority(Context context) {
+        return context.getString(R.string.provider);
     }
 
 }
