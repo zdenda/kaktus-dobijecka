@@ -69,25 +69,27 @@ dependencies {
     endpointsServer project(path: ':backend', configuration: 'endpoints')
 
     // To avoid conflicts with ListenableFuture
-    api 'com.google.guava:guava:27.1-android'
+    api 'com.google.guava:guava:28.0-android'
 
     //compile 'com.google.api-client:google-api-client:1.27.0'
-    implementation('com.google.api-client:google-api-client-android:1.28.0', {
+    implementation('com.google.api-client:google-api-client-android:1.30.2', {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     })
 
-    implementation 'androidx.core:core:1.1.0-alpha05'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    implementation 'androidx.core:core:1.1.0-rc02'
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-alpha04'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0-rc01'
 
     // Firebase Core v15 started requesting a new permission:
     // com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
     // https://issuetracker.google.com/issues/78380811
-    // so keep both Firebase and Play Services in v12
+    // so keep both Firebase and Play Services in v12.
+    // Unfortunately FCM delivery reports might need v18.0.1
+    // https://firebase.google.com/docs/cloud-messaging/understand-delivery#message_delivery_reports
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-core:12.0.1'
     //noinspection GradleDependency
@@ -97,12 +99,12 @@ dependencies {
     //noinspection GradleDependency
     implementation 'com.google.android.gms:play-services-gcm:12.0.1'
 
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.1', {
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0', {
         //exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     })

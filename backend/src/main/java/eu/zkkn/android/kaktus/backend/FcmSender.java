@@ -76,6 +76,10 @@ public class FcmSender extends HttpServlet {
      */
     private void sendMessage(@Nonnull String message) {
 
+        //TODO: Migrate from legacy HTTP to HTTP v1 API
+        // So the analytics labels could be added to messages in order to have data for reports
+        // in Firebase console
+        // https://firebase.google.com/docs/cloud-messaging/understand-delivery#adding_analytics_labels_to_messages
         Sender sender = new Sender(API_KEY);
 
         Message msg = new Message.Builder()

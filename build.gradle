@@ -2,7 +2,7 @@
 
 buildscript {
 
-    ext.kotlin_version = '1.3.30'
+    ext.kotlin_version = '1.3.41'
 
     repositories {
         google()
@@ -12,11 +12,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0'
-        classpath 'com.google.gms:google-services:4.2.0'
-        classpath 'com.google.firebase:firebase-plugins:1.2.0'
+        classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'com.google.gms:google-services:4.3.0'
+        classpath 'com.google.firebase:firebase-plugins:2.0.0'
         classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:2.0.1'
-        classpath 'io.fabric.tools:gradle:1.28.1'
+        classpath 'io.fabric.tools:gradle:1.31.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
