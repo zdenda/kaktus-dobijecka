@@ -48,6 +48,7 @@ public class Helper {
      */
     public static String getUserAgent() {
         // don't add build type if it is release
+        //noinspection ConstantConditions
         String buildType = "release".equals(BuildConfig.BUILD_TYPE) ? "" : " " + BuildConfig.BUILD_TYPE;
         return String.format(Locale.US, "App/%s-%d%s (%s %s; Android/%s)", BuildConfig.VERSION_NAME,
                 BuildConfig.VERSION_CODE, buildType, Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE);
@@ -59,7 +60,6 @@ public class Helper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             spanned = Html.fromHtml(htmlText, Html.FROM_HTML_MODE_LEGACY);
         } else {
-            //noinspection deprecation
             spanned = Html.fromHtml(htmlText);
         }
         return spanned;

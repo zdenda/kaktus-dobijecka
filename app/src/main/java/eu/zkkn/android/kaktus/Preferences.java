@@ -138,8 +138,8 @@ public class Preferences {
 
     public static Notification getLastNotification(Context context) {
         SharedPreferences preferences = getPref(context);
-        Long sentTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_SENT_TIME, 0);
-        Long receivedTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME, 0);
+        long sentTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_SENT_TIME, 0);
+        long receivedTimeMs = preferences.getLong(PREF_KEY_LAST_NOTIFICATION_RECEIVED_TIME, 0);
         String text = preferences.getString(PREF_KEY_LAST_NOTIFICATION_TEXT, null);
         String uri = preferences.getString(PREF_KEY_LAST_NOTIFICATION_URI, null);
         String from = preferences.getString(PREF_KEY_LAST_NOTIFICATION_FROM, null);

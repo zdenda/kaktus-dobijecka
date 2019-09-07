@@ -4,22 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.WorkerThread;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.OneoffTask;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
-
-import androidx.annotation.WorkerThread;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import eu.zkkn.android.kaktus.BuildConfig;
 import eu.zkkn.android.kaktus.Config;
@@ -105,13 +105,12 @@ public class SendTokenTaskService extends GcmTaskService {
         //if (true) throw new IOException("Test");
         if (registration == null) {
             Registration.Builder builder = new Registration.Builder(
-                    AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    new NetHttpTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl(Config.BACKEND_ROOT_URL + "_ah/api/")
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
-                                throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true)
+                        public void initialize(AbstractGoogleClientRequest<?> googleClientRequest) {
+                            googleClientRequest.setDisableGZipContent(true)
                                     .getRequestHeaders().setUserAgent(Helper.getUserAgent());
                         }
                     });
