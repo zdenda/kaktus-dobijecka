@@ -4,17 +4,6 @@
     package="eu.zkkn.android.kaktus">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--
-      this permission should no longer be needed for GCM to work
-        uses-permission android:name="android.permission.GET_ACCOUNTS" /
-    -->
-    <!-- this permission was removed in SDK 23 -->
-    <uses-permission
-        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
-        android:maxSdkVersion="22" />
-    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <!-- for persistent GcmTaskService -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -38,12 +27,6 @@
             android:label="@string/activity_about_name"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
 
-        <provider
-            android:name=".sync.StubProvider"
-            android:authorities="@string/provider"
-            android:exported="false"
-            android:syncable="true" />
-
         <service android:name=".fcm.MyFcmListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -53,28 +36,6 @@
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-        </service>
-        <service
-            android:name=".sync.AuthenticatorService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
-        </service>
-        <service
-            android:name=".sync.SyncService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
         </service>
         <service
             android:name=".fcm.SendTokenTaskService"

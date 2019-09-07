@@ -4,8 +4,6 @@
     <string name="generic_alert_button_ok">OK</string>
     <string name="generic_alert_button_cancel">Storno</string>
 
-    <string name="action_sync_settings">Synchronizovat Facebook</string>
-
     <string name="donation_header">Podpořte Kaktus Dobíječku</string>
     <string name="donation_text">Slouží ti tahle appka dobře a máš díky dobíječce tolik kreditu, že nevíš co s ním? \u263a Co takhle ho trochu darovat na její podporu?\n\nPosílat ho můžete přes oficiální Kaktus appku. V menu vyberte položku \"Poslat\u00A0kredit\" a zadejte telefonní číslo %s.\n\nKaždá koruna se počítá! Díky!!!</string>
     <string name="donation_button_hide">Skrýt</string>
@@ -15,8 +13,7 @@
     <string name="lastNotification_none">Zatím nebylo přijato žádné upozornění.</string>
 
     <string name="lastFbPost_header">Kaktus na Facebooku</string>
-    <string name="lastFbPost_none">Zatím nebyl načten žádný příspěvek z Facebook stránky Kaktusu.</string>
-    <string name="lastFbPost_refresh">Obnovit</string>
+    <string name="lastFbPost_disabled">Zde býval poslední příspěvek z Facebook stránky Kaktusu. Protože se Facebook rozhodl změnit podmínky pro aplikace, jako je tahle, tak už se zobrazovat nebude.\nHlavní funkce appky — upozornění na dobíječku — tím není nijak ovlivněna a bude fungovat jako doposud.</string>
 
     <string name="status_missing_google_play_services">Toto zařízení bohužel není podporováno. Aplikace vyžaduje Služby Google Play, které zde nejsou dostupné.</string>
     <string name="status_fcm_registered">Příjem upozornění je aktivní.</string>
@@ -30,9 +27,6 @@
 
     <string name="dialog_notification_received_title">Přijato</string>
 
-    <string name="dialog_sync_title">Synchronizovat Facebook</string>
-    <string name="dialog_sync_message">Chcete zapnout synchronizaci příspěvků ze stránky Kaktusu na Facebooku?</string>
-
     <string name="notification_action_view">Zobrazit</string>
 
     <string name="activity_about_name">O aplikaci</string>
@@ -42,6 +36,5 @@
     <string name="about_privacy_link"><u><a href="https://goo.gl/44Fs19">Ochrana soukromí</a></u></string>
 
     <string name="notification_channel_name">Upozornění na dobíječku</string>
-    <string name="lastFbPost_error">Při načítání došlo k chybě</string>
 
 </resources>

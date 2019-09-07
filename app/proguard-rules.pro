@@ -44,9 +44,6 @@
 -dontnote org.apache.http.**
 -dontnote android.net.http.*
 
-# Picasso doesn't need OkHttp, it can use HttpURLConnection to download images
--dontwarn com.squareup.okhttp.**
-
 # Crashlytics
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable

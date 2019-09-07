@@ -134,44 +134,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <FrameLayout
-                    android:id="@+id/fl_lastFbPostImage"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/yellow"
-                    android:padding="4dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/iv_lastFbPostImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:adjustViewBounds="true"
-                        android:contentDescription="@null"
-                        android:scaleType="centerInside" />
-
-                </FrameLayout>
-
                 <TextView
                     android:id="@+id/tv_lastFbPostText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginRight="16dp"
-                    android:layout_marginEnd="16dp"
                     android:autoLink="web"
-                    android:textIsSelectable="true"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    app:layout_constraintTop_toBottomOf="@+id/fl_lastFbPostImage"
+                    android:textIsSelectable="true"
+                    android:text="@string/lastFbPost_disabled"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    tools:text="@string/lastFbPost_none" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/iv_fbIcon"
@@ -183,7 +159,7 @@
                     android:layout_marginBottom="16dp"
                     android:contentDescription="@null"
                     app:srcCompat="@drawable/ic_fb_logo"
-                    app:layout_constraintBottom_toTopOf="@+id/v_fbErrorDivider"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_lastFbPostText" />
 
@@ -191,97 +167,26 @@
                     android:id="@+id/b_tv1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/lastFbPost_header"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="?android:textColorPrimary"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_lastFbPostText"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_lastFbPostDate"
                     app:layout_constraintLeft_toRightOf="@+id/iv_fbIcon"
-                    app:layout_constraintRight_toLeftOf="@+id/vs_fbPostRefresh"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_lastFbPostDate" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_lastFbPostText" />
 
                 <TextView
                     android:id="@+id/tv_lastFbPostDate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     app:layout_constraintLeft_toRightOf="@+id/iv_fbIcon"
-                    app:layout_constraintRight_toLeftOf="@+id/vs_fbPostRefresh"
                     app:layout_constraintTop_toBottomOf="@+id/b_tv1"
                     tools:text="1. července 2017 23:59" />
-
-                <ViewSwitcher
-                    android:id="@+id/vs_fbPostRefresh"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toTopOf="@id/v_fbErrorDivider"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_lastFbPostText">
-
-                    <!-- Keep the order of items inside of ViewSwitcher!!! -->
-
-                    <ImageButton
-                        android:id="@+id/ib_fbPostRefresh"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:contentDescription="@string/lastFbPost_refresh"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_refresh" />
-
-                    <ProgressBar
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center" />
-
-                </ViewSwitcher>
-
-                <View
-                    android:id="@+id/v_fbErrorDivider"
-                    android:layout_width="0dp"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="16dp"
-                    android:background="?android:attr/listDivider"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/tv_lastFbPostDate"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/fl_fbError"
-                    tools:visibility="visible" />
-
-                <FrameLayout
-                    android:id="@+id/fl_fbError"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="#61ffffff"
-                    android:visibility="visible"
-                    app:layout_constraintTop_toBottomOf="@+id/v_fbErrorDivider"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:visibility="visible">
-
-                    <TextView
-                        android:id="@+id/tv_fbError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:padding="8dp"
-                        android:textColor="#d50000"
-                        tools:text="Chybička se vloudila" />
-
-                </FrameLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

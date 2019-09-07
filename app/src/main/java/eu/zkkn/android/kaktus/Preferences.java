@@ -5,13 +5,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import androidx.annotation.IntDef;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
 
-import androidx.annotation.IntDef;
-
-import eu.zkkn.android.kaktus.FacebookPostsRepository.FbPost;
 import eu.zkkn.android.kaktus.LastNotification.Notification;
 
 
@@ -73,19 +72,12 @@ public class Preferences {
      */
     private static final String PREF_KEY_SYNCHRONIZATION_STATUS = "synchronizationEnabled";
 
-    /**
-     * Time when was the last post on Kaktus' Facebook page created
-     */
+    // Keep old keys for last FB post
+    @SuppressWarnings("unused")
     private static final String PREF_KEY_LAST_FB_POST_DATE = "lastKaktusFbPostDate";
-
-    /**
-     * Text of the last post on Kaktus' Facebook page
-     */
+    @SuppressWarnings("unused")
     private static final String PREF_KEY_LAST_FB_POST_TEXT = "lastKaktusFbPostText";
-
-    /**
-     * URL of the image of the last post on Kaktus' Facebook page
-     */
+    @SuppressWarnings("unused")
     private static final String PREF_KEY_LAST_FB_POST_IMAGE_URL = "lastKaktusFbPostImageUrl";
 
     /**
@@ -156,26 +148,6 @@ public class Preferences {
         if (sentTimeMs == 0 || TextUtils.isEmpty(text)) return null;
 
         return new Notification(new Date(sentTimeMs), new Date(receivedTimeMs), text, uri, from);
-    }
-
-    public static void setLastFbPost(Context context, FbPost fbPost) {
-        getPref(context).edit()
-                .putLong(PREF_KEY_LAST_FB_POST_DATE, fbPost.getDate().getTime())
-                .putString(PREF_KEY_LAST_FB_POST_TEXT, fbPost.getText())
-                .putString(PREF_KEY_LAST_FB_POST_IMAGE_URL, fbPost.getImageUrl())
-                .apply();
-    }
-
-    public static FbPost getLastFbPost(Context context) {
-        SharedPreferences preferences = getPref(context);
-        Long unixTimeMs = preferences.getLong(PREF_KEY_LAST_FB_POST_DATE, 0);
-        String text = preferences.getString(PREF_KEY_LAST_FB_POST_TEXT, null);
-        String imageUrl = preferences.getString(PREF_KEY_LAST_FB_POST_IMAGE_URL, null);
-
-        // if there's no last notification (it has no text nor image)
-        if (unixTimeMs == 0 || (TextUtils.isEmpty(text) && TextUtils.isEmpty(imageUrl))) return null;
-
-        return new FbPost(new Date(unixTimeMs), text, imageUrl);
     }
 
     public static void setSyncStatus(Context context, @SyncStatus int status) {

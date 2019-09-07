@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="account_type" translatable="false">beta.kaktus.zkkn.eu</string>
-    <string name="provider" translatable="false">eu.zkkn.android.kaktus.beta.provider</string>
-</resources>
