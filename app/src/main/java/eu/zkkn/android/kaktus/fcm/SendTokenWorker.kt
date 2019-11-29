@@ -16,6 +16,7 @@ import eu.zkkn.android.kaktus.Helper
 import eu.zkkn.android.kaktus.Preferences
 import eu.zkkn.android.kaktus.backend.registration.Registration
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
@@ -62,7 +63,7 @@ class SendTokenWorker(
 
         try {
             // Get updated InstanceID token.
-            val token = FirebaseInstanceId.getInstance().token
+            val token = FirebaseInstanceId.getInstance().instanceId.await().token
             Log.i(Config.TAG, "FCM Registration Token: $token")
 
             val firebaseMessaging = FirebaseMessaging.getInstance()
@@ -75,7 +76,6 @@ class SendTokenWorker(
                 firebaseMessaging.subscribeToTopic("${FcmHelper.FCM_TOPIC_NOTIFICATIONS}-debug")
             }
 
-            if (token == null) return@withContext Result.retry()
             sendRegistrationToServer(token)
 
             FcmHelper.saveFcmToken(appContext, token)
