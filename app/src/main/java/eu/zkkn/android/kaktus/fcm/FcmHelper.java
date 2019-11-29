@@ -13,6 +13,10 @@ import eu.zkkn.android.kaktus.Preferences;
  */
 public class FcmHelper {
 
+    //TODO: Move to common module with backend
+    public static final String FCM_TOPIC_NOTIFICATIONS = "notifications";
+
+
     public static void saveFcmToken(Context context, String token) {
         Preferences.setFcmToken(context, token);
         Preferences.setFcmSentTokenToServer(context, true);

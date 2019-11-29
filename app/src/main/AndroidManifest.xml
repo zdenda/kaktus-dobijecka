@@ -4,8 +4,6 @@
     package="eu.zkkn.android.kaktus">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- for persistent GcmTaskService -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="false"
@@ -27,22 +25,10 @@
             android:label="@string/activity_about_name"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
 
-        <service android:name=".fcm.MyFcmListenerService">
+        <service android:name=".fcm.MyFcmListenerService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".fcm.IdListenerService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".fcm.SendTokenTaskService"
-            android:exported="true"
-            android:permission="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE">
-            <intent-filter>
-                <action android:name="com.google.android.gms.gcm.ACTION_TASK_READY" />
             </intent-filter>
         </service>
 

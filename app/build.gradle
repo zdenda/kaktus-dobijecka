@@ -16,7 +16,7 @@ android {
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
-        minSdkVersion 14
+        minSdkVersion 16
         // I don't have any Android P (SDK 28) device to test on
         //noinspection OldTargetApi
         targetSdkVersion 27
@@ -59,6 +59,8 @@ android {
 
 dependencies {
 
+    def work_version = "2.2.0"
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -81,21 +83,12 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
-
-    // Firebase Core v15 started requesting a new permission:
-    // com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
-    // https://issuetracker.google.com/issues/78380811
-    // so keep both Firebase and Play Services in v12.
-    // Unfortunately FCM delivery reports might need v18.0.1
-    // https://firebase.google.com/docs/cloud-messaging/understand-delivery#message_delivery_reports
-    //noinspection GradleDependency
-    implementation 'com.google.firebase:firebase-core:12.0.1'
-    //noinspection GradleDependency
-    implementation 'com.google.firebase:firebase-messaging:12.0.1'
-    //noinspection GradleDependency
-    implementation 'com.google.android.gms:play-services-base:12.0.1'
-    //noinspection GradleDependency
-    implementation 'com.google.android.gms:play-services-gcm:12.0.1'
+    implementation "androidx.work:work-runtime:$work_version"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation "androidx.work:work-gcm:$work_version"
+    implementation 'com.google.firebase:firebase-core:17.2.1'
+    implementation 'com.google.firebase:firebase-messaging:20.0.1'
+    implementation 'com.google.android.gms:play-services-base:17.1.0'
 
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 

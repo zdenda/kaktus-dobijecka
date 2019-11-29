@@ -24,7 +24,7 @@ import java.util.Date;
 
 import eu.zkkn.android.kaktus.fcm.FcmHelper;
 import eu.zkkn.android.kaktus.fcm.MyFcmListenerService;
-import eu.zkkn.android.kaktus.fcm.SendTokenTaskService;
+import eu.zkkn.android.kaktus.fcm.SendTokenWorker;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (TextUtils.isEmpty(FcmHelper.loadFcmToken(this))) {
                 if (FcmHelper.missingSubscriptionToNotifications(this)) {
-                    SendTokenTaskService.runSendTokenTask(this);
+                    SendTokenWorker.runSendTokenTask(this);
                 }
                 mSemaphoreStatus.setInfo(R.string.status_fcm_registration_in_progress);
                 // register local broadcast receiver for result of the registration.
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(mFcmRegistrationBroadcastReceiver,
-                new IntentFilter(SendTokenTaskService.REGISTRATION_COMPLETE));
+                new IntentFilter(SendTokenWorker.REGISTRATION_COMPLETE));
     }
 
     private void unRegisterFcmRegistrationReceiver() {

@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -37,6 +38,11 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 .logEvent(FirebaseAnalyticsHelper.EVENT_FCM_RECEIVED, type);
     }
 
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        SendTokenWorker.runSendTokenTask(this);
+    }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
