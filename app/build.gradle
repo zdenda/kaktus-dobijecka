@@ -72,7 +72,7 @@ dependencies {
     api 'com.google.guava:guava:28.1-android'
 
     //compile 'com.google.api-client:google-api-client:1.27.0'
-    implementation('com.google.api-client:google-api-client-android:1.30.2', {
+    implementation('com.google.api-client:google-api-client-android:1.30.5', {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     })
 
@@ -80,7 +80,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
 
     // Firebase Core v15 started requesting a new permission:
     // com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
