@@ -17,11 +17,11 @@ android {
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 16
-        // I don't have any Android P (SDK 28) device to test on
+        // I don't have any Android 10 (SDK 29) device to test on
         //noinspection OldTargetApi
-        targetSdkVersion 27
-        versionCode 35
-        versionName '0.15.0'
+        targetSdkVersion 28
+        versionCode 36
+        versionName '0.15.1'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
