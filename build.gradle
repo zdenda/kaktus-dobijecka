@@ -2,7 +2,7 @@
 
 buildscript {
 
-    ext.kotlin_version = '1.3.61'
+    ext.kotlin_version = '1.3.72'
 
     repositories {
         google()
@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'com.google.firebase:firebase-plugins:2.0.0'
         classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:2.0.1'

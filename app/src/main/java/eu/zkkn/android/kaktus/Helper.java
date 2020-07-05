@@ -102,6 +102,8 @@ public class Helper {
 
     @Nullable
     public static Intent getAppIntent(Context context, String packageName) {
+        //TODO: test this on Android 11
+        //https://developer.android.com/preview/privacy/package-visibility
         return context.getPackageManager().getLaunchIntentForPackage(packageName);
     }
 
