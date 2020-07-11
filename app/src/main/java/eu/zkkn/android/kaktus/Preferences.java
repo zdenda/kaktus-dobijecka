@@ -91,6 +91,11 @@ public class Preferences {
      */
     private static final String PREF_KEY_HIDE_DONATION = "hideDonation";
 
+    /**
+     * Don't show the last post on Facebook page
+     */
+    private static final String PREF_KEY_HIDE_FACEBOOK_INFO = "hideLastKaktusFbPostInfo";
+
 
     private static SharedPreferences sPreferences;
 
@@ -179,6 +184,14 @@ public class Preferences {
 
     public static void setDonationHidden(Context context, boolean hide) {
         getPref(context).edit().putBoolean(PREF_KEY_HIDE_DONATION, hide).apply();
+    }
+
+    public static boolean isFacebookInfoHidden(Context context) {
+        return getPref(context).getBoolean(PREF_KEY_HIDE_FACEBOOK_INFO, false);
+    }
+
+    public static void setFacebookInfoHidden(Context context, boolean hide) {
+        getPref(context).edit().putBoolean(PREF_KEY_HIDE_FACEBOOK_INFO, hide).apply();
     }
 
 }

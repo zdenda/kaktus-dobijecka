@@ -14,6 +14,7 @@
 
     <string name="lastFbPost_header">Kaktus na Facebooku</string>
     <string name="lastFbPost_disabled">Zde býval poslední příspěvek z Facebook stránky Kaktusu. Protože se Facebook rozhodl změnit podmínky pro aplikace, jako je tahle, tak už se zobrazovat nebude.\nHlavní funkce appky — upozornění na dobíječku — tím není nijak ovlivněna a bude fungovat jako doposud.</string>
+    <string name="hide_lastFbPost">Skrýt příspěvek z Facebooku</string>
 
     <string name="status_missing_google_play_services">Toto zařízení bohužel není podporováno. Aplikace vyžaduje Služby Google Play, které zde nejsou dostupné.</string>
     <string name="status_fcm_registered">Příjem upozornění je aktivní.</string>

@@ -86,14 +86,25 @@ public class MainActivity extends AppCompatActivity {
         registerFcmMessageReceiver();
 
         // Facebook
-        findViewById(R.id.iv_fbIcon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.viewUri(MainActivity.this, Config.KAKTUS_FACEBOOK_URL);
-            }
-        });
-        ((TextView) findViewById(R.id.tv_lastFbPostDate)).setText(Helper.formatDate(
-                MainActivity.this, new Date()));
+        if (!Preferences.isFacebookInfoHidden(this)) {
+            findViewById(R.id.iv_hideFb).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    findViewById(R.id.cv_facebook).setVisibility(View.GONE);
+                    Preferences.setFacebookInfoHidden(MainActivity.this, true);
+                }
+            });
+            findViewById(R.id.iv_fbIcon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.viewUri(MainActivity.this, Config.KAKTUS_FACEBOOK_URL);
+                }
+            });
+            ((TextView) findViewById(R.id.tv_lastFbPostDate)).setText(Helper.formatDate(
+                    MainActivity.this, new Date()));
+        } else {
+            findViewById(R.id.cv_facebook).setVisibility(View.GONE);
+        }
 
     }
 
