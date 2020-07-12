@@ -46,7 +46,7 @@ public class CheckServlet extends HttpServlet {
             // send notification email to admin, but only one email in 12 hours
             String recipient = System.getProperty("admin.email");
             Calendar since = Calendar.getInstance();
-            since.add(Calendar.HOUR_OF_DAY, -12);
+            since.add(Calendar.DAY_OF_MONTH, -1);
 
             List<EmailLog> emailsSince = ofy().load().type(EmailLog.class)
                     .filter("recipient", recipient).filter("date >", since.getTime()).list();
