@@ -8,6 +8,9 @@
     <color name="background">#fffee8</color>
     <color name="cardBackground">#fff8e1</color>
 
+    <color name="cardInfoBackground">#e1f5fe</color>
+    <color name="cardErrorBackground">#ffcdd2</color>
+
     <color name="yellow">#fede00</color>
 
 </resources>

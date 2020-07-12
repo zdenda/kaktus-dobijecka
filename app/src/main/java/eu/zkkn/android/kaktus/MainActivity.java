@@ -13,12 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.Date;
 
@@ -105,6 +110,37 @@ public class MainActivity extends AppCompatActivity {
         } else {
             findViewById(R.id.cv_facebook).setVisibility(View.GONE);
         }
+
+        // Remote config
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(3600)
+                .build();
+        final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
+        remoteConfig.setConfigSettingsAsync(configSettings);
+
+        remoteConfig.activate().addOnCompleteListener(new OnCompleteListener<Boolean>() {
+            @Override
+            public void onComplete(@NonNull Task<Boolean> task) {
+                if (task.isSuccessful()) {
+                    String errorMsg = remoteConfig.getString("error");
+                    String infoMsg = remoteConfig.getString("info");
+                    // Show error
+                    if (!TextUtils.isEmpty(errorMsg)) {
+                        ((TextView) findViewById(R.id.tv_infoText)).setText(errorMsg);
+                        View info = findViewById(R.id.cv_info);
+                        info.setBackgroundColor(
+                                getResources().getColor(R.color.cardErrorBackground));
+                        info.setVisibility(View.VISIBLE);
+                    // Show info if there's no error which has bigger priority
+                    } else if (!TextUtils.isEmpty(infoMsg)) {
+                        ((TextView) findViewById(R.id.tv_infoText)).setText(infoMsg);
+                        findViewById(R.id.cv_info).setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        remoteConfig.fetch();
 
     }
 

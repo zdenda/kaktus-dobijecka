@@ -9,6 +9,8 @@
     <string name="donation_button_hide">Skrýt</string>
     <string name="donation_button_donate">Kopírovat tel. číslo a\notevřít Kaktus appku</string>
 
+    <string name="info_header">Informace pro uživatele</string>
+
     <string name="lastNotification_header">Upozornění na dobíječku</string>
     <string name="lastNotification_none">Zatím nebylo přijato žádné upozornění.</string>
 
