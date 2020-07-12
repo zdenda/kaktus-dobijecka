@@ -8,4 +8,7 @@
         <property name="gcm.api.key" value="${fcmKey}" />
         <property name="admin.email" value="${email}" />
     </system-properties>
+    <automatic-scaling>
+        <max-instances>1</max-instances>
+    </automatic-scaling>
 </appengine-web-app>
