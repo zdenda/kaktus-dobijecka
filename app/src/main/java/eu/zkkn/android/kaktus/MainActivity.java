@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            SendTokenWorker.schedulePeriodicRefresh(this);
+
         } else {
             mSemaphoreStatus.setError(R.string.status_missing_google_play_services);
         }
@@ -249,8 +251,13 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(title);
-        builder.setMessage(Helper.formatHtml("%1$s <br/><br/><small>* %2$s</small>",
-                token, getString(R.string.dialog_fcm_token_warning)));
+        builder.setMessage(Helper.formatHtml(
+                "%1$s <br/><br/>%2$s<br/><br/><small>* %3$s</small>",
+                token,
+                getString(R.string.dialog_fcm_token_refresh_time,
+                        Preferences.getLastSubscriptionRefreshTime(this)),
+                getString(R.string.dialog_fcm_token_warning))
+        );
         builder.setNeutralButton(R.string.dialog_fcm_token_button_copy_to_clipboard,
                 new DialogInterface.OnClickListener() {
                     @Override

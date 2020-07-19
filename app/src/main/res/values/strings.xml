@@ -24,6 +24,7 @@
     <string name="status_fcm_registration_error">Registrace pro příjem upozornení se zatím nepodařila. Za chvíli to zkusíme znovu …</string>
 
     <string name="dialog_fcm_token_title">FCM Token</string>
+    <string name="dialog_fcm_token_refresh_time">Obnoveno: %1$tY-%1$tm-%1$td&#160;%1$tH:%1$tM:%1$tS</string>
     <string name="dialog_fcm_token_warning">Svůj token sdílejte jen s důvěryhodnými osobami!</string>
     <string name="dialog_fcm_token_button_copy_to_clipboard">Kopírovat</string>
     <string name="dialog_fcm_token_button_ok">OK</string>

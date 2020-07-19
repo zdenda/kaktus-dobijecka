@@ -12,6 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
 
 import eu.zkkn.android.kaktus.LastNotification.Notification;
+import eu.zkkn.android.kaktus.fcm.SendTokenWorker;
 
 
 /**
@@ -39,7 +40,7 @@ public class Preferences {
     /**
      * Boolean preference that indicates whether the device is subscribed to topic "notifications"
      */
-    private static final String PREF_KEY_FCM_TOPIC_NOTIFICATIONS = "fcmTopicNotifications";
+    private static final String PREF_KEY_FCM_TOPIC_NOTIFICATIONS = "fcmTopicNotifications-1";
 
     /**
      * Time when was the last notification sent
@@ -95,6 +96,11 @@ public class Preferences {
      * Don't show the last post on Facebook page
      */
     private static final String PREF_KEY_HIDE_FACEBOOK_INFO = "hideLastKaktusFbPostInfo";
+
+    private static final String PREF_KEY_PERIODIC_SUBSCRIPTION_REFRESH =
+            "periodicSubscriptionRefresh-v" + SendTokenWorker.PERIODIC_WORK_VERSION;
+    private static final String PREF_KEY_LAST_SUBSCRIPTION_REFRESH =
+            "lastSubscriptionRefreshTime-v" + SendTokenWorker.PERIODIC_WORK_VERSION;
 
 
     private static SharedPreferences sPreferences;
@@ -192,6 +198,24 @@ public class Preferences {
 
     public static void setFacebookInfoHidden(Context context, boolean hide) {
         getPref(context).edit().putBoolean(PREF_KEY_HIDE_FACEBOOK_INFO, hide).apply();
+    }
+
+    public static void setPeriodicSubscriptionRefresh(Context context) {
+        getPref(context).edit().putLong(
+                PREF_KEY_PERIODIC_SUBSCRIPTION_REFRESH, System.currentTimeMillis()).apply();
+    }
+
+    public static boolean isPeriodicSubscriptionRefreshEnabled(Context context) {
+        return 0L != getPref(context).getLong(PREF_KEY_PERIODIC_SUBSCRIPTION_REFRESH, 0L);
+    }
+
+    public static void setLastSubscriptionRefresh(Context context) {
+        getPref(context).edit().putLong(
+                PREF_KEY_LAST_SUBSCRIPTION_REFRESH, System.currentTimeMillis()).apply();
+    }
+
+    public static long getLastSubscriptionRefreshTime(Context context) {
+        return getPref(context).getLong(PREF_KEY_LAST_SUBSCRIPTION_REFRESH, 0L);
     }
 
 }

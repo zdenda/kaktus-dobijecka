@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 
 class SendTokenWorker(
@@ -30,6 +31,9 @@ class SendTokenWorker(
     companion object {
 
         const val REGISTRATION_COMPLETE = "registrationComplete"
+        const val PERIODIC_WORK_VERSION = 2
+
+        private const val PERIODIC_WORK_NAME = "eu.zkkn.android.kaktus.work.PERIODIC_REFRESH"
 
         @JvmStatic
         fun runSendTokenTask(context: Context) {
@@ -42,6 +46,34 @@ class SendTokenWorker(
                     .build()
             Log.d(Config.TAG, "SendTokenWorker.runSendTokenTask()")
             WorkManager.getInstance(context).enqueue(sendTokenTask)
+        }
+
+        @JvmStatic
+        fun schedulePeriodicRefresh(context: Context) {
+            if (Preferences.isPeriodicSubscriptionRefreshEnabled(context)) return
+
+            Log.d(Config.TAG, "Schedule periodic refresh for FCM topic subscriptions")
+            val workManager = WorkManager.getInstance(context)
+            workManager.enqueueUniquePeriodicWork(
+                    PERIODIC_WORK_NAME,
+                    ExistingPeriodicWorkPolicy.REPLACE,
+                    //Interval resets (job is rescheduled) on device reboot, so it might never run if interval is too long
+                    PeriodicWorkRequest.Builder(SendTokenWorker::class.java, 30, TimeUnit.DAYS, 4, TimeUnit.DAYS)
+                            .addTag(PERIODIC_WORK_NAME)
+                            .setBackoffCriteria(
+                                    BackoffPolicy.EXPONENTIAL,
+                                    WorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS * 4,
+                                    TimeUnit.MILLISECONDS
+                            )
+                            .setConstraints(
+                                    Constraints.Builder()
+                                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                                            .setRequiresCharging(true)
+                                            .build()
+                            )
+                            .build()
+            )
+            Preferences.setPeriodicSubscriptionRefresh(context)
         }
 
     }
@@ -76,9 +108,13 @@ class SendTokenWorker(
                 firebaseMessaging.subscribeToTopic("${FcmHelper.FCM_TOPIC_NOTIFICATIONS}-debug")
             }
 
+            // probably false positive https://youtrack.jetbrains.com/issue/KT-39684
+            @Suppress("BlockingMethodInNonBlockingContext")
             sendRegistrationToServer(token)
 
             FcmHelper.saveFcmToken(appContext, token)
+
+            Preferences.setLastSubscriptionRefresh(applicationContext)
 
             //TODO: send test FCM to make sure the device can receive our messages
 
