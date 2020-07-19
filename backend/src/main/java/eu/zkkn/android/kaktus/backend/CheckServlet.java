@@ -7,12 +7,18 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.HttpCookie;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 
@@ -29,9 +35,13 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  */
 public class CheckServlet extends HttpServlet {
 
-    public static final String KAKTUS_WEB_URL = "https://www.mujkaktus.cz/chces-pridat";
+    public static final String KAKTUS_DOBIJECKA_URL = "https://www.mujkaktus.cz/chces-pridat";
+    private static final String KAKTUS_WEB_HOMEPAGE = "https://www.mujkaktus.cz/";
 
     private static final Logger LOG = Logger.getLogger(CheckServlet.class.getName());
+
+    // App Engine request has to return within 60 seconds
+    private static final int APP_ENGINE_REQ_TIMEOUT = 59 * 1000;
 
     @SuppressWarnings("unchecked") //TODO: remove
     @Override
@@ -115,8 +125,13 @@ public class CheckServlet extends HttpServlet {
      */
     @Nullable
     private String loadTextFromWeb() throws IOException {
-        // App Engine request has to return within 60 seconds
-        Document document = Jsoup.connect(KAKTUS_WEB_URL).timeout(59 * 1000).get();
+
+        Map<String, String> cookies = getCookies();
+        if (cookies.isEmpty()) LOG.warning("Cookies are empty");
+
+        Document document = Jsoup.connect(KAKTUS_DOBIJECKA_URL).cookies(cookies)
+                .timeout(APP_ENGINE_REQ_TIMEOUT).get();
+
         Elements elements = document.select("div.wrapper > h2.uppercase + h3.uppercase.text-drawn");
 
         // there should be only one element
@@ -138,6 +153,33 @@ public class CheckServlet extends HttpServlet {
         }
 
         return text;
+    }
+
+    // Get cookies by loading Homepage
+    private Map<String, String> getCookies() {
+        try {
+
+            Map<String, String> cookies = new HashMap<>();
+
+            URLConnection connection = (new URL(KAKTUS_WEB_HOMEPAGE)).openConnection();
+            connection.setConnectTimeout(APP_ENGINE_REQ_TIMEOUT);
+            connection.setReadTimeout(APP_ENGINE_REQ_TIMEOUT / 2);
+
+            @Nullable
+            List<String> cookieFields = connection.getHeaderFields().get("set-cookie");
+            if (cookieFields != null) {
+                cookieFields.forEach(cookieField ->
+                        HttpCookie.parse(cookieField).forEach(httpCookie ->
+                                cookies.put(httpCookie.getName(), httpCookie.getValue())
+                        )
+                );
+            }
+
+            return cookies;
+
+        } catch (IOException e) {
+            return Collections.emptyMap();
+        }
     }
 
     private void saveParseResult(String text) {
