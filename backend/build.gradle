@@ -48,10 +48,14 @@ war {
 appengine {
     run {
         host = '0.0.0.0'
+        automaticRestart = true
         //TODO: this doesn't work, so the jvmFlag has to be used instead
         //datastorePath = "$rootDir/backend/local_db.bin"
-        jvmFlags = ["-Ddatastore.backing_store=$rootDir/backend/local_db.bin".toString(),
-                    "-Dappengine.fullscan.seconds=5".toString()]
+        jvmFlags = [
+                "-Ddatastore.backing_store=$rootDir/backend/local_db.bin".toString(),
+                "-Dappengine.fullscan.seconds=5".toString(),
+                "-Xdebug".toString(), "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005".toString()
+        ]
     }
     deploy {
         projectId = "$googleCloudProjectId"
