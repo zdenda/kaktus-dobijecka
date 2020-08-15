@@ -4,4 +4,5 @@
 # Those files contain private IDs and keys
 firebase-crashreporting.json
 google-services.json
+google-services.json.old
 src/main/java/eu/zkkn/android/kaktus/Config.java
