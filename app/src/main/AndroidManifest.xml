@@ -33,6 +33,10 @@
             </intent-filter>
         </service>
 
+        <receiver android:name=".CancelNotificationReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

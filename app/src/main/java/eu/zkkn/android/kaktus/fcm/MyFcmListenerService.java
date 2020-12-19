@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import eu.zkkn.android.kaktus.CancelNotificationReceiver;
 import eu.zkkn.android.kaktus.Config;
 import eu.zkkn.android.kaktus.FirebaseAnalyticsHelper;
 import eu.zkkn.android.kaktus.LastNotification;
@@ -96,6 +97,12 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             builder.addAction(R.drawable.ic_open, getString(R.string.notification_action_view),
                     PendingIntent.getActivity(this, 0, action, 0));
         }
+
+        Intent actionCancel = CancelNotificationReceiver.getIntent(
+                this, NotificationHelper.DOBIJECKA_NOTIFICATION_ID);
+        builder.addAction(R.drawable.ic_cancel, getString(R.string.notification_action_cancel),
+                PendingIntent.getBroadcast(this, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
+                        actionCancel, PendingIntent.FLAG_UPDATE_CURRENT));
 
         NotificationHelper.notify(this, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
                 builder.build());
