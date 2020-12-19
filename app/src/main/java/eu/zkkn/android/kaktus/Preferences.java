@@ -74,11 +74,8 @@ public class Preferences {
     private static final String PREF_KEY_SYNCHRONIZATION_STATUS = "synchronizationEnabled";
 
     // Keep old keys for last FB post
-    @SuppressWarnings("unused")
     private static final String PREF_KEY_LAST_FB_POST_DATE = "lastKaktusFbPostDate";
-    @SuppressWarnings("unused")
     private static final String PREF_KEY_LAST_FB_POST_TEXT = "lastKaktusFbPostText";
-    @SuppressWarnings("unused")
     private static final String PREF_KEY_LAST_FB_POST_IMAGE_URL = "lastKaktusFbPostImageUrl";
 
     /**

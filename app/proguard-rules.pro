@@ -17,10 +17,8 @@
 #}
 
 -dontwarn com.google.android.gms.auth.*
--keep class com.google.android.gms.gcm.** { *; }
 
 -dontwarn org.apache.commons.codec.binary.**
--keep class org.apache.commons.codec.binary.** { *; }
 
 # Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
 -keepclasseswithmembers class * {
@@ -44,9 +42,6 @@
 -dontnote org.apache.http.**
 -dontnote android.net.http.*
 
-# Crashlytics
--keepattributes *Annotation*
+# Firebase Crashlytics
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
--keep class com.crashlytics.** { *; }
--dontwarn com.crashlytics.**

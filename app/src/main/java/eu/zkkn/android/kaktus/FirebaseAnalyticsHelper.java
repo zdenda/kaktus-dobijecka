@@ -27,7 +27,7 @@ public class FirebaseAnalyticsHelper {
     public static final int EVENT_DONATE_ABOUT = 8;
     public static final int EVENT_FCM_RECEIVED = 9;
 
-    private FirebaseAnalytics mFirebaseAnalytics;
+    private final FirebaseAnalytics mFirebaseAnalytics;
 
 
     public FirebaseAnalyticsHelper(FirebaseAnalytics firebaseAnalytics) {
