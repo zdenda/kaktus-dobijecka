@@ -8,8 +8,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.*
 import com.google.api.client.extensions.android.json.AndroidJsonFactory
 import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 import eu.zkkn.android.kaktus.BuildConfig
 import eu.zkkn.android.kaktus.Config
 import eu.zkkn.android.kaktus.Helper
@@ -95,8 +96,7 @@ class SendTokenWorker(
 
         try {
             // Get updated InstanceID token.
-            //TODO FirebaseInstanceId is deprecated
-            val token = FirebaseInstanceId.getInstance().instanceId.await().token
+            val token: String = Firebase.messaging.token.await()
             Log.i(Config.TAG, "FCM Registration Token: $token")
 
             val firebaseMessaging = FirebaseMessaging.getInstance()
