@@ -95,6 +95,7 @@ class SendTokenWorker(
 
         try {
             // Get updated InstanceID token.
+            //TODO FirebaseInstanceId is deprecated
             val token = FirebaseInstanceId.getInstance().instanceId.await().token
             Log.i(Config.TAG, "FCM Registration Token: $token")
 
