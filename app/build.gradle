@@ -13,15 +13,14 @@ apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion '30.0.3'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 16
-        //noinspection OldTargetApi TODO: Test on Android 11
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 41
-        versionName '0.16.4-α2'
+        versionName '0.16.4-α3'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"

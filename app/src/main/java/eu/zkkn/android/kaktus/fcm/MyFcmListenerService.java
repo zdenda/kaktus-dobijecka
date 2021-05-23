@@ -70,22 +70,23 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
             // show notification if the message is fresh
             if (sentTime > (System.currentTimeMillis() - TimeUnit.HOURS.toMillis(12))) {
-                showNotification(message, uri);
+                showNotification(this, message, uri);
             }
         }
 
     }
 
 
-    protected void showNotification(String message, @Nullable String uri) {
+    protected static void showNotification(Context context, String message, @Nullable String uri) {
+        Context ctx = context.getApplicationContext();
         NotificationCompat.Builder builder = NotificationHelper
-                .getDefaultBuilder(this, NotificationHelper.DOBIJECKA_CHANNEL_ID)
+                .getDefaultBuilder(ctx, NotificationHelper.DOBIJECKA_CHANNEL_ID)
                 .setContentText(message)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setAutoCancel(true);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0,
+                new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
         // add action if URI is not empty and intent for that URI can be resolved
@@ -93,18 +94,18 @@ public class MyFcmListenerService extends FirebaseMessagingService {
         if (!TextUtils.isEmpty(uri)) {
             action = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
         }
-        if (action != null && action.resolveActivity(getPackageManager()) != null) {
-            builder.addAction(R.drawable.ic_open, getString(R.string.notification_action_view),
-                    PendingIntent.getActivity(this, 0, action, 0));
+        if (action != null && action.resolveActivity(ctx.getPackageManager()) != null) {
+            builder.addAction(R.drawable.ic_open, ctx.getString(R.string.notification_action_view),
+                    PendingIntent.getActivity(ctx, 0, action, 0));
         }
 
         Intent actionCancel = CancelNotificationReceiver.getIntent(
-                this, NotificationHelper.DOBIJECKA_NOTIFICATION_ID);
-        builder.addAction(R.drawable.ic_cancel, getString(R.string.notification_action_cancel),
-                PendingIntent.getBroadcast(this, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
+                ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID);
+        builder.addAction(R.drawable.ic_cancel, ctx.getString(R.string.notification_action_cancel),
+                PendingIntent.getBroadcast(ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
                         actionCancel, PendingIntent.FLAG_UPDATE_CURRENT));
 
-        NotificationHelper.notify(this, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
+        NotificationHelper.notify(ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
                 builder.build());
     }
 

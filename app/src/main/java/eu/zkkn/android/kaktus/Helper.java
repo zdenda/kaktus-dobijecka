@@ -3,7 +3,6 @@ package eu.zkkn.android.kaktus;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -23,11 +22,6 @@ import java.util.Locale;
  * Collection of useful methods
  */
 public class Helper {
-
-    private static final long MIN_IN_S = 60;
-    private static final long HOUR_IN_S = MIN_IN_S * 60;
-    public static final long DAY_IN_S = HOUR_IN_S * 24;
-
 
     /**
      * Formats the date as a string with date and time. It respect the localization of device.
@@ -80,12 +74,7 @@ public class Helper {
         builder.setTitle(title);
         builder.setMessage(message);
         builder.setPositiveButton(R.string.generic_alert_button_ok,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }
+                (dialog, which) -> dialog.dismiss()
         );
         builder.show();
     }
@@ -102,8 +91,6 @@ public class Helper {
 
     @Nullable
     public static Intent getAppIntent(Context context, String packageName) {
-        //TODO: test this on Android 11
-        //https://developer.android.com/preview/privacy/package-visibility
         return context.getPackageManager().getLaunchIntentForPackage(packageName);
     }
 
