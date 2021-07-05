@@ -27,7 +27,7 @@ public class Config {
     public static final String KAKTUS_FACEBOOK_URL = "https://www.facebook.com/kaktus";
 
     /**
-     * Package name of Kaktus' app
+     * Package name of Kaktus' app (also used in Android Manifest)
      */
     public static final String KAKTUS_APP_ID = "com.zentity.tmcz.kaktus";
 

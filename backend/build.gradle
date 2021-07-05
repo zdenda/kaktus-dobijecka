@@ -4,7 +4,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        jcenter()
     }
     dependencies {
         classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.4.1'
@@ -14,7 +13,6 @@ buildscript {
 repositories {
     google()
     mavenCentral()
-    jcenter()
 }
 
 apply plugin: 'java'
