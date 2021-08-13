@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -132,16 +133,21 @@ public class CheckServlet extends HttpServlet {
         Document document = Jsoup.connect(KAKTUS_DOBIJECKA_URL).cookies(cookies)
                 .timeout(APP_ENGINE_REQ_TIMEOUT).get();
 
-        Elements elements = document.select("div.wrapper > h2.uppercase + h3.uppercase.text-drawn");
+        // Try query here: https://try.jsoup.org/
+        Elements elements = document.select("div.wrapper > h1 + h3.uppercase.text-drawn");
 
         // there should be only one element
         if (elements.size() != 1) {
             // something wrong happened if there's more or less than one element
             // for example the structure of kaktus web might have been changed
+            LOG.warning("Unexpected count (" + elements.size() + ") of matching elements.");
             return null;
         }
 
-        String text = elements.first().text();
+        Element element = elements.first();
+        if (element == null) return null;
+
+        String text = element.text();
 
         // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
         String regex = "Pokud si dneska \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? od \\d+:\\d+ do \\d+:\\d+ hodin dobije\u0161 alespo\u0148 \\d+ K\u010d, d\u00e1me ti dvojn\u00e1sob .*";
@@ -149,6 +155,7 @@ public class CheckServlet extends HttpServlet {
         if (!text.matches(regex)) {
             // something wrong happened if there's no match
             // for example the structure of kaktus web might have been changed
+            LOG.warning("Text: '" + text + "' doesn't match RegEx");
             return null;
         }
 
