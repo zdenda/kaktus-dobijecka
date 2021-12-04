@@ -24,7 +24,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 30
         versionCode 42
-        versionName '0.16.5-α6'
+        versionName '0.16.5-α7'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -87,12 +87,16 @@ dependencies {
     implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     implementation "androidx.work:work-gcm:$work_version"
-    implementation 'com.google.firebase:firebase-core:19.0.1'
-    implementation 'com.google.firebase:firebase-config:21.0.1'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.1'
-    implementation 'com.google.firebase:firebase-analytics:19.0.1'
-    implementation 'com.google.firebase:firebase-messaging-ktx:22.0.0'
     implementation 'com.google.android.gms:play-services-base:17.6.0'
+
+    // Import the BoM for the Firebase platform
+    // firebase-bom v29 needs minSdkVersion 19
+    implementation platform('com.google.firebase:firebase-bom:28.4.2')
+    implementation 'com.google.firebase:firebase-core'
+    implementation 'com.google.firebase:firebase-config'
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:rules:1.4.0'
