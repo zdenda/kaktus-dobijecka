@@ -79,6 +79,12 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
     protected static void showNotification(Context context, String message, @Nullable String uri) {
         Context ctx = context.getApplicationContext();
+
+        int pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            pendingIntentFlags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+
         NotificationCompat.Builder builder = NotificationHelper
                 .getDefaultBuilder(ctx, NotificationHelper.DOBIJECKA_CHANNEL_ID)
                 .setContentText(message)
@@ -86,7 +92,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
                 .setAutoCancel(true);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0,
-                new Intent(ctx, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                new Intent(ctx, MainActivity.class), pendingIntentFlags);
         builder.setContentIntent(pendingIntent);
 
         // add action if URI is not empty and intent for that URI can be resolved
@@ -96,14 +102,14 @@ public class MyFcmListenerService extends FirebaseMessagingService {
         }
         if (action != null && action.resolveActivity(ctx.getPackageManager()) != null) {
             builder.addAction(R.drawable.ic_open, ctx.getString(R.string.notification_action_view),
-                    PendingIntent.getActivity(ctx, 0, action, 0));
+                    PendingIntent.getActivity(ctx, 0, action, pendingIntentFlags));
         }
 
         Intent actionCancel = CancelNotificationReceiver.getIntent(
                 ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID);
         builder.addAction(R.drawable.ic_cancel, ctx.getString(R.string.notification_action_cancel),
                 PendingIntent.getBroadcast(ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
-                        actionCancel, PendingIntent.FLAG_UPDATE_CURRENT));
+                        actionCancel, pendingIntentFlags));
 
         NotificationHelper.notify(ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
                 builder.build());
