@@ -20,11 +20,10 @@ android {
         minSdkVersion 16
         //TODO: Test on Android 12 (SDK 31) when it's released
         // - App hibernation https://developer.android.com/about/versions/12/behavior-changes-12#app-hibernation
-        // - D2D transfer https://developer.android.com/about/versions/12/backup-restore#functionality-changes
         //noinspection OldTargetApi
         targetSdkVersion 30
         versionCode 42
-        versionName '0.16.5-α8'
+        versionName '0.17.0-α1'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
