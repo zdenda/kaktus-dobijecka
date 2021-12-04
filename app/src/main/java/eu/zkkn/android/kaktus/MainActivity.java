@@ -13,15 +13,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.IntentCompat;
+import androidx.core.content.PackageManagerCompat;
+import androidx.core.content.PackageManagerCompat.UnusedAppRestrictionsStatus;
+import androidx.core.content.UnusedAppRestrictionsConstants;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
@@ -33,6 +45,30 @@ import eu.zkkn.android.kaktus.fcm.SendTokenWorker;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private final ActivityResultLauncher<Void> mManageUnusedAppRestrictionsLauncher =
+            registerForActivityResult(
+                    new ActivityResultContract<Void, ActivityResult>() {
+                        @NonNull
+                        @Override
+                        public Intent createIntent(@NonNull Context context, @Nullable Void input) {
+                            return IntentCompat.createManageUnusedAppRestrictionsIntent(
+                                    context, BuildConfig.APPLICATION_ID);
+                        }
+                        @Override
+                        public ActivityResult parseResult(int resultCode, @Nullable Intent intent) {
+                            return new ActivityResult(resultCode, intent);
+                        }
+                    },
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            refreshAppHibernationView();
+                        }
+                    }
+
+            );
+
 
     private BroadcastReceiver mFcmRegistrationBroadcastReceiver;
     private BroadcastReceiver mFcmMessageBroadcastReceiver;
@@ -144,6 +180,15 @@ public class MainActivity extends AppCompatActivity {
 
         remoteConfig.fetch();
 
+        // App Hibernation
+        findViewById(R.id.bt_app_hibernation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mManageUnusedAppRestrictionsLauncher.launch(null);
+            }
+        });
+        refreshAppHibernationView();
+
     }
 
     @Override
@@ -209,6 +254,40 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void refreshAppHibernationView() {
+        Futures.addCallback(
+                PackageManagerCompat.getUnusedAppRestrictionsStatus(this),
+                new FutureCallback<Integer>() {
+                    @Override
+                    public void onSuccess(@UnusedAppRestrictionsStatus Integer result) {
+                        switch (result) {
+                            case UnusedAppRestrictionsConstants.ERROR:
+                            case UnusedAppRestrictionsConstants.FEATURE_NOT_AVAILABLE:
+                            case UnusedAppRestrictionsConstants.DISABLED:
+                            case UnusedAppRestrictionsConstants.API_30_BACKPORT:
+                            case UnusedAppRestrictionsConstants.API_30:
+                                // App hibernation is NOT active
+                                findViewById(R.id.cv_app_hibernation).setVisibility(View.GONE);
+                                break;
+                            case UnusedAppRestrictionsConstants.API_31:
+                                // App hibernation is active
+                                findViewById(R.id.cv_app_hibernation).setVisibility(View.VISIBLE);
+                                break;
+                            default:
+                                findViewById(R.id.cv_app_hibernation).setVisibility(View.GONE);
+                                Log.e(Config.TAG, "Unknown value for UnusedAppRestrictionsConstants: " + result);
+                                break;
+                        }
+                    }
+                    @Override
+                    public void onFailure(Throwable t) {
+                        // Do nothing
+                    }
+                },
+                ContextCompat.getMainExecutor(this)
+        );
     }
 
     private void registerFcmRegistrationReceiver() {
