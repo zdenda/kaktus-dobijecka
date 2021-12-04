@@ -24,7 +24,7 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 30
         versionCode 42
-        versionName '0.16.5-α7'
+        versionName '0.16.5-α8'
         resConfigs "en", "cs"
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"

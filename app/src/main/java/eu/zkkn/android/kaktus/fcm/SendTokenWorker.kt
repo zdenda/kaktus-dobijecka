@@ -59,7 +59,7 @@ class SendTokenWorker(
                     PERIODIC_WORK_NAME,
                     ExistingPeriodicWorkPolicy.REPLACE,
                     //Interval resets (job is rescheduled) on device reboot, so it might never run if interval is too long
-                    PeriodicWorkRequest.Builder(SendTokenWorker::class.java, 30, TimeUnit.DAYS, 4, TimeUnit.DAYS)
+                    PeriodicWorkRequest.Builder(SendTokenWorker::class.java, 28, TimeUnit.DAYS, 4, TimeUnit.DAYS)
                             .addTag(PERIODIC_WORK_NAME)
                             .setBackoffCriteria(
                                     BackoffPolicy.EXPONENTIAL,
