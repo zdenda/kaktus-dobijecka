@@ -21,7 +21,7 @@ android {
         //noinspection OldTargetApi - Wait for Android 13 (SDK 33)
         targetSdkVersion 31
         versionCode 43
-        versionName '0.18.0-α1'
+        versionName '0.18.0-α4'
         resConfigs 'en', 'cs'
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"

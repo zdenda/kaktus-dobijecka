@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -45,6 +47,23 @@ import eu.zkkn.android.kaktus.fcm.SendTokenWorker;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private final ActivityResultLauncher<Void> mAppSettingsLauncher = registerForActivityResult(
+            new ActivityResultContract<Void, ActivityResult>() {
+                @NonNull
+                @Override
+                public Intent createIntent(@NonNull Context context, Void input) {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.fromParts("package", BuildConfig.APPLICATION_ID, null));
+                    return intent;
+                }
+                @Override
+                public ActivityResult parseResult(int resultCode, @Nullable Intent intent) {
+                    return new ActivityResult(resultCode, intent);
+                }
+            },
+            result -> refreshAppNotificationsView()
+    );
 
     private final ActivityResultLauncher<Void> mManageUnusedAppRestrictionsLauncher =
             registerForActivityResult(
@@ -180,6 +199,12 @@ public class MainActivity extends AppCompatActivity {
 
         remoteConfig.fetch();
 
+        // App Notifications Disabled
+        findViewById(R.id.bt_app_settings).setOnClickListener(
+                view -> mAppSettingsLauncher.launch(null)
+        );
+        refreshAppNotificationsView();
+
         // App Hibernation
         findViewById(R.id.bt_app_hibernation).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,6 +281,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void refreshAppNotificationsView() {
+        findViewById(R.id.cv_app_notifications).setVisibility(
+                NotificationHelper.areNotificationsEnabled(this) ? View.GONE : View.VISIBLE
+        );
+    }
+
     private void refreshAppHibernationView() {
         Futures.addCallback(
                 PackageManagerCompat.getUnusedAppRestrictionsStatus(this),
@@ -297,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(FcmHelper.loadFcmToken(context))) {
                     mSemaphoreStatus.setError(R.string.status_fcm_registration_error);
                 } else {
+                    NotificationHelper.createChannel(MainActivity.this);
                     mSemaphoreStatus.setOk(R.string.status_fcm_registered);
                 }
             }

@@ -11,10 +11,12 @@
 
     <string name="info_header">Informace pro uživatele</string>
 
+    <string name="app_settings_button">Otevřít nastavení</string>
+    <string name="app_notifications_header">Oznámení jsou blokována</string>
+    <string name="app_notifications_text">Zobrazení oznámení z aplikace je blokováno. V nastavení aplikace zkontrolujte sekce <b>Oznámení</b> a <b>Oprávnění</b>, že je tam vše povoleno, tak aby se upozornění správně zobrazovala.</string>
     <string name="app_hibernation_header">Omezení nepoužívaných aplikací</string>
-    <string name="app_hibernation_text1">Protože stačí jen sledovat upozornění z appky a typicky není potřeba ji vůbec spouštět, mohl by ji android vyhodnotit jako nepoužívanou a začít blokovat zobrazení jejích upozornění.</string>
-    <string name="app_hibernation_text2">Aby k tomu nedošlo je potřeba v nastavení "O aplikaci" pro tuto appku, dole v sekci "<b>Nepoužívané aplikace</b>" vypnout volbu "<b>Odebrat oprávnění a uvolnit místo</b>"</string>
-    <string name="app_hibernation_button">Otevřít nastavení</string>
+    <string name="app_hibernation_text1">Protože typicky stačí jen sledovat upozornění z appky a není potřeba ji vůbec spouštět, mohl by ji android vyhodnotit jako nepoužívanou a začít blokovat zobrazení jejích upozornění.</string>
+    <string name="app_hibernation_text2">Aby k tomu nedošlo, je potřeba v nastavení "O aplikaci" pro tuto appku, dole v sekci "<b>Nepoužívané aplikace</b>" vypnout volbu "<b>Odebrat oprávnění a uvolnit místo</b>"</string>
 
     <string name="lastNotification_header">Upozornění na dobíječku</string>
     <string name="lastNotification_none">Zatím nebylo přijato žádné upozornění.</string>

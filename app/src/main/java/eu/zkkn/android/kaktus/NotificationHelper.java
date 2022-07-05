@@ -35,6 +35,16 @@ public class NotificationHelper {
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS);
     }
 
+    public static boolean areNotificationsEnabled(Context context) {
+        return getNotificationManager(context).areNotificationsEnabled();
+    }
+
+    public static void createChannel(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel(context, DOBIJECKA_CHANNEL_ID);
+        }
+    }
+
     public static void notify(Context ctx, int notificationId, @NonNull Notification notification) {
         getNotificationManager(ctx).notify(notificationId, notification);
     }
