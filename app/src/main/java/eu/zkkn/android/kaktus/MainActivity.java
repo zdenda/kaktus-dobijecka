@@ -2,7 +2,6 @@ package eu.zkkn.android.kaktus;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
@@ -32,14 +30,13 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.Date;
+import java.util.Objects;
 
 import eu.zkkn.android.kaktus.fcm.FcmHelper;
 import eu.zkkn.android.kaktus.fcm.MyFcmListenerService;
@@ -57,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.setData(Uri.fromParts("package", BuildConfig.APPLICATION_ID, null));
                     return intent;
                 }
+
                 @Override
                 public ActivityResult parseResult(int resultCode, @Nullable Intent intent) {
                     return new ActivityResult(resultCode, intent);
@@ -74,17 +72,13 @@ public class MainActivity extends AppCompatActivity {
                             return IntentCompat.createManageUnusedAppRestrictionsIntent(
                                     context, BuildConfig.APPLICATION_ID);
                         }
+
                         @Override
                         public ActivityResult parseResult(int resultCode, @Nullable Intent intent) {
                             return new ActivityResult(resultCode, intent);
                         }
                     },
-                    new ActivityResultCallback<ActivityResult>() {
-                        @Override
-                        public void onActivityResult(ActivityResult result) {
-                            refreshAppHibernationView();
-                        }
-                    }
+                    result -> refreshAppHibernationView()
 
             );
 
@@ -121,18 +115,10 @@ public class MainActivity extends AppCompatActivity {
 
             // Display FCM Token after one short and one long click on status message
             final View statusLayout = findViewById(R.id.fl_status);
-            statusLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    statusLayout.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            showFcmToken();
-                            return true;
-                        }
-                    });
-                }
-            });
+            statusLayout.setOnClickListener(v -> statusLayout.setOnLongClickListener(v1 -> {
+                showFcmToken();
+                return true;
+            }));
 
             SendTokenWorker.schedulePeriodicRefresh(this);
 
@@ -149,19 +135,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Facebook
         if (!Preferences.isFacebookInfoHidden(this)) {
-            findViewById(R.id.iv_hideFb).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    findViewById(R.id.cv_facebook).setVisibility(View.GONE);
-                    Preferences.setFacebookInfoHidden(MainActivity.this, true);
-                }
+            findViewById(R.id.iv_hideFb).setOnClickListener(view -> {
+                findViewById(R.id.cv_facebook).setVisibility(View.GONE);
+                Preferences.setFacebookInfoHidden(MainActivity.this, true);
             });
-            findViewById(R.id.iv_fbIcon).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Helper.viewUri(MainActivity.this, Config.KAKTUS_FACEBOOK_URL);
-                }
-            });
+            findViewById(R.id.iv_fbIcon).setOnClickListener(v ->
+                    Helper.viewUri(MainActivity.this, Config.KAKTUS_FACEBOOK_URL)
+            );
             ((TextView) findViewById(R.id.tv_lastFbPostDate)).setText(Helper.formatDate(
                     MainActivity.this, new Date()));
         } else {
@@ -175,24 +155,21 @@ public class MainActivity extends AppCompatActivity {
         final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.getInstance();
         remoteConfig.setConfigSettingsAsync(configSettings);
 
-        remoteConfig.activate().addOnCompleteListener(new OnCompleteListener<Boolean>() {
-            @Override
-            public void onComplete(@NonNull Task<Boolean> task) {
-                if (task.isSuccessful()) {
-                    String errorMsg = remoteConfig.getString("error");
-                    String infoMsg = remoteConfig.getString("info");
-                    // Show error
-                    if (!TextUtils.isEmpty(errorMsg)) {
-                        ((TextView) findViewById(R.id.tv_infoText)).setText(errorMsg);
-                        View info = findViewById(R.id.cv_info);
-                        info.setBackgroundColor(
-                                getResources().getColor(R.color.cardErrorBackground));
-                        info.setVisibility(View.VISIBLE);
+        remoteConfig.activate().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String errorMsg = remoteConfig.getString("error");
+                String infoMsg = remoteConfig.getString("info");
+                // Show error
+                if (!TextUtils.isEmpty(errorMsg)) {
+                    ((TextView) findViewById(R.id.tv_infoText)).setText(errorMsg);
+                    View info = findViewById(R.id.cv_info);
+                    info.setBackgroundColor(
+                            getResources().getColor(R.color.cardErrorBackground));
+                    info.setVisibility(View.VISIBLE);
                     // Show info if there's no error which has bigger priority
-                    } else if (!TextUtils.isEmpty(infoMsg)) {
-                        ((TextView) findViewById(R.id.tv_infoText)).setText(infoMsg);
-                        findViewById(R.id.cv_info).setVisibility(View.VISIBLE);
-                    }
+                } else if (!TextUtils.isEmpty(infoMsg)) {
+                    ((TextView) findViewById(R.id.tv_infoText)).setText(infoMsg);
+                    findViewById(R.id.cv_info).setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -206,12 +183,9 @@ public class MainActivity extends AppCompatActivity {
         refreshAppNotificationsView();
 
         // App Hibernation
-        findViewById(R.id.bt_app_hibernation).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mManageUnusedAppRestrictionsLauncher.launch(null);
-            }
-        });
+        findViewById(R.id.bt_app_hibernation).setOnClickListener(v ->
+                mManageUnusedAppRestrictionsLauncher.launch(null)
+        );
         refreshAppHibernationView();
 
     }
@@ -248,36 +222,27 @@ public class MainActivity extends AppCompatActivity {
         if (notification != null) {
             mTvLastNotificationDate.setText(Helper.formatDate(this, notification.sent));
             // long click on the sent date to show the received date
-            mTvLastNotificationDate.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Helper.showAlert(MainActivity.this,
-                            getString(R.string.dialog_notification_received_title),
-                            String.format("%s (%s)",
-                                    Helper.formatDate(MainActivity.this, notification.received),
-                                    notification.from
-                            )
-                    );
-                    return true;
-                }
+            mTvLastNotificationDate.setOnLongClickListener(v -> {
+                Helper.showAlert(MainActivity.this,
+                        getString(R.string.dialog_notification_received_title),
+                        String.format("%s (%s)",
+                                Helper.formatDate(MainActivity.this, notification.received),
+                                notification.from
+                        )
+                );
+                return true;
             });
             mTvLastNotificationText.setText(notification.text);
-            mLastNotification.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            mLastNotification.setOnClickListener(v ->
                     Helper.viewUri(MainActivity.this, notification.uri != null ?
-                            notification.uri : Config.KAKTUS_DOBIJCECKA_URL);
-                }
-            });
+                    notification.uri : Config.KAKTUS_DOBIJCECKA_URL)
+            );
         } else {
             mTvLastNotificationDate.setText(Helper.formatDate(this, new Date()));
             mTvLastNotificationText.setText(R.string.lastNotification_none);
-            mLastNotification.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Helper.viewUri(MainActivity.this, Config.KAKTUS_DOBIJCECKA_URL);
-                }
-            });
+            mLastNotification.setOnClickListener(v ->
+                    Helper.viewUri(MainActivity.this, Config.KAKTUS_DOBIJCECKA_URL)
+            );
         }
     }
 
@@ -370,20 +335,10 @@ public class MainActivity extends AppCompatActivity {
                 getString(R.string.dialog_fcm_token_warning))
         );
         builder.setNeutralButton(R.string.dialog_fcm_token_button_copy_to_clipboard,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Helper.copyToClipboard(MainActivity.this, title, token);
-                    }
-                }
+                (dialog, which) -> Helper.copyToClipboard(MainActivity.this, title, token)
         );
         builder.setPositiveButton(R.string.dialog_fcm_token_button_ok,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }
+                (dialog, which) -> dialog.dismiss()
         );
         builder.show();
     }
@@ -398,7 +353,9 @@ public class MainActivity extends AppCompatActivity {
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, 9000).show();
+                Objects.requireNonNull(
+                        apiAvailability.getErrorDialog(this, resultCode, 9000)
+                ).show();
             } else {
                 Log.i(Config.TAG, "This device is not supported. GooglePlayServices not available.");
                 finish();

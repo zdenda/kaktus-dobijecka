@@ -26,12 +26,7 @@ public class AboutActivity extends AppCompatActivity {
         final FirebaseAnalyticsHelper firebaseAnalytics = new FirebaseAnalyticsHelper(
                 FirebaseAnalytics.getInstance(this));
 
-        findViewById(R.id.ib_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        findViewById(R.id.ib_close).setOnClickListener(v -> finish());
 
         ((TextView) findViewById(R.id.tv_version)).setText(
                 getString(R.string.about_version, BuildConfig.VERSION_NAME));
@@ -47,14 +42,10 @@ public class AboutActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_donationText)).setText(
                 getString(R.string.donation_text, number));
         final Intent kaktusAppIntent = Helper.getAppIntent(this, Config.KAKTUS_APP_ID);
-        findViewById(R.id.bt_donate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_DONATE_ABOUT);
-                Helper.copyToClipboard(AboutActivity.this, Config.DONATION_NUMBER);
-                startActivity(kaktusAppIntent);
-
-            }
+        findViewById(R.id.bt_donate).setOnClickListener(v -> {
+            firebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_DONATE_ABOUT);
+            Helper.copyToClipboard(AboutActivity.this, Config.DONATION_NUMBER);
+            startActivity(kaktusAppIntent);
         });
         // hide donation box if any notification has ben received yet,
         // or the official Kaktus app is not installed
