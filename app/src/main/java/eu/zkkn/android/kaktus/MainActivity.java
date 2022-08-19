@@ -180,14 +180,19 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_app_settings).setOnClickListener(
                 view -> mAppSettingsLauncher.launch(null)
         );
-        refreshAppNotificationsView();
 
         // App Hibernation
         findViewById(R.id.bt_app_hibernation).setOnClickListener(v ->
                 mManageUnusedAppRestrictionsLauncher.launch(null)
         );
-        refreshAppHibernationView();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshAppNotificationsView();
+        refreshAppHibernationView();
     }
 
     @Override
