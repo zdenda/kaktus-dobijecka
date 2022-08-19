@@ -13,7 +13,7 @@ apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion '33.0.0'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
@@ -21,7 +21,7 @@ android {
         //noinspection OldTargetApi - Wait for Android 13 (SDK 33)
         targetSdkVersion 31
         versionCode 44
-        versionName '0.18.0'
+        versionName '0.18.1-α01'
         resConfigs 'en', 'cs'
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -63,7 +63,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -77,7 +77,7 @@ dependencies {
     })
 
     implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
