@@ -1,10 +1,13 @@
 package eu.zkkn.android.kaktus;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -82,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
 
             );
 
+    private final ActivityResultLauncher<String> mRequestPermissionLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    result -> refreshAppNotificationsView()
+            );
+
 
     private BroadcastReceiver mFcmRegistrationBroadcastReceiver;
     private BroadcastReceiver mFcmMessageBroadcastReceiver;
@@ -98,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mSemaphoreStatus = findViewById(R.id.tv_status);
+
+        requireNotificationPermission();
 
         //TODO: create parent Play Services Activity
         if (checkPlayServices()) {
@@ -193,6 +205,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         refreshAppNotificationsView();
         refreshAppHibernationView();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        requireNotificationPermission();
     }
 
     @Override
@@ -346,6 +364,24 @@ public class MainActivity extends AppCompatActivity {
                 (dialog, which) -> dialog.dismiss()
         );
         builder.show();
+    }
+
+    private void requireNotificationPermission() {
+        if (Build.VERSION.SDK_INT < 33) return; // Only Android 13 and up
+        String permission = Manifest.permission.POST_NOTIFICATIONS;
+        if (ContextCompat.checkSelfPermission(this, permission) !=
+                PackageManager.PERMISSION_GRANTED) {
+            if (shouldShowRequestPermissionRationale(permission)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.dialog_notifications_permission_title);
+                builder.setMessage(R.string.dialog_notifications_permission_message);
+                builder.setPositiveButton(R.string.dialog_notifications_permission_ok,
+                        (dialog, which) -> mRequestPermissionLauncher.launch(permission));
+                builder.show();
+            } else {
+                mRequestPermissionLauncher.launch(permission);
+            }
+        }
     }
 
     /**

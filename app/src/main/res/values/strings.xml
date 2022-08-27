@@ -31,6 +31,10 @@
     <string name="status_fcm_registration_in_progress">Probíhá přihlášení k odběru upozornění …</string>
     <string name="status_fcm_registration_error">Registrace pro příjem upozornení se zatím nepodařila. Za chvíli to zkusíme znovu …</string>
 
+    <string name="dialog_notifications_permission_title">Povolit oznámení</string>
+    <string name="dialog_notifications_permission_message">Aby aplikace mohla zobrazovat upozornění na dobíječku, je potřeba pro ni povolit odesílání oznámení, jinak nebude fungovat.</string>
+    <string name="dialog_notifications_permission_ok">OK</string>
+
     <string name="dialog_fcm_token_title">FCM Token</string>
     <string name="dialog_fcm_token_refresh_time">Obnoveno: %1$tY-%1$tm-%1$td&#160;%1$tH:%1$tM:%1$tS</string>
     <string name="dialog_fcm_token_warning">Svůj token sdílejte jen s důvěryhodnými osobami!</string>
