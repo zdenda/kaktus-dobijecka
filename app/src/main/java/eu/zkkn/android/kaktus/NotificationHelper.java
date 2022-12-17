@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 
 public class NotificationHelper {
@@ -31,6 +32,7 @@ public class NotificationHelper {
         }
         return new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
+                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setContentTitle(context.getString(R.string.app_name))
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS);
     }

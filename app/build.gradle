@@ -20,8 +20,8 @@ android {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 16
         targetSdkVersion 33 // Android 13
-        versionCode 46
-        versionName '0.19.1-α01'
+        versionCode 47
+        versionName '0.19.1'
         resConfigs 'en', 'cs'
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
