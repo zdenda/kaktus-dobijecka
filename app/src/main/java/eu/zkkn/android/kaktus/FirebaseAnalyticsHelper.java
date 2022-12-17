@@ -15,7 +15,8 @@ public class FirebaseAnalyticsHelper {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({EVENT_SYNC_OFF, EVENT_SYNC_ON, EVENT_FB_REFRESH, EVENT_DOBIJECKA_WEB, EVENT_KAKTUS_FB,
-            EVENT_HIDE_DONATION, EVENT_DONATE, EVENT_DONATE_ABOUT, EVENT_FCM_RECEIVED})
+            EVENT_HIDE_DONATION, EVENT_DONATE, EVENT_DONATE_ABOUT, EVENT_FCM_RECEIVED,
+            EVENT_FCM_PRIORITY_CHANGED})
     public @interface Event {}
     public static final int EVENT_SYNC_OFF = 1;
     public static final int EVENT_SYNC_ON = 2;
@@ -26,6 +27,7 @@ public class FirebaseAnalyticsHelper {
     public static final int EVENT_DONATE = 7;
     public static final int EVENT_DONATE_ABOUT = 8;
     public static final int EVENT_FCM_RECEIVED = 9;
+    public static final int EVENT_FCM_PRIORITY_CHANGED = 10;
 
     private final FirebaseAnalytics mFirebaseAnalytics;
 
@@ -97,6 +99,9 @@ public class FirebaseAnalyticsHelper {
                 break;
             case EVENT_FCM_RECEIVED:
                 name = "fcm_message_received";
+                break;
+            case EVENT_FCM_PRIORITY_CHANGED:
+                name = "fcm_message_priority_changed";
                 break;
             default:
                 throw new RuntimeException("Unsupported Firebase Analytics Event ID: " + event);

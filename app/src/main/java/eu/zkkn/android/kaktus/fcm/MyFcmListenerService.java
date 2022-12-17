@@ -34,12 +34,6 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     public static final String FCM_MESSAGE_RECEIVED = "fcmMessageReceived";
 
 
-    private static void logFcmReceivedAnalyticsEvent(Context context, String type) {
-        new FirebaseAnalyticsHelper(FirebaseAnalytics.getInstance(context))
-                .logEvent(FirebaseAnalyticsHelper.EVENT_FCM_RECEIVED, type);
-    }
-
-
     @Override
     public void onNewToken(@NonNull String token) {
         SendTokenWorker.runSendTokenTask(this);
@@ -51,7 +45,6 @@ public class MyFcmListenerService extends FirebaseMessagingService {
         Map<String, String> data = remoteMessage.getData();
         //Warning: App versions 0.4.6 (15) and bellow doesn't filter notifications nor support URI
         String type = data.get("type");
-        logFcmReceivedAnalyticsEvent(this, type);
         if ("notification".equals(type)) {
             long sentTime = remoteMessage.getSentTime();
             String from = remoteMessage.getFrom();
@@ -74,6 +67,13 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             }
         }
 
+        // Send events to Firebase Analytics
+        FirebaseAnalyticsHelper firebaseAnalytics = new FirebaseAnalyticsHelper(
+                FirebaseAnalytics.getInstance(this));
+        firebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_FCM_RECEIVED, type);
+        if (remoteMessage.getPriority() != remoteMessage.getOriginalPriority()) {
+            firebaseAnalytics.logEvent(FirebaseAnalyticsHelper.EVENT_FCM_PRIORITY_CHANGED);
+        }
     }
 
 
