@@ -2,7 +2,8 @@
 
 buildscript {
 
-    ext.kotlin_version = '1.8.0'
+    // Version 1.8.0 breaks APK release build
+    ext.kotlin_version = '1.7.22'
 
     repositories {
         google()
@@ -16,6 +17,7 @@ buildscript {
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
         classpath 'com.google.firebase:firebase-plugins:2.0.0'
         classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:2.0.1'
+        //noinspection DifferentKotlinGradleVersion Kotlin v1.8.0 breaks APK release build
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
