@@ -42,9 +42,8 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import java.util.Date;
 import java.util.Objects;
 
-import eu.zkkn.android.kaktus.fcm.FcmHelper;
 import eu.zkkn.android.kaktus.fcm.MyFcmListenerService;
-import eu.zkkn.android.kaktus.fcm.SendTokenWorker;
+import eu.zkkn.android.kaktus.fcm.FcmSubscriptionWorker;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -114,13 +113,11 @@ public class MainActivity extends AppCompatActivity {
         //TODO: create parent Play Services Activity
         if (checkPlayServices()) {
 
-            if (TextUtils.isEmpty(FcmHelper.loadFcmToken(this))) {
-                if (FcmHelper.missingSubscriptionToNotifications(this)) {
-                    SendTokenWorker.runSendTokenTask(this);
-                }
+            if (!Preferences.isSubscribedToNotifications(this)) {
                 mSemaphoreStatus.setInfo(R.string.status_fcm_registration_in_progress);
                 // register local broadcast receiver for result of the registration.
                 registerFcmRegistrationReceiver();
+                FcmSubscriptionWorker.runSubscribeToTopics(this);
             } else {
                 mSemaphoreStatus.setOk(R.string.status_fcm_registered);
             }
@@ -132,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }));
 
-            SendTokenWorker.schedulePeriodicRefresh(this);
+            FcmSubscriptionWorker.schedulePeriodicSubscriptionRefresh(this);
 
         } else {
             mSemaphoreStatus.setError(R.string.status_missing_google_play_services);
@@ -313,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
         mFcmRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (TextUtils.isEmpty(FcmHelper.loadFcmToken(context))) {
+                if (!Preferences.isSubscribedToNotifications(context)) {
                     mSemaphoreStatus.setError(R.string.status_fcm_registration_error);
                 } else {
                     NotificationHelper.createChannel(MainActivity.this);
@@ -322,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(mFcmRegistrationBroadcastReceiver,
-                new IntentFilter(SendTokenWorker.REGISTRATION_COMPLETE));
+                new IntentFilter(FcmSubscriptionWorker.WORKER_HAS_FINISHED));
     }
 
     private void unRegisterFcmRegistrationReceiver() {
@@ -346,15 +343,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void showFcmToken() {
         final String title = getString(R.string.dialog_fcm_token_title);
-        final String token = FcmHelper.loadFcmToken(this);
+        final String token = Preferences.getFcmToken(this);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle(title);
         builder.setMessage(Helper.formatHtml(
-                "%1$s <br/><br/>%2$s<br/><br/><small>* %3$s</small>",
+                "%1$s <br/><br/>%2$s<br/><br/>%3$s<br/><br/><small>* %4$s</small>",
                 token,
                 getString(R.string.dialog_fcm_token_refresh_time,
                         Preferences.getLastSubscriptionRefreshTime(this)),
+                getString(R.string.dialog_fcm_topic_subscription,
+                        Preferences.isSubscribedToNotifications(this)),
                 getString(R.string.dialog_fcm_token_warning))
         );
         builder.setNeutralButton(R.string.dialog_fcm_token_button_copy_to_clipboard,

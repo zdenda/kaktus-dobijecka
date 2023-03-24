@@ -36,7 +36,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(@NonNull String token) {
-        SendTokenWorker.runSendTokenTask(this);
+        FcmSubscriptionWorker.runSubscribeToTopics(this);
     }
 
     @Override

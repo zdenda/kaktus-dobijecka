@@ -25,7 +25,11 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  * TODO: This endpoint does not use any form of authorization or
  * authentication! If this app is deployed, anyone can access this endpoint! If
  * you'd like to add authentication, take a look at the documentation.
+ *
+ * @deprecated FCM (GCM) tokens are no longer used, because Topic are used instead.
+ * So there's no need to send and store tokens on backend.
  */
+@Deprecated
 @Api(name = "registration", version = "v1", namespace = @ApiNamespace(ownerDomain = "backend.kaktus.android.zkkn.eu", ownerName = "backend.kaktus.android.zkkn.eu"))
 public class RegistrationEndpoint {
 
@@ -57,6 +61,7 @@ public class RegistrationEndpoint {
      */
     // force path, otherwise it would be "registerTopicNotifications/{token}", which causes problem for Jetty (App Engine on localhost).
     // token might contain colon (":") and jetty returns error 404 if colon is in URL path
+    @Deprecated
     @ApiMethod(name = "registerTopicNotifications", path = "registerTopicNotifications")
     public void registerTopicNotifications(@Named("token") String token) {
         RegistrationRecord record = findRecord(token);

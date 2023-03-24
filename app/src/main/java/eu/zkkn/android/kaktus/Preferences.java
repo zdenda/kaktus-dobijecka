@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.Date;
 
 import eu.zkkn.android.kaktus.LastNotification.Notification;
-import eu.zkkn.android.kaktus.fcm.SendTokenWorker;
+import eu.zkkn.android.kaktus.fcm.FcmSubscriptionWorker;
 
 
 /**
@@ -95,9 +95,9 @@ public class Preferences {
     private static final String PREF_KEY_HIDE_FACEBOOK_INFO = "hideLastKaktusFbPostInfo";
 
     private static final String PREF_KEY_PERIODIC_SUBSCRIPTION_REFRESH =
-            "periodicSubscriptionRefresh-v" + SendTokenWorker.PERIODIC_WORK_VERSION;
+            "periodicSubscriptionRefresh-v" + FcmSubscriptionWorker.PERIODIC_WORK_VERSION;
     private static final String PREF_KEY_LAST_SUBSCRIPTION_REFRESH =
-            "lastSubscriptionRefreshTime-v" + SendTokenWorker.PERIODIC_WORK_VERSION;
+            "lastSubscriptionRefreshTime-v" + FcmSubscriptionWorker.PERIODIC_WORK_VERSION;
 
 
     private static SharedPreferences sPreferences;
@@ -116,14 +116,6 @@ public class Preferences {
 
     public static String getFcmToken(Context context) {
         return getPref(context).getString(PREF_KEY_FCM_TOKEN, "");
-    }
-
-    public static void setFcmSentTokenToServer(Context context, boolean isSent) {
-        getPref(context).edit().putBoolean(PREF_KEY_FCM_SENT_TOKEN_TO_SERVER, isSent).apply();
-    }
-
-    public static boolean isFcmSentTokenToServer(Context context) {
-        return getPref(context).getBoolean(PREF_KEY_FCM_SENT_TOKEN_TO_SERVER, false);
     }
 
     public static void setSubscribedToNotifications(Context context, boolean isSubscribed) {
