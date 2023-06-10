@@ -17,7 +17,7 @@
     <string name="app_hibernation_header">Omezení nepoužívaných aplikací</string>
     <string name="app_hibernation_text1">Protože typicky stačí jen sledovat upozornění z appky a není potřeba ji vůbec spouštět, mohl by ji android vyhodnotit jako nepoužívanou a začít blokovat zobrazení jejích upozornění.</string>
     <!-- app_hibernation_text2 is different for SDK v33 and up -->
-    <string name="app_hibernation_text2">Aby k tomu nedošlo, je potřeba v nastavení "O aplikaci" pro tuto appku, dole v sekci "<b>Nepoužívané aplikace</b>" vypnout volbu "<b>Odebrat oprávnění a uvolnit místo</b>".</string>
+    <string name="app_hibernation_text2">Aby k tomu nedošlo, je potřeba v nastavení "O aplikaci" pro tuto appku, dole v sekci "<b>Nepoužívané aplikace</b>" <u>vypnout</u> volbu "<b>Odebrat oprávnění a uvolnit místo</b>".</string>
 
     <string name="lastNotification_header">Upozornění na dobíječku</string>
     <string name="lastNotification_none">Zatím nebylo přijato žádné upozornění.</string>

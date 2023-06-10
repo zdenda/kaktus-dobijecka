@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_hibernation_text2">Aby k tomu nedošlo, je potřeba v nastavení "O aplikaci" pro tuto appku, v sekci "<b>Nastavení nepoužívaných aplikací</b>" vypnout volbu "<b>Pozastavit aktivitu při nepoužívání</b>".</string>
+    <string name="app_hibernation_text2">Aby k tomu nedošlo, je potřeba v nastavení "O aplikaci" pro tuto appku, v sekci "<b>Nastavení nepoužívaných aplikací</b>" <u>vypnout</u> volbu "<b>Pozastavit aktivitu při nepoužívání</b>".</string>
 </resources>
