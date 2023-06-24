@@ -21,7 +21,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 33 // Android 13
         versionCode 48
-        versionName '0.19.2'
+        versionName '0.19.3-α03'
         resConfigs 'en', 'cs'
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -68,6 +68,7 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    //noinspection GradleDependency version 1.10.0 causes an error "Duplicate class found"
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
