@@ -151,8 +151,9 @@ public class CheckServlet extends HttpServlet {
 
         // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
         String regex = "Pokud si dneska \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? od \\d+:\\d+ do \\d+:\\d+ hodin dobije\u0161 alespo\u0148 \\d+ K\u010d, d\u00e1me ti dvojn\u00e1sob .*";
+        String regex1 = "Sta\u010d\u00ed dob\u00edt dnes \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? mezi \\d+ a \\d+ hodinou \\d+ - \\d+.*";
         // the text of that element should match pattern
-        if (!text.matches(regex)) {
+        if (!text.matches(regex) && !text.matches(regex1)) {
             // something wrong happened if there's no match
             // for example the structure of kaktus web might have been changed
             LOG.warning("Text: '" + text + "' doesn't match RegEx");
