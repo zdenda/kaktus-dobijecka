@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -149,11 +151,8 @@ public class CheckServlet extends HttpServlet {
 
         String text = element.text();
 
-        // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
-        String regex = "Pokud si dneska \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? od \\d+:\\d+ do \\d+:\\d+ hodin dobije\u0161 alespo\u0148 \\d+ K\u010d, d\u00e1me ti dvojn\u00e1sob .*";
-        String regex1 = "Sta\u010d\u00ed dob\u00edt dnes \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? mezi \\d+ a \\d+ hodinou \\d+ - \\d+.*";
-        // the text of that element should match pattern
-        if (!text.matches(regex) && !text.matches(regex1)) {
+        // the text of that element should match one of the patterns
+        if (!textMatchesPattern(text)) {
             // something wrong happened if there's no match
             // for example the structure of kaktus web might have been changed
             LOG.warning("Text: '" + text + "' doesn't match RegEx");
@@ -161,6 +160,21 @@ public class CheckServlet extends HttpServlet {
         }
 
         return text;
+    }
+
+    /**
+     * Checks whether the text matches one of the regular expressions
+     * @param text text to match
+     * @return true if the text matches, false otherwise
+     */
+    public static boolean textMatchesPattern(@Nonnull String text) {
+        List<String> regularExpressions = Arrays.asList(
+                // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
+                "Pokud si dneska \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? od \\d+:\\d+ do \\d+:\\d+ hodin dobije\u0161 alespo\u0148 \\d+ K\u010d, d\u00e1me ti dvojn\u00e1sob.*",
+                "Sta\u010d\u00ed dob\u00edt dnes \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? mezi \\d+ a \\d+ hodinou \\d+ - \\d+.*",
+                "Posta\u010D\u00ED, kdy\u017E si dneska \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? dobije\u0161 za \\d+ - \\d+ K\u010D mezi \\d+ a \\d+ a my ti aktivujem 2x tolik.*"
+        );
+        return regularExpressions.stream().anyMatch(text::matches);
     }
 
     // Get cookies by loading Homepage

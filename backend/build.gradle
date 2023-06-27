@@ -30,6 +30,8 @@ targetCompatibility = JavaVersion.VERSION_1_8
 // File > Settings... > Build, Execution, Deployment > Build Tools > Gradle > Gradle JDK > 1.8
 //java { toolchain {languageVersion = JavaLanguageVersion.of(8) } }
 
+//TODO: compileJava {options.encoding = "UTF-8"}
+
 dependencies {
 
     implementation 'com.google.endpoints:endpoints-framework:2.2.2'
@@ -38,6 +40,8 @@ dependencies {
     implementation 'com.googlecode.objectify:objectify:5.1.25' //TODO v6.0
     implementation 'org.jsoup:jsoup:1.15.4'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
 
 }
 
@@ -67,11 +71,19 @@ appengine {
     }
     deploy {
         projectId = "$googleCloudProjectId"
-        version = 33
+        version = 34
         // keep the old version running, do the switch manually in administration
         stopPreviousVersion = false
         promote = false
     }
+}
+
+compileTestJava {
+    options.encoding = "UTF-8"
+}
+
+test {
+    useJUnitPlatform()
 }
 
 task reloadApp(type: Copy) {
