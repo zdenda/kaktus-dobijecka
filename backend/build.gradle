@@ -71,7 +71,7 @@ appengine {
     }
     deploy {
         projectId = "$googleCloudProjectId"
-        version = 34
+        version = 35
         // keep the old version running, do the switch manually in administration
         stopPreviousVersion = false
         promote = false
