@@ -168,12 +168,14 @@ public class CheckServlet extends HttpServlet {
      * @return true if the text matches, false otherwise
      */
     public static boolean textMatchesPattern(@Nonnull String text) {
+        //noinspection UnnecessaryUnicodeEscape
         List<String> regularExpressions = Arrays.asList(
                 // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
                 "Pokud si dneska \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? od \\d+:\\d+ do \\d+:\\d+ hodin dobije\u0161 alespo\u0148 \\d+ K\u010d, d\u00e1me ti dvojn\u00e1sob.*",
                 "Sta\u010d\u00ed dob\u00edt dnes \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? mezi \\d+ a \\d+ hodinou \\d+ - \\d+.*",
                 "Posta\u010D\u00ED, kdy\u017E si dneska \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? dobije\u0161 za \\d+ - \\d+ K\u010D mezi \\d+ a \\d+ a my ti aktivujem 2x tolik.*",
-                "Sta\u010D\u00ED dnes \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? naladit \\d+ - \\d+ ka\u010Dek mezi \\d+ a \\d+ hodinou a Kaktus ti nabrnkne 2x takovej n\u00E1\u0159ez.*"
+                "Sta\u010D\u00ED dnes \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? naladit \\d+ - \\d+ ka\u010Dek mezi \\d+ a \\d+ hodinou a Kaktus ti nabrnkne 2x takovej n\u00E1\u0159ez.*",
+                ".*Posta\u010D\u00ED dnes \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? dob\u00EDt mezi \\d+ a \\d+ hodinou \\d+ - \\d+ ka\u010Dek a my ti nalejem 2x tolik.*"
         );
         return regularExpressions.stream().anyMatch(text::matches);
     }
