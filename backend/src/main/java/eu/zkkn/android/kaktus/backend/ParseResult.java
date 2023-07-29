@@ -18,6 +18,9 @@ public class ParseResult {
     @Index
     private Date date;
 
+    @Index
+    private Boolean notificationsSent;
+
     private String text;
 
     public ParseResult() {
@@ -29,6 +32,14 @@ public class ParseResult {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Boolean getNotificationsSent() {
+        return notificationsSent;
+    }
+
+    public void setNotificationsSent(boolean notificationsSent) {
+        this.notificationsSent = notificationsSent;
     }
 
     public String getText() {

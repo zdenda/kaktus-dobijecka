@@ -88,8 +88,7 @@ public class CheckServlet extends HttpServlet {
                     && text.matches(".+ " + dayMonthRegExpFormat.format(new Date()) + " .+");
         }
 
-        saveParseResult(text);
-        //TODO: delete too old records, so they wouldn't take up space in database
+        saveParseResult(text, sendNotifications);
 
         // if change was detected, send GCM notifications
         if (sendNotifications) {
@@ -109,6 +108,7 @@ public class CheckServlet extends HttpServlet {
             JSONObject jsonResult = new JSONObject();
             jsonResult.put("date", isoFormat.format(parseResult.getDate()));
             jsonResult.put("text", parseResult.getText());
+            jsonResult.put("notificationSent", parseResult.getNotificationsSent());
             jsonPrevious.add(jsonResult);
         }
         jsonResponse.put("previous", jsonPrevious);
@@ -207,9 +207,10 @@ public class CheckServlet extends HttpServlet {
         }
     }
 
-    private void saveParseResult(String text) {
+    private void saveParseResult(String text, boolean notificationsSent) {
         ParseResult result = new ParseResult();
         result.setDate(new Date());
+        result.setNotificationsSent(notificationsSent);
         result.setText(text);
         ofy().save().entity(result).now();
     }
