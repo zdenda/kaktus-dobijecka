@@ -27,5 +27,7 @@ class CheckServletTest {
         assertTrue(CheckServlet.textMatchesPattern("Stačí dnes 11. 7. naladit 200 - 500 kaček mezi 16 a 19 hodinou a Kaktus ti nabrnkne 2x takovej nářez.\uD83D\uDD25"));
         // Udělej randál 💦 s dvojitym kreditem! Postačí dnes 25. 7. dobít mezi 17 a 19 hodinou 200 - 500 kaček a my ti nalejem 2x tolik.💦💸
         assertTrue(CheckServlet.textMatchesPattern("Udělej randál \uD83D\uDCA6 s dvojitym kreditem! Postačí dnes 25. 7. dobít mezi 17 a 19 hodinou 200 - 500 kaček a my ti nalejem 2x tolik.\uD83D\uDCA6\uD83D\uDCB8"));
+        // Probuď v sobě kreditovýho ninju! 🐢 Dobij si dnes 10. 8. od 17 do 20 hodin 2 až 5 kil a nauč se prastarýmu umění dvojitýho kreditu.
+        assertTrue(CheckServlet.textMatchesPattern("Probuď v sobě kreditovýho ninju! \uD83D\uDC22 Dobij si dnes 10. 8. od 17 do 20 hodin 2 až 5 kil a nauč se prastarýmu umění dvojitýho kreditu."));
     }
 }

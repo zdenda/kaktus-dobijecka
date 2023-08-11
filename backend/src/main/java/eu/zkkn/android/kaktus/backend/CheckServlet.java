@@ -88,6 +88,7 @@ public class CheckServlet extends HttpServlet {
                     && text.matches(".+ " + dayMonthRegExpFormat.format(new Date()) + " .+");
         }
 
+        //TODO: save all results, even those which didn't cause sending notifications
         saveParseResult(text, sendNotifications);
 
         // if change was detected, send GCM notifications
@@ -171,7 +172,7 @@ public class CheckServlet extends HttpServlet {
         //noinspection UnnecessaryUnicodeEscape,ArraysAsListWithZeroOrOneArgument
         List<String> regularExpressions = Arrays.asList(
                 // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
-                ".+ dnes(ka)? \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? .+ 200 .+ (dvojn\u00e1sob|2x).*"
+                ".+ dnes(ka)? \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? .+ 2(00)? .+ (dva|dvoj|2x).*"
         );
         return regularExpressions.stream().anyMatch(text::matches);
     }
