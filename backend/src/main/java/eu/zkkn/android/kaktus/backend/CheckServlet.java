@@ -169,10 +169,12 @@ public class CheckServlet extends HttpServlet {
      * @return true if the text matches, false otherwise
      */
     public static boolean textMatchesPattern(@Nonnull String text) {
-        //noinspection UnnecessaryUnicodeEscape,ArraysAsListWithZeroOrOneArgument
+        //noinspection UnnecessaryUnicodeEscape
         List<String> regularExpressions = Arrays.asList(
                 // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
-                ".+ dnes(ka)? \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? .+ 2(00)? .+ (dva|dvoj|2x).*"
+                ".+ dnes(ka)? \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? .+ 2(00)? .+ (dva|dvoj|2x).*",
+                // Podráždi ho 2 až 5 stovkama mezi 16 a 18 hodinou a my už ti píchnem, aby byl 2x takovej.
+                ".*Podr\u00E1\u017Edi ho 2 a\u017E 5 stovkama mezi 16 a 18 hodinou a my u\u017E ti p\u00EDchnem, aby byl 2x takovej.*"
         );
         return regularExpressions.stream().anyMatch(text::matches);
     }
