@@ -32,6 +32,9 @@ class CheckServletTest {
 
         // This text doesn't contain any date
         // Udělej ze svýho kreditu pořádný žihadlo. 😎 Podráždi ho 2 až 5 stovkama mezi 16 a 18 hodinou a my už ti píchnem, aby byl 2x takovej. 🐝
-        assertTrue(CheckServlet.textMatchesPattern("Udělej ze svýho kreditu pořádný žihadlo. \uD83D\uDE0E Podráždi ho 2 až 5 stovkama mezi 16 a 18 hodinou a my už ti píchnem, aby byl 2x takovej. \uD83D\uDC1D"));
+        //assertTrue(CheckServlet.textMatchesPattern("Udělej ze svýho kreditu pořádný žihadlo. \uD83D\uDE0E Podráždi ho 2 až 5 stovkama mezi 16 a 18 hodinou a my už ti píchnem, aby byl 2x takovej. \uD83D\uDC1D"));
+        // But it was later fixed, and the date was added
+        // Udělej ze svýho kreditu pořádný žihadlo. 😎 Podráždi ho 2 až 5 stovkama dneska 21. 8. mezi 16 a 18 hodinou a my už ti píchnem, aby byl 2x takovej. 🐝
+        assertTrue(CheckServlet.textMatchesPattern("Udělej ze svýho kreditu pořádný žihadlo. \uD83D\uDE0E Podráždi ho 2 až 5 stovkama dneska 21. 8. mezi 16 a 18 hodinou a my už ti píchnem, aby byl 2x takovej. \uD83D\uDC1D"));
     }
 }
