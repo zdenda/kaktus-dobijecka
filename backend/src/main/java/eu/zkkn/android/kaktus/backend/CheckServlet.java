@@ -172,10 +172,14 @@ public class CheckServlet extends HttpServlet {
         //noinspection UnnecessaryUnicodeEscape
         List<String> regularExpressions = Arrays.asList(
                 // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
-                ".+ dnes(ka)? \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? .+ 2(00)? .+ (dva|dvoj|2x).*",
-                ".+ 2(00)? .+ dnes(ka)? \\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})? .+ (dva|dvoj|2x).*"
+                "dnes(ka)?",
+                "\\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})?",
+                "2(00)?",
+                "(dva|dvoj|2x)"
         );
-        return regularExpressions.stream().anyMatch(text::matches);
+        return regularExpressions.stream()
+                .map(regex -> ".+" + regex + ".+")
+                .allMatch(text::matches);
     }
 
     // Get cookies by loading Homepage

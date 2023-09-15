@@ -12,6 +12,13 @@ class CheckServletTest {
     void textMatchesPattern_false() {
         assertFalse(CheckServlet.textMatchesPattern(""));
         assertFalse(CheckServlet.textMatchesPattern("Test"));
+        assertFalse(CheckServlet.textMatchesPattern("dneska"));
+        assertFalse(CheckServlet.textMatchesPattern(" dvojnásob "));
+        assertFalse(CheckServlet.textMatchesPattern("15. 9."));
+        assertFalse(CheckServlet.textMatchesPattern(" 15.9. "));
+        assertFalse(CheckServlet.textMatchesPattern(" 15. 9. "));
+        assertFalse(CheckServlet.textMatchesPattern(" 2. 2. 2023 "));
+        assertFalse(CheckServlet.textMatchesPattern("2x dneska 15. 9."));
         assertFalse(CheckServlet.textMatchesPattern("*Bonusový kredit za dobití z, kvůli technickým problémům původně zrušené dobíječky, 9. 6. 2023 mezi 15 a 18 hodinou bude připsán do půlnoci 12. 6. 2023. Omlouváme se za případné nepříjemnosti."));
     }
 
@@ -36,5 +43,8 @@ class CheckServletTest {
         // But it was later fixed, and the date was added
         // Udělej ze svýho kreditu pořádný žihadlo. 😎 Podráždi ho 2 až 5 stovkama dneska 21. 8. mezi 16 a 18 hodinou a my už ti píchnem, aby byl 2x takovej. 🐝
         assertTrue(CheckServlet.textMatchesPattern("Udělej ze svýho kreditu pořádný žihadlo. \uD83D\uDE0E Podráždi ho 2 až 5 stovkama dneska 21. 8. mezi 16 a 18 hodinou a my už ti píchnem, aby byl 2x takovej. \uD83D\uDC1D"));
+
+        // Nakopni svůj kredit dvakrát takovou náloží. 💥 Dobij dnes 13. 9. mezi 17 a 19 hodinou 200 až 500 Kč a my ti nasolíme 🧂 tuplovanou sumu, ani nemrkneš. 🦾🌵
+        assertTrue(CheckServlet.textMatchesPattern("Nakopni svůj kredit dvakrát takovou náloží. \uD83D\uDCA5 Dobij dnes 13. 9. mezi 17 a 19 hodinou 200 až 500 Kč a my ti nasolíme \uD83E\uDDC2 tuplovanou sumu, ani nemrkneš. \uD83E\uDDBE\uD83C\uDF35"));
     }
 }
