@@ -13,8 +13,9 @@ buildscript {
     dependencies {
         //noinspection GradleDependency Android Gradle plugin v7.4.0 needs JDK 11, but backend still uses JDK 8
         classpath 'com.android.tools.build:gradle:7.3.1'
+        //noinspection GradleDependency v4.4.0 crashes app on start with error: Default FirebaseApp is not initialized in this process
         classpath 'com.google.gms:google-services:4.3.15'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.6'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
         classpath 'com.google.firebase:firebase-plugins:2.0.0'
         classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:2.0.1'
         //noinspection DifferentKotlinGradleVersion Kotlin v1.8.0 breaks APK release build
@@ -41,6 +42,6 @@ allprojects {
     */
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
