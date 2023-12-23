@@ -2,8 +2,7 @@
 
 buildscript {
 
-    // Version 1.8.0 breaks APK release build
-    ext.kotlin_version = '1.7.22'
+    ext.kotlin_version = '1.9.22'
 
     repositories {
         google()
@@ -11,13 +10,10 @@ buildscript {
     }
 
     dependencies {
-        //noinspection GradleDependency Android Gradle plugin v7.4.0 needs JDK 11, but backend still uses JDK 8
-        classpath 'com.android.tools.build:gradle:7.3.1'
-        //noinspection GradleDependency v4.4.0 crashes app on start with error: Default FirebaseApp is not initialized in this process
-        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.android.tools.build:gradle:8.2.0'
+        classpath 'com.google.gms:google-services:4.4.0'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
         classpath 'com.google.firebase:firebase-plugins:2.0.0'
-        //noinspection DifferentKotlinGradleVersion Kotlin v1.8.0 breaks APK release build
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -42,5 +38,5 @@ allprojects {
 }
 
 tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }
