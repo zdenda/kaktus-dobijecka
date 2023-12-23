@@ -18,16 +18,12 @@ repositories {
 apply plugin: 'java'
 apply plugin: 'war'
 
-apply plugin: 'com.google.cloud.tools.appengine'
+apply plugin: 'com.google.cloud.tools.appengine-appenginewebxml'
 
 apply from: 'appengine-settings.gradle'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-// This unfortunately doesn't work for AppEngine tasks, so it need to be done by changing settings
-// File > Settings... > Build, Execution, Deployment > Build Tools > Gradle > Gradle JDK > 1.8
-//java { toolchain {languageVersion = JavaLanguageVersion.of(8) } }
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 //TODO: compileJava {options.encoding = "UTF-8"}
 
