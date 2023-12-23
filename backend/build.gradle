@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.4.5'
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.5.0'
     }
 }
 
@@ -38,10 +38,10 @@ dependencies {
     implementation 'javax.servlet:servlet-api:2.5'
     //noinspection GradleDependency v6.0 breaks local dev environment
     implementation 'com.googlecode.objectify:objectify:5.1.25' //TODO v6.0
-    implementation 'org.jsoup:jsoup:1.15.4'
+    implementation 'org.jsoup:jsoup:1.17.1'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
 
 }
 
@@ -71,7 +71,7 @@ appengine {
     }
     deploy {
         projectId = "$googleCloudProjectId"
-        version = 41
+        version = 42
         // keep the old version running, do the switch manually in administration
         stopPreviousVersion = false
         promote = false
