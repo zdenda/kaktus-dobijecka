@@ -8,8 +8,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 // Firebase Crashlytics
 apply plugin: 'com.google.firebase.crashlytics'
-// App Engine Endpoints Framework client plugin
-apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 
 
 android {

@@ -19,7 +19,6 @@ apply plugin: 'java'
 apply plugin: 'war'
 
 apply plugin: 'com.google.cloud.tools.appengine'
-apply plugin: 'com.google.cloud.tools.endpoints-framework-server'
 
 apply from: 'appengine-settings.gradle'
 
@@ -34,7 +33,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
 
-    implementation 'com.google.endpoints:endpoints-framework:2.2.2'
+    implementation 'com.google.appengine:appengine-api-1.0-sdk:2.0.23'
     implementation 'javax.servlet:servlet-api:2.5'
     //noinspection GradleDependency v6.0 breaks local dev environment
     implementation 'com.googlecode.objectify:objectify:5.1.25' //TODO v6.0
@@ -71,7 +70,7 @@ appengine {
     }
     deploy {
         projectId = "$googleCloudProjectId"
-        version = 42
+        version = 43
         // keep the old version running, do the switch manually in administration
         stopPreviousVersion = false
         promote = false
@@ -84,12 +83,4 @@ compileTestJava {
 
 test {
     useJUnitPlatform()
-}
-
-task reloadApp(type: Copy) {
-    dependsOn war
-    project.afterEvaluate {
-        into project.tasks.explodeWar.explodedAppDirectory
-        with war
-    }
 }

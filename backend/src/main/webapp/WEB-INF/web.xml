@@ -48,11 +48,7 @@
 
     <servlet>
         <servlet-name>EndpointsServlet</servlet-name>
-        <servlet-class>com.google.api.server.spi.EndpointsServlet</servlet-class>
-        <init-param>
-            <param-name>services</param-name>
-            <param-value>eu.zkkn.android.kaktus.backend.RegistrationEndpoint</param-value>
-        </init-param>
+        <servlet-class>eu.zkkn.android.kaktus.backend.EndpointsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EndpointsServlet</servlet-name>
