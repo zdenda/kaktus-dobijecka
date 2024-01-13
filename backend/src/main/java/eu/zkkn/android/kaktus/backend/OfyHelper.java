@@ -18,7 +18,7 @@ public class OfyHelper implements ServletContextListener {
         // or the first user request if no warmup request.
 
         // For Objectify v6: ObjectifyService.init();
-        ObjectifyService.register(RegistrationRecord.class);
+        //ObjectifyService.register(RegistrationRecord.class);
         ObjectifyService.register(ParseResult.class);
         ObjectifyService.register(EmailLog.class);
     }
