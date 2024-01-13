@@ -20,7 +20,7 @@ android {
         //noinspection OldTargetApi Test on Android 14
         targetSdkVersion 33 // Android 13
         versionCode 50
-        versionName '0.20.0'
+        versionName '0.20.1-α00'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -84,7 +84,7 @@ dependencies {
     implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     implementation "androidx.work:work-gcm:$work_version"
-    implementation 'com.google.android.gms:play-services-base:18.2.0'
+    implementation 'com.google.android.gms:play-services-base:18.3.0'
     implementation 'com.google.guava:guava:33.0.0-android'
 
     // Import the BoM for the Firebase platform
