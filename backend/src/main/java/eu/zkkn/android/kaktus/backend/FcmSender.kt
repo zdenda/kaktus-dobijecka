@@ -35,23 +35,20 @@ class FcmSender : HttpServlet() {
 
     override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
         log.info("Start sending FCMs")
-        val message = req.getParameter(PARAM_MESSAGE_NAME)
+        val message: String? = req.getParameter(PARAM_MESSAGE_NAME)
+        val debug: Boolean = req.getParameter(PARAM_DEBUG_NAME).toBoolean()
+
         if (message != null && message.trim().isNotEmpty()) {
-            sendMessage(message)
+            // Send message to topic for notifications
+            val topic = if (Utils.isProduction() && !debug) "notifications" else "notifications-debug"
+            sendTopicNotification(topic, message)
         } else {
             log.warning("The message to send is empty.")
         }
         log.info("Finish Sending FCMs")
     }
 
-    /**
-     * Send FCM to all registered devices
-     *
-     * @param message The message to send
-     */
-    private fun sendMessage(message: String) {
-        // Send message to topic for notifications
-        val topicName = if (Utils.isProduction()) "notifications" else "notifications-debug"
+    private fun sendTopicNotification(topicName: String, message: String) {
         val fcmMessage = Message.builder()
             .setTopic(topicName)
             .putData("type", "notification")
@@ -85,12 +82,14 @@ class FcmSender : HttpServlet() {
     companion object {
 
         private const val PARAM_MESSAGE_NAME = "msg"
+        private const val PARAM_DEBUG_NAME = "debug"
 
-        @JvmStatic
-        fun sendFcmToAll(message: String?) {
+        @JvmStatic @JvmOverloads
+        fun sendFcmToAll(message: String?, debug: Boolean = false) {
             QueueFactory.getDefaultQueue().add(
                 TaskOptions.Builder.withUrl("/tasks/fcm-sender")
                     .param(PARAM_MESSAGE_NAME, message)
+                    .param(PARAM_DEBUG_NAME, debug.toString())
                     .retryOptions(RetryOptions.Builder.withTaskRetryLimit(3))
             )
         }
