@@ -1,29 +1,10 @@
 // App Engine Backend build file
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.5.0'
-    }
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'com.google.cloud.tools.appengine-appenginewebxml'
 }
-
-repositories {
-    google()
-    mavenCentral()
-}
-
-apply plugin: 'java'
-apply plugin: 'war'
-
-apply plugin: 'com.google.cloud.tools.appengine-appenginewebxml'
 
 apply from: 'appengine-settings.gradle'
-
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
 
 //TODO: compileJava {options.encoding = "UTF-8"}
 
@@ -75,6 +56,13 @@ appengine {
         stopPreviousVersion = false
         promote = false
     }
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+kotlin {
+    jvmToolchain(17)
 }
 
 compileTestJava {
