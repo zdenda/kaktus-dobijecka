@@ -44,10 +44,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <listener>
-        <listener-class>eu.zkkn.android.kaktus.backend.OfyHelper</listener-class>
-    </listener>
-
     <servlet>
         <servlet-name>EndpointsServlet</servlet-name>
         <servlet-class>eu.zkkn.android.kaktus.backend.EndpointsServlet</servlet-class>

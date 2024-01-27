@@ -6,3 +6,6 @@ appengine-settings.gradle
 
 # local_db.bin can't be under /build directory because every new build would delete it
 local_db.bin
+
+# private key file for Firebase service account
+src/main/webapp/WEB-INF/serviceAccountKey.json
