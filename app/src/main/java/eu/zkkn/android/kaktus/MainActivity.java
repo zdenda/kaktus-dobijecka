@@ -142,22 +142,6 @@ public class MainActivity extends AppCompatActivity {
         refreshLastNotificationViews();
         registerFcmMessageReceiver();
 
-        // Facebook
-        //TODO: Remove facebook
-        if (!Preferences.isFacebookInfoHidden(this)) {
-            findViewById(R.id.iv_hideFb).setOnClickListener(view -> {
-                findViewById(R.id.cv_facebook).setVisibility(View.GONE);
-                Preferences.setFacebookInfoHidden(MainActivity.this, true);
-            });
-            findViewById(R.id.iv_fbIcon).setOnClickListener(v ->
-                    Helper.viewUri(MainActivity.this, Config.KAKTUS_FACEBOOK_URL)
-            );
-            ((TextView) findViewById(R.id.tv_lastFbPostDate)).setText(Helper.formatDate(
-                    MainActivity.this, new Date()));
-        } else {
-            findViewById(R.id.cv_facebook).setVisibility(View.GONE);
-        }
-
         // Remote config
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(3600)

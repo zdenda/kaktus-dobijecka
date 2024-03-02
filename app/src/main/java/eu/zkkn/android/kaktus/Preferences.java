@@ -187,14 +187,6 @@ public class Preferences {
         getPref(context).edit().putBoolean(PREF_KEY_HIDE_DONATION, hide).apply();
     }
 
-    public static boolean isFacebookInfoHidden(Context context) {
-        return getPref(context).getBoolean(PREF_KEY_HIDE_FACEBOOK_INFO, false);
-    }
-
-    public static void setFacebookInfoHidden(Context context, boolean hide) {
-        getPref(context).edit().putBoolean(PREF_KEY_HIDE_FACEBOOK_INFO, hide).apply();
-    }
-
     public static void setPeriodicSubscriptionRefresh(Context context) {
         getPref(context).edit().putLong(
                 PREF_KEY_PERIODIC_SUBSCRIPTION_REFRESH, System.currentTimeMillis()).apply();
