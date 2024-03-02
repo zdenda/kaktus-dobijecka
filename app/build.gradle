@@ -19,8 +19,8 @@ android {
         minSdkVersion 16
         //noinspection OldTargetApi Test on Android 14
         targetSdkVersion 33 // Android 13
-        versionCode 50
-        versionName '0.21.0-α03'
+        versionCode 51
+        versionName '0.21.0'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -72,7 +72,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
