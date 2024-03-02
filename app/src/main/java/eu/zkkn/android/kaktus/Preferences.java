@@ -14,6 +14,7 @@ import java.util.Date;
 import eu.zkkn.android.kaktus.LastNotification.Notification;
 import eu.zkkn.android.kaktus.fcm.FcmSubscriptionWorker;
 
+//TODO: Migrate to DataStore
 
 /**
  * App settings
@@ -110,10 +111,15 @@ public class Preferences {
         return sPreferences;
     }
 
+    /**
+     * @deprecated FCM tokens are no longer used
+     */
     public static void setFcmToken(Context context, String token) {
         getPref(context).edit().putString(PREF_KEY_FCM_TOKEN, token).apply();
     }
 
+
+    @Deprecated
     public static String getFcmToken(Context context) {
         return getPref(context).getString(PREF_KEY_FCM_TOKEN, "");
     }

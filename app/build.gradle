@@ -20,7 +20,7 @@ android {
         //noinspection OldTargetApi Test on Android 14
         targetSdkVersion 33 // Android 13
         versionCode 50
-        versionName '0.20.1-α01'
+        versionName '0.21.0-α02'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -80,6 +80,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //noinspection GradleDependency v2.7.0 needs minSdkVersion 19
+    implementation "androidx.lifecycle:lifecycle-common:2.6.2"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
@@ -88,7 +90,7 @@ dependencies {
     implementation 'com.google.guava:guava:33.0.0-android'
 
     // Import the BoM for the Firebase platform
-    // firebase-bom v29 needs minSdkVersion 19
+    //noinspection GradleDependency v29 needs minSdkVersion 19
     implementation platform('com.google.firebase:firebase-bom:28.4.2')
     implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-config'

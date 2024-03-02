@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             // Display FCM Token after one short and one long click on status message
             final View statusLayout = findViewById(R.id.fl_status);
             statusLayout.setOnClickListener(v -> statusLayout.setOnLongClickListener(v1 -> {
-                showFcmToken();
+                showDebugInfo();
                 return true;
             }));
 
@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         registerFcmMessageReceiver();
 
         // Facebook
+        //TODO: Remove facebook
         if (!Preferences.isFacebookInfoHidden(this)) {
             findViewById(R.id.iv_hideFb).setOnClickListener(view -> {
                 findViewById(R.id.cv_facebook).setVisibility(View.GONE);
@@ -341,28 +342,8 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmMessageBroadcastReceiver);
     }
 
-    private void showFcmToken() {
-        final String title = getString(R.string.dialog_fcm_token_title);
-        final String token = Preferences.getFcmToken(this);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle(title);
-        builder.setMessage(Helper.formatHtml(
-                "%1$s <br/><br/>%2$s<br/><br/>%3$s<br/><br/><small>* %4$s</small>",
-                token,
-                getString(R.string.dialog_fcm_token_refresh_time,
-                        Preferences.getLastSubscriptionRefreshTime(this)),
-                getString(R.string.dialog_fcm_topic_subscription,
-                        Preferences.isSubscribedToNotifications(this)),
-                getString(R.string.dialog_fcm_token_warning))
-        );
-        builder.setNeutralButton(R.string.dialog_fcm_token_button_copy_to_clipboard,
-                (dialog, which) -> Helper.copyToClipboard(MainActivity.this, title, token)
-        );
-        builder.setPositiveButton(R.string.dialog_fcm_token_button_ok,
-                (dialog, which) -> dialog.dismiss()
-        );
-        builder.show();
+    private void showDebugInfo() {
+        new DebugInfoDialog(this).show();
     }
 
     private void requireNotificationPermission() {

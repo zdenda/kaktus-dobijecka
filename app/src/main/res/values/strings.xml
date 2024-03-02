@@ -35,12 +35,14 @@
     <string name="dialog_notifications_permission_message">Aby aplikace mohla zobrazovat upozornění na dobíječku, je potřeba pro ni povolit odesílání oznámení, jinak nebude fungovat.</string>
     <string name="dialog_notifications_permission_ok">OK</string>
 
-    <string name="dialog_fcm_token_title">FCM Token</string>
-    <string name="dialog_fcm_token_refresh_time">Obnoveno: %1$tY-%1$tm-%1$td&#160;%1$tH:%1$tM:%1$tS</string>
-    <string name="dialog_fcm_topic_subscription">Přihlášeno: %b</string>
-    <string name="dialog_fcm_token_warning">Svůj token sdílejte jen s důvěryhodnými osobami!</string>
-    <string name="dialog_fcm_token_button_copy_to_clipboard">Kopírovat</string>
-    <string name="dialog_fcm_token_button_ok">OK</string>
+    <string name="dialog_debug_info_title">Technické info</string>
+    <string name="dialog_debug_info_firebase_instance_id">ID: %s</string>
+    <string name="dialog_debug_info_refresh_time">Obnoveno: %1$tY-%1$tm-%1$td&#160;%1$tH:%1$tM:%1$tS</string>
+    <string name="dialog_debug_info_topic_subscription">Přihlášeno: %b</string>
+    <string name="dialog_debug_info_warning">Informace sdílejte jen s důvěryhodnými osobami!</string>
+    <string name="dialog_debug_info_copy_to_clipboard">Kopírovat</string>
+    <string name="dialog_debug_info_copy_unavailable">Technické informace nejsou dostupné</string>
+    <string name="dialog_debug_info_button_ok">OK</string>
 
     <string name="dialog_notification_received_title">Přijato</string>
 
