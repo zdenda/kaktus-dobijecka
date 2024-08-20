@@ -46,5 +46,8 @@ class CheckServletTest {
 
         // Nakopni svůj kredit dvakrát takovou náloží. 💥 Dobij dnes 13. 9. mezi 17 a 19 hodinou 200 až 500 Kč a my ti nasolíme 🧂 tuplovanou sumu, ani nemrkneš. 🦾🌵
         assertTrue(CheckServlet.textMatchesPattern("Nakopni svůj kredit dvakrát takovou náloží. \uD83D\uDCA5 Dobij dnes 13. 9. mezi 17 a 19 hodinou 200 až 500 Kč a my ti nasolíme \uD83E\uDDC2 tuplovanou sumu, ani nemrkneš. \uD83E\uDDBE\uD83C\uDF35"));
+
+        // Udělej díru do světa 🌍 nebo jiný libovolný planety s dvojitym kreditem. Stačí chytit dobíječku dneska 19. 8. mezi 17 a 19 hodinou a pyšnit se intergalaktickou 🚀 porcí kreditu.
+        assertTrue(CheckServlet.textMatchesPattern("Udělej díru do světa \uD83C\uDF0D nebo jiný libovolný planety s dvojitym kreditem. Stačí chytit dobíječku dneska 19. 8. mezi 17 a 19 hodinou a pyšnit se intergalaktickou \uD83D\uDE80 porcí kreditu."));
     }
 }
