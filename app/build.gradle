@@ -20,7 +20,7 @@ android {
         //noinspection OldTargetApi Test on Android 14
         targetSdkVersion 33 // Android 13
         versionCode 51
-        versionName '0.21.0'
+        versionName '0.21.1-α00'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"

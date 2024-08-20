@@ -15,20 +15,20 @@ configurations {
 
 dependencies {
 
-    def appEngineVersion = '2.0.24'
+    def appEngineVersion = '2.0.29'
 
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
     compileOnly "com.google.appengine:appengine-resources:$appEngineVersion"
 
     implementation "com.google.appengine:appengine-api-1.0-sdk:$appEngineVersion"
-    implementation 'com.google.firebase:firebase-admin:9.2.0'
+    implementation 'com.google.firebase:firebase-admin:9.3.0'
     //noinspection GradleDependency v6.0 breaks local dev environment
     implementation 'com.googlecode.objectify:objectify:5.1.25' //TODO v6.0
-    implementation 'org.jsoup:jsoup:1.17.2'
+    implementation 'org.jsoup:jsoup:1.18.1'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'javax.activation:activation:1.1.1' // necessary for sending emails
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
 
 }
 
@@ -58,7 +58,7 @@ appengine {
     }
     deploy {
         projectId = "$googleCloudProjectId"
-        version = 46
+        version = 47
         // keep the old version running, do the switch manually in administration
         stopPreviousVersion = false
         promote = false
