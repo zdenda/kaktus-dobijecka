@@ -49,5 +49,9 @@ class CheckServletTest {
 
         // Udělej díru do světa 🌍 nebo jiný libovolný planety s dvojitym kreditem. Stačí chytit dobíječku dneska 19. 8. mezi 17 a 19 hodinou a pyšnit se intergalaktickou 🚀 porcí kreditu.
         assertTrue(CheckServlet.textMatchesPattern("Udělej díru do světa \uD83C\uDF0D nebo jiný libovolný planety s dvojitym kreditem. Stačí chytit dobíječku dneska 19. 8. mezi 17 a 19 hodinou a pyšnit se intergalaktickou \uD83D\uDE80 porcí kreditu."));
+
+        // Vejdi v dobíječkový pokušení. Dvojitej kredit, dneska 26. 11. mezi 16. - 18. hodinou a dobítí za 200 - 500 Kč. Ty víš, co máš dělat. 👹
+        assertTrue(CheckServlet.textMatchesPattern("Vejdi v dobíječkový pokušení. Dvojitej kredit, dneska 26. 11. mezi 16. - 18. hodinou a dobítí za 200 - 500 Kč. Ty víš, co máš dělat. \uD83D\uDC79"));
+
     }
 }

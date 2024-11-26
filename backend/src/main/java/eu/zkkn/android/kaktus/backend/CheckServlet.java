@@ -178,7 +178,7 @@ public class CheckServlet extends HttpServlet {
         );
         return regularExpressions.stream()
                 .map(regex -> ".+" + regex + ".+")
-                .allMatch(text::matches);
+                .allMatch(text.toLowerCase(Locale.forLanguageTag("cs-CZ"))::matches);
     }
 
     // Get cookies by loading Homepage
