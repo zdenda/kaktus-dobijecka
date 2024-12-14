@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Control backup on Android 11 and lower -->
+<full-backup-content>
+    <include domain="sharedpref" path="backup_preferences.xml" />
+</full-backup-content>
