@@ -8,8 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KaktusDobijecka.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KaktusDobijecka.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/KaktusDobijecka.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/KaktusDobijecka.app.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/KaktusDobijecka.backend.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/KaktusDobijecka.backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/KaktusDobijecka.backend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/KaktusDobijecka.backend.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend/KaktusDobijecka.backend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/backend/KaktusDobijecka.backend.test.iml" />
     </modules>
   </component>
 </project>

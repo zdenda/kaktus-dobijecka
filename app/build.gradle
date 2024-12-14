@@ -20,7 +20,7 @@ android {
         //noinspection OldTargetApi Fix problems on Android 15
         targetSdkVersion 34 // Android 14
         versionCode 51
-        versionName '0.21.1-α04'
+        versionName '0.21.1-α05'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
