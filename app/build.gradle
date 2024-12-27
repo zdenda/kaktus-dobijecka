@@ -17,10 +17,9 @@ android {
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 16
-        //noinspection OldTargetApi Fix problems on Android 15
-        targetSdkVersion 34 // Android 14
+        targetSdkVersion 35 // Android 15
         versionCode 52
-        versionName '0.21.1'
+        versionName '0.21.2-α01'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
