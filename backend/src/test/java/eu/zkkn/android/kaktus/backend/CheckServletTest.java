@@ -53,5 +53,8 @@ class CheckServletTest {
         // Vejdi v dobíječkový pokušení. Dvojitej kredit, dneska 26. 11. mezi 16. - 18. hodinou a dobítí za 200 - 500 Kč. Ty víš, co máš dělat. 👹
         assertTrue(CheckServlet.textMatchesPattern("Vejdi v dobíječkový pokušení. Dvojitej kredit, dneska 26. 11. mezi 16. - 18. hodinou a dobítí za 200 - 500 Kč. Ty víš, co máš dělat. \uD83D\uDC79"));
 
+        // Budoucnost je tady. 🚀 Od teď umíme klonovat kredity! Vyzkoušej to i ty dnes 10. 3. mezi 17 a 20. Stačí dobít 200 - 500 Kč a máš jednou tolik. 😎🤟
+        assertTrue(CheckServlet.textMatchesPattern("Budoucnost je tady. \uD83D\uDE80 Od teď umíme klonovat kredity! Vyzkoušej to i ty dnes 10. 3. mezi 17 a 20. Stačí dobít 200 - 500 Kč a máš jednou tolik. \uD83D\uDE0E\uD83E\uDD1F"));
+
     }
 }

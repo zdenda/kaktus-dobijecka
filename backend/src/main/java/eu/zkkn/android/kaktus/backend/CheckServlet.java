@@ -174,7 +174,7 @@ public class CheckServlet extends HttpServlet {
                 // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
                 "dnes(ka)?",
                 "\\d+\\.\\s?\\d+\\.(\\s?20[0-9]{2})?",
-                "(dva|dvoj|2x)"
+                "(dva|dvoj|2x|jednou tolik)"
         );
         return regularExpressions.stream()
                 .map(regex -> ".+" + regex + ".+")
