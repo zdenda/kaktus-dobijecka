@@ -16,10 +16,10 @@ android {
     buildToolsVersion = '35.0.0'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 35 // Android 15
         versionCode 52
-        versionName '0.21.2-α01'
+        versionName '0.21.2-α02'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -75,14 +75,13 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    //noinspection GradleDependency v1.13.0 needs minSdkVersion 19
-    implementation 'androidx.core:core-ktx:1.12.0'
+    //noinspection GradleDependency v1.15.0 needs minSdkVersion 21
+    implementation 'androidx.core:core-ktx:1.13.1'
     //noinspection GradleDependency v1.7.0 needs minSdkVersion 21
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    //noinspection GradleDependency v2.7.0 needs minSdkVersion 19
-    implementation "androidx.lifecycle:lifecycle-common:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-common:2.8.7"
     //noinspection GradleDependency v2.2.0 needs minSdkVersion 21
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     //noinspection GradleDependency v2.10.0 needs minSdkVersion 21
@@ -96,21 +95,15 @@ dependencies {
     implementation 'com.google.guava:guava:33.4.5-android'
 
     // Import the BoM for the Firebase platform
-    //noinspection GradleDependency v29 needs minSdkVersion 19
-    implementation platform('com.google.firebase:firebase-bom:28.4.2')
-    implementation 'com.google.firebase:firebase-core'
+    //noinspection GradleDependency v33.0.0 needs minSdkVersion 21
+    implementation platform('com.google.firebase:firebase-bom:32.8.1')
+    implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging-ktx'
 
     testImplementation 'junit:junit:4.13.2'
-    //noinspection GradleDependency v1.6.0 needs minSdkVersion 19
-    androidTestImplementation 'androidx.test:rules:1.5.0'
-    //noinspection GradleDependency v3.6.0 needs minSdkVersion 19
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.5.1', {
-        //exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    })
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
 }
