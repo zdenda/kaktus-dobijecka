@@ -54,7 +54,7 @@ public class CheckServlet extends HttpServlet {
         LOG.info("Text: " + text);
 
         // return error if there's no text
-        if (text == null || text.length() == 0) {
+        if (text == null || text.isEmpty()) {
 
             // send notification email to admin, but only one email in 12 hours
             String recipient = System.getProperty("admin.email");
@@ -169,7 +169,6 @@ public class CheckServlet extends HttpServlet {
      * @return true if the text matches, false otherwise
      */
     public static boolean textMatchesPattern(@Nonnull String text) {
-        //noinspection UnnecessaryUnicodeEscape
         List<String> regularExpressions = Arrays.asList(
                 // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)
                 "dnes(ka)?",

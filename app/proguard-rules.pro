@@ -20,11 +20,6 @@
 
 -dontwarn org.apache.commons.codec.binary.**
 
-# Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
--keepclasseswithmembers class * {
-  @com.google.api.client.util.Key <fields>;
-}
-
 -keepattributes EnclosingMethod
 
 # Needed by Guava
