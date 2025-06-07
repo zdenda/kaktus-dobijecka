@@ -50,11 +50,11 @@ public class CheckServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        String text = loadTextFromWeb();
-        LOG.info("Text: " + text);
+        String link = loadLinkToPdf();
+        LOG.info("Link: " + link);
 
-        // return error if there's no text
-        if (text == null || text.isEmpty()) {
+        // return error if there's no link
+        if (link == null || link.isEmpty()) {
 
             // send notification email to admin, but only one email in 12 hours
             String recipient = System.getProperty("admin.email");
@@ -80,26 +80,25 @@ public class CheckServlet extends HttpServlet {
 
         boolean sendNotifications = false;
         if (!previousResults.isEmpty()) {
-            DateFormat dayMonthRegExpFormat = new SimpleDateFormat("d\\.\\'s?'M\\.", Locale.US);
-            dayMonthRegExpFormat.setTimeZone(TimeZone.getTimeZone("Europe/Prague"));
-            // set changed if the current text is different from text of the most recent result in database
+            // send notifications if the current text is different from text of the most recent result in database
             // and if it contains today's date
-            sendNotifications = !previousResults.get(0).getText().equals(text)
-                    && text.matches(".+ " + dayMonthRegExpFormat.format(new Date()) + " .+");
+            sendNotifications = !previousResults.get(0).getText().equals(link)
+                    && containsDate(link, new Date());
         }
 
         //TODO: save all results, even those which didn't cause sending notifications
-        saveParseResult(text, sendNotifications);
+        saveParseResult(link, sendNotifications);
 
         // if change was detected, send GCM notifications
         if (sendNotifications) {
             LOG.info("Send notifications!");
+            String text = "Dneska to vypadá na Dobíječku! Pro přesný čas mrkněte na web nebo Facebook Kaktusu.";
             FcmSender.sendFcmToAll(text);
         }
 
         // send JSON response
         JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("result", text);
+        jsonResponse.put("result", link);
         jsonResponse.put("notifications", sendNotifications);
 
         DateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
@@ -121,14 +120,12 @@ public class CheckServlet extends HttpServlet {
 
 
     /**
-     * It loads and validates a text of specific element on the Kaktus' web page.
-     * The text must match a specific pattern.
-     *
-     * @return text or null if the text doesn't match specific pattern
-     * @throws IOException if the kaktus' web page could not be found or read
+     * Get link to the PDF file with the conditions
+     * @return link or null if it could not be found
+     * @throws IOException if the web page could not be found or read
      */
     @Nullable
-    private String loadTextFromWeb() throws IOException {
+    private String loadLinkToPdf() throws IOException {
 
         Map<String, String> cookies = getCookies();
         if (cookies.isEmpty()) LOG.warning("Cookies are empty");
@@ -137,7 +134,7 @@ public class CheckServlet extends HttpServlet {
                 .timeout(APP_ENGINE_REQ_TIMEOUT).get();
 
         // Try query here: https://try.jsoup.org/
-        Elements elements = document.select("div.wrapper > h1 + h3.uppercase.text-drawn");
+        Elements elements = document.select("a:contains(Celé podmínky v PDF)");
 
         // there should be only one element
         if (elements.size() != 1) {
@@ -147,27 +144,54 @@ public class CheckServlet extends HttpServlet {
             return null;
         }
 
-        Element element = elements.first();
-        if (element == null) return null;
+        Element linkElement = elements.first();
+        if (linkElement == null) return null;
 
-        String text = element.text();
+        String link = elements.attr("href");
 
-        // the text of that element should match one of the patterns
-        if (!textMatchesPattern(text)) {
+        // the text of the link should match the pattern
+        if (!linkMatchesPattern(link)) {
             // something wrong happened if there's no match
             // for example the structure of kaktus web might have been changed
-            LOG.warning("Text: '" + text + "' doesn't match RegEx");
+            LOG.warning("Link: '" + link + "' doesn't match RegEx");
             return null;
         }
 
-        return text;
+        return link;
     }
+
+    /**
+     * Checks whether the link matches the pattern with date
+     * @param link link to check
+     * @return true if the link matches, false otherwise
+     */
+    public static boolean linkMatchesPattern(@Nonnull String link) {
+        String dayRegExp = "(0[1-9]|[12]\\d|3[01])";
+        String monthRegExp = "(0[1-9]|1[0-2])";
+        String yearRegExp = "(20)\\d{2}";
+        return link.matches(".+filename=OP-Odmena-za-dobiti-FB_"+ dayRegExp + monthRegExp + yearRegExp +"\\.pdf$");
+    }
+
+    /**
+     * Checks whether the text contains date in format ddMMyyyy, for example 12012020
+     * @param text text to check
+     * @param date date to find
+     * @return true if the text contains date, false otherwise
+     */
+    public static boolean containsDate(@Nonnull String text, Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy", Locale.forLanguageTag("cs-CZ"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Prague"));
+        return text.matches(".+" + dateFormat.format(date) + ".+");
+    }
+
+
 
     /**
      * Checks whether the text matches one of the regular expressions
      * @param text text to match
      * @return true if the text matches, false otherwise
      */
+    @Deprecated
     public static boolean textMatchesPattern(@Nonnull String text) {
         List<String> regularExpressions = Arrays.asList(
                 // the czech characters must be encoded to ASCII using Unicode escapes (native2ascii)

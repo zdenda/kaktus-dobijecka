@@ -5,6 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import java.util.Date;
+
 
 class CheckServletTest {
 
@@ -57,4 +62,35 @@ class CheckServletTest {
         assertTrue(CheckServlet.textMatchesPattern("Budoucnost je tady. \uD83D\uDE80 Od teď umíme klonovat kredity! Vyzkoušej to i ty dnes 10. 3. mezi 17 a 20. Stačí dobít 200 - 500 Kč a máš jednou tolik. \uD83D\uDE0E\uD83E\uDD1F"));
 
     }
+
+    @Test
+    void linkMatchesPattern_false() {
+        assertFalse(CheckServlet.linkMatchesPattern(""));
+        assertFalse(CheckServlet.linkMatchesPattern("Test"));
+        assertFalse(CheckServlet.linkMatchesPattern("https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_04062025.pdf&filename=OP-Odmena-za-dobiti-FB_04062025.pdf+"));
+        assertFalse(CheckServlet.linkMatchesPattern("https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_00062025.pdf&filename=OP-Odmena-za-dobiti-FB_00062025.pdf"));
+        assertFalse(CheckServlet.linkMatchesPattern("https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_01132025.pdf&filename=OP-Odmena-za-dobiti-FB_01132025.pdf"));
+        assertFalse(CheckServlet.linkMatchesPattern("https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_32122025.pdf&filename=OP-Odmena-za-dobiti-FB_32122025.pdf"));
+        //TODO assertFalse(CheckServlet.linkMatchesPattern("https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_29022025.pdf&filename=OP-Odmena-za-dobiti-FB_29022025.pdf"));
+    }
+
+    @Test
+    void linkMatchesPattern_true() {
+        assertTrue(CheckServlet.linkMatchesPattern("https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_04062025.pdf&filename=OP-Odmena-za-dobiti-FB_04062025.pdf"));
+        assertTrue(CheckServlet.linkMatchesPattern("https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_31122025.pdf&filename=OP-Odmena-za-dobiti-FB_31122025.pdf"));
+    }
+
+    @Test
+    void containsDate_false() {
+        String text = "https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_04062025.pdf&filename=OP-Odmena-za-dobiti-FB_04062025.pdf";
+        assertFalse(CheckServlet.containsDate(text, new Date()));
+        assertFalse(CheckServlet.containsDate(text, Date.from(LocalDate.of(2025, Month.JUNE, 7).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+    }
+
+    @Test
+    void containsDate_true() {
+        String text = "https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_04062025.pdf&filename=OP-Odmena-za-dobiti-FB_04062025.pdf";
+        assertTrue(CheckServlet.containsDate(text, Date.from(LocalDate.of(2025, Month.JUNE, 4).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+    }
+
 }
