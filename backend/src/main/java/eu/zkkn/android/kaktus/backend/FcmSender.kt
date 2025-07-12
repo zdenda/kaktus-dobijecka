@@ -10,6 +10,7 @@ import com.google.firebase.messaging.AndroidConfig
 import com.google.firebase.messaging.FcmOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
+import java.time.format.DateTimeFormatter
 import java.util.logging.Logger
 import javax.servlet.http.HttpServlet
 import javax.servlet.http.HttpServletRequest
@@ -37,23 +38,27 @@ class FcmSender : HttpServlet() {
         log.info("Start sending FCMs")
         val message: String? = req.getParameter(PARAM_MESSAGE_NAME)
         val debug: Boolean = req.getParameter(PARAM_DEBUG_NAME).toBoolean()
+        val start: String? = req.getParameter(PARAM_START_NAME)
+        val end: String? = req.getParameter(PARAM_END_NAME)
 
         if (message != null && message.trim().isNotEmpty()) {
             // Send message to topic for notifications
             val topic = if (Utils.isProduction() && !debug) "notifications" else "notifications-debug"
-            sendTopicNotification(topic, message)
+            sendTopicNotification(topic, message, start, end)
         } else {
             log.warning("The message to send is empty.")
         }
         log.info("Finish Sending FCMs")
     }
 
-    private fun sendTopicNotification(topicName: String, message: String) {
+    private fun sendTopicNotification(topicName: String, message: String, start: String?, end: String?) {
         val fcmMessage = Message.builder()
             .setTopic(topicName)
             .putData("type", "notification")
             .putData("message", Utils.cropText(message, 1000))
             .putData("uri", CheckServlet.KAKTUS_DOBIJECKA_URL)
+            .putData("start", start ?: "")
+            .putData("end", end ?: "")
             .setAndroidConfig(
                 AndroidConfig.builder()
                     .setPriority(AndroidConfig.Priority.HIGH)
@@ -83,13 +88,21 @@ class FcmSender : HttpServlet() {
 
         private const val PARAM_MESSAGE_NAME = "msg"
         private const val PARAM_DEBUG_NAME = "debug"
+        private const val PARAM_START_NAME = "start"
+        private const val PARAM_END_NAME = "end"
 
         @JvmStatic @JvmOverloads
-        fun sendFcmToAll(message: String?, debug: Boolean = false) {
+        fun sendFcmToAll(message: String?, timeInfo: TimeInfo? = null, debug: Boolean = false) {
             QueueFactory.getDefaultQueue().add(
                 TaskOptions.Builder.withUrl("/tasks/fcm-sender")
                     .param(PARAM_MESSAGE_NAME, message)
                     .param(PARAM_DEBUG_NAME, debug.toString())
+                    .param(PARAM_START_NAME,
+                        timeInfo?.start?.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) ?: ""
+                    )
+                    .param(PARAM_END_NAME,
+                        timeInfo?.end?.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) ?: ""
+                    )
                     .retryOptions(RetryOptions.Builder.withTaskRetryLimit(3))
             )
         }

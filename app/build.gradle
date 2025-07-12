@@ -19,8 +19,8 @@ android {
         minSdkVersion 19
         //noinspection OldTargetApi test on Android 16
         targetSdkVersion 35 // Android 15
-        versionCode 52
-        versionName '0.21.2-α06'
+        versionCode 53
+        versionName '0.21.2'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"

@@ -13,6 +13,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -23,6 +29,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,11 +58,11 @@ public class CheckServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        String link = loadLinkToPdf();
-        LOG.info("Link: " + link);
+        String timeString = loadTimeInfo();
+        LOG.info("Time: " + timeString);
 
         // return error if there's no link
-        if (link == null || link.isEmpty()) {
+        if (timeString == null || timeString.isEmpty()) {
 
             // send notification email to admin, but only one email in 12 hours
             String recipient = System.getProperty("admin.email");
@@ -82,23 +90,26 @@ public class CheckServlet extends HttpServlet {
         if (!previousResults.isEmpty()) {
             // send notifications if the current text is different from text of the most recent result in database
             // and if it contains today's date
-            sendNotifications = !previousResults.get(0).getText().equals(link)
-                    && containsDate(link, new Date());
+            sendNotifications = !previousResults.get(0).getText().equals(timeString)
+                    && containsDate(timeString, new Date());
         }
 
-        //TODO: save all results, even those which didn't cause sending notifications
-        saveParseResult(link, sendNotifications);
+        saveParseResult(timeString, sendNotifications);
+
+        TimeInfo timeInfo = parseTimeInfo(timeString);
 
         // if change was detected, send GCM notifications
         if (sendNotifications) {
             LOG.info("Send notifications!");
-            String text = "Dneska to vypadá na Dobíječku! Pro přesný čas mrkněte na web nebo Facebook Kaktusu.";
-            FcmSender.sendFcmToAll(text);
+            String text = "Vypadá to na dobíječku! Dnes " + timeString + ". Raději ale mrkni i na oficiální web nebo sociální sítě Kaktusu, ať máš jistotu.";
+            FcmSender.sendFcmToAll(text, timeInfo);
         }
 
         // send JSON response
         JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("result", link);
+        jsonResponse.put("result", timeString);
+        jsonResponse.put("start", timeInfo != null ? timeInfo.getStart().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) : null);
+        jsonResponse.put("end", timeInfo != null ? timeInfo.getEnd().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME) : null);
         jsonResponse.put("notifications", sendNotifications);
 
         DateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
@@ -124,6 +135,7 @@ public class CheckServlet extends HttpServlet {
      * @return link or null if it could not be found
      * @throws IOException if the web page could not be found or read
      */
+    @Deprecated
     @Nullable
     private String loadLinkToPdf() throws IOException {
 
@@ -161,10 +173,100 @@ public class CheckServlet extends HttpServlet {
     }
 
     /**
+     * Get time information from the web page
+     * @return time information or null if it could not be found
+     * @throws IOException if the web page could not be found or read
+     */
+    @Nullable
+    private String loadTimeInfo() throws IOException {
+
+        Map<String, String> cookies = getCookies();
+        if (cookies.isEmpty()) LOG.warning("Cookies are empty");
+
+        Document document = Jsoup.connect(KAKTUS_DOBIJECKA_URL).cookies(cookies)
+                .timeout(APP_ENGINE_REQ_TIMEOUT).get();
+
+        // Try query here: https://try.jsoup.org/
+        Elements elements = document.select("div.richTextStyles h4 strong");
+
+        // there should be only one element
+        if (elements.size() != 1) {
+            // something wrong happened if there's more or less than one element
+            // for example the structure of kaktus web might have been changed
+            LOG.warning("Unexpected count (" + elements.size() + ") of matching elements.");
+            return null;
+        }
+
+        Element timeInfoElement = elements.first();
+        if (timeInfoElement == null) return null;
+
+        String timeInfo = timeInfoElement.text().trim();
+
+        // the text of the link should match the pattern
+        if (!timeInfoMatchesPattern(timeInfo)) {
+            // something wrong happened if there's no match
+            // for example the structure of kaktus web might have been changed
+            LOG.warning("Time Information: '" + timeInfo + "' doesn't match RegEx");
+            return null;
+        }
+
+        return timeInfo;
+    }
+
+    /**
+     * Checks whether the string with time information matches the pattern,
+     * for example: "9.7.2025 16:00 - 18:00"
+     * @param timeInfo string to check
+     * @return true if the link matches, false otherwise
+     */
+    public static boolean timeInfoMatchesPattern(@Nonnull String timeInfo) {
+        String dayRegExp = "([1-9]|[12]\\d|3[01])";
+        String monthRegExp = "([1-9]|1[0-2])";
+        String yearRegExp = "(20)?\\d{2}";
+        String timeRegExp = "((0?|1)\\d|2[0-4])(:[0-5][0-9])?";
+        return timeInfo.matches("^"+ dayRegExp + "\\. ?" + monthRegExp + "\\. ?" + yearRegExp + " " + timeRegExp + " - " + timeRegExp + "$");
+    }
+
+    @Nullable
+    public static TimeInfo parseTimeInfo(@Nonnull String timeInfo) {
+        if (!timeInfoMatchesPattern(timeInfo)) return null;
+
+        // Normalize: remove spaces after dots in the date
+        timeInfo = timeInfo.replaceAll("(\\d)\\.\\s+", "$1.");
+
+        Matcher matcher = Pattern.compile("^(\\d+\\.\\d+\\.\\d+)\\s+(\\d{1,2}:\\d{2})\\s*-\\s*(\\d{1,2}:\\d{2})$")
+                .matcher(timeInfo);
+
+        if (!matcher.matches()) return null;
+        String date = matcher.group(1);
+        String startTime = matcher.group(2);
+        String endTime = matcher.group(3);
+
+        String startDateTimeString = date + " " + startTime;
+        String endDateTimeString = date + " " + endTime;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.M.uuuu HH:mm")
+                .withResolverStyle(ResolverStyle.STRICT);
+        ZoneId zone = ZoneId.of("Europe/Prague");
+
+        ZonedDateTime start;
+        ZonedDateTime end;
+        try {
+            start = LocalDateTime.parse(startDateTimeString, formatter).atZone(zone);
+            end = LocalDateTime.parse(endDateTimeString, formatter).atZone(zone);
+        } catch (DateTimeException e) {
+            return null;
+        }
+
+        return new TimeInfo(start, end);
+    }
+
+    /**
      * Checks whether the link matches the pattern with date
      * @param link link to check
      * @return true if the link matches, false otherwise
      */
+    @Deprecated
     public static boolean linkMatchesPattern(@Nonnull String link) {
         String dayRegExp = "(0[1-9]|[12]\\d|3[01])";
         String monthRegExp = "(0[1-9]|1[0-2])";
@@ -179,9 +281,10 @@ public class CheckServlet extends HttpServlet {
      * @return true if the text contains date, false otherwise
      */
     public static boolean containsDate(@Nonnull String text, Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("ddMMyyyy", Locale.forLanguageTag("cs-CZ"));
-        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Prague"));
-        return text.matches(".+" + dateFormat.format(date) + ".+");
+        DateFormat datePatternFormat = new SimpleDateFormat(".*d\\.\\'s?'M\\.\\'s?'(20)?yy.*",
+                Locale.forLanguageTag("cs-CZ"));
+        datePatternFormat.setTimeZone(TimeZone.getTimeZone("Europe/Prague"));
+        return text.matches(datePatternFormat.format(date));
     }
 
 

@@ -22,7 +22,7 @@ class ManualNotificationsServlet : HttpServlet() {
             return
         }
 
-        FcmSender.sendFcmToAll(message, debug == "true")
+        FcmSender.sendFcmToAll(message, debug = debug.toBoolean())
         resp.writer.println("OK")
     }
 }

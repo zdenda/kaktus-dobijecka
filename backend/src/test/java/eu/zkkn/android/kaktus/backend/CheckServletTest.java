@@ -1,6 +1,8 @@
 package eu.zkkn.android.kaktus.backend;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 
@@ -82,15 +85,67 @@ class CheckServletTest {
 
     @Test
     void containsDate_false() {
-        String text = "https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_04062025.pdf&filename=OP-Odmena-za-dobiti-FB_04062025.pdf";
-        assertFalse(CheckServlet.containsDate(text, new Date()));
-        assertFalse(CheckServlet.containsDate(text, Date.from(LocalDate.of(2025, Month.JUNE, 7).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+        assertFalse(CheckServlet.containsDate("9.7.2025 16:00 - 18:00", new Date()));
+        assertFalse(CheckServlet.containsDate("9.7.2025 16:00 - 18:00", Date.from(LocalDate.of(2025, Month.JULY, 7).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+        assertFalse(CheckServlet.containsDate("9. 7. 2025 16:00 - 18:00", Date.from(LocalDate.of(2025, Month.JUNE, 9).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+        assertFalse(CheckServlet.containsDate("9. 7. 25 16:00 - 18:00", Date.from(LocalDate.of(2024, Month.JULY, 9).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
     }
 
     @Test
     void containsDate_true() {
-        String text = "https://www.mujkaktus.cz/api/download?docUrl=%2Fapi%2Fdocuments%2Ffile%2FOP-Odmena-za-dobiti-FB_04062025.pdf&filename=OP-Odmena-za-dobiti-FB_04062025.pdf";
-        assertTrue(CheckServlet.containsDate(text, Date.from(LocalDate.of(2025, Month.JUNE, 4).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+        assertTrue(CheckServlet.containsDate("9.7.2025 16:00 - 18:00", Date.from(LocalDate.of(2025, Month.JULY, 9).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+        assertTrue(CheckServlet.containsDate("31. 12. 2025 00:00 - 23:59", Date.from(LocalDate.of(2025, Month.DECEMBER, 31).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+        assertTrue(CheckServlet.containsDate("31.12.25 00:00 - 23:59", Date.from(LocalDate.of(2025, Month.DECEMBER, 31).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+        assertTrue(CheckServlet.containsDate("9. 7. 25 16:00 - 18:00", Date.from(LocalDate.of(2025, Month.JULY, 9).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+        assertTrue(CheckServlet.containsDate("Dobíječka 9.7.2025 16:00 - 18:00", Date.from(LocalDate.of(2025, Month.JULY, 9).atStartOfDay(ZoneId.of("Europe/Prague")).toInstant())));
+    }
+
+    @Test
+    void timeInfoMatchesPattern_false() {
+        assertFalse(CheckServlet.timeInfoMatchesPattern(""));
+        assertFalse(CheckServlet.timeInfoMatchesPattern("Test"));
+        assertFalse(CheckServlet.timeInfoMatchesPattern("32.12.2025 16:00 - 18:00"));
+        assertFalse(CheckServlet.timeInfoMatchesPattern("1. 13. 2025 16:00 - 18:00"));
+        assertFalse(CheckServlet.timeInfoMatchesPattern("1.1.25 00:60 - 18:00"));
+        assertFalse(CheckServlet.timeInfoMatchesPattern("1.1.2025 16 - 25"));
+        assertFalse(CheckServlet.timeInfoMatchesPattern(" 9.7.2025 16:00 - 18:00 "));
+        //TODO assertFalse(CheckServlet.timeInfoMatchesPattern("29.2.2025 16:00 - 18:00"));
+    }
+
+    @Test
+    void timeInfoMatchesPattern_true() {
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9.7.2025 16:00 - 18:00"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("31.12.2099 00:00 - 23:59"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9.7.25 16:00 - 18:00"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9. 7. 2025 16:00 - 18:00"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9.7.2025 6:00 - 8:00"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9.7.2025 06:30 - 08:30"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9.7.2025 16 - 18"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9.7.25 16 - 18"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9. 7. 25 6 - 8"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("9. 7. 25 06 - 08"));
+    }
+
+    @Test
+    void parseTimeInfo_error() {
+        assertNull(CheckServlet.parseTimeInfo(""));
+        assertNull(CheckServlet.parseTimeInfo("Test"));
+        assertNull(CheckServlet.parseTimeInfo("31.2.2025 16:00 - 18:00"));
+    }
+
+    @Test
+    void parseTimeInfo_ok() {
+        TimeInfo timeInfo = new TimeInfo(
+                ZonedDateTime.of(2025, 7, 9, 16, 0, 0, 0, ZoneId.of("Europe/Prague")),
+                ZonedDateTime.of(2025, 7, 9, 18, 0, 0, 0, ZoneId.of("Europe/Prague")));
+
+        assertEquals(timeInfo, CheckServlet.parseTimeInfo("9.7.2025 16:00 - 18:00"));
+        assertEquals(timeInfo, CheckServlet.parseTimeInfo("9. 7. 2025 16:00 - 18:00"));
+
+        // TODO:
+        //assertEquals(timeInfo, CheckServlet.parseTimeInfo("9. 7. 2025 16 - 18"));
+        //assertEquals(timeInfo, CheckServlet.parseTimeInfo("9. 7. 25 16 - 18"));
+        // and other cases from timeInfoMatchesPattern_true()
     }
 
 }
