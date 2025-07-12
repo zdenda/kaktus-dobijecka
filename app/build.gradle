@@ -12,14 +12,15 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     namespace 'eu.zkkn.android.kaktus'
-    compileSdk 35
-    buildToolsVersion = '35.0.1'
+    compileSdk 36
+    buildToolsVersion = '36.0.0'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 19
+        //noinspection OldTargetApi test on Android 16
         targetSdkVersion 35 // Android 15
         versionCode 52
-        versionName '0.21.2-α05'
+        versionName '0.21.2-α06'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"

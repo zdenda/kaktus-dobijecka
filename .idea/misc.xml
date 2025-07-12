@@ -5,6 +5,7 @@
       <item index="1" class="java.lang.String" itemvalue="javax.servlet.annotation.WebServlet" />
     </list>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />
