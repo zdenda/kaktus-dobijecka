@@ -15,7 +15,7 @@ configurations {
 
 dependencies {
 
-    def appEngineVersion = '2.0.36'
+    def appEngineVersion = '2.0.38'
 
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
     compileOnly "com.google.appengine:appengine-resources:$appEngineVersion"
