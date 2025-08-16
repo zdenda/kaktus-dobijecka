@@ -20,7 +20,7 @@ android {
         //noinspection OldTargetApi test on Android 16
         targetSdkVersion 35 // Android 15
         versionCode 53
-        versionName '0.21.3-α01'
+        versionName '0.21.3-α02'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -66,7 +66,7 @@ android {
 
 dependencies {
 
-    def work_version = "2.10.2"
+    def work_version = "2.10.3"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -74,7 +74,7 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation 'androidx.core:core-ktx:1.16.0'
+    implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
