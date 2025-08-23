@@ -8,5 +8,6 @@
 *.iml
 /local.properties
 /.idea/workspace.xml
+/.idea/assetWizardSettings.xml
 .DS_Store
 .externalNativeBuild

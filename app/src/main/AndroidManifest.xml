@@ -44,6 +44,9 @@
         <receiver android:name=".CancelNotificationReceiver"
             android:enabled="true"
             android:exported="false" />
+        <receiver android:name=".PostponeNotificationReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
         <meta-data android:name= "delivery_metrics_exported_to_big_query_enabled"
             android:value="true" />

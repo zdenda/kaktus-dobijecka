@@ -42,7 +42,8 @@
 
     <string name="dialog_notification_received_title">Přijato</string>
 
-    <string name="notification_action_view">Zobrazit na webu</string>
+    <string name="notification_action_view">Otevřít web</string>
+    <string name="notification_action_postpone">Odložit</string>
     <string name="notification_action_cancel">Skrýt</string>
 
     <string name="activity_about_name">O aplikaci</string>

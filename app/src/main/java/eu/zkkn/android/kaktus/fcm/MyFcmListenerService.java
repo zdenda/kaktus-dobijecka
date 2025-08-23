@@ -26,6 +26,7 @@ import eu.zkkn.android.kaktus.FirebaseAnalyticsHelper;
 import eu.zkkn.android.kaktus.LastNotification;
 import eu.zkkn.android.kaktus.MainActivity;
 import eu.zkkn.android.kaktus.NotificationHelper;
+import eu.zkkn.android.kaktus.PostponeNotificationReceiver;
 import eu.zkkn.android.kaktus.R;
 
 
@@ -50,9 +51,13 @@ public class MyFcmListenerService extends FirebaseMessagingService {
             String from = remoteMessage.getFrom();
             String message = data.get("message");
             String uri = data.get("uri");
+            String start = data.get("start");
+            String end = data.get("end");
 
-            Log.d(Config.TAG, "From: " + from + ", Type: " + type + "Time: "
-                    + sentTime + ", Message: " + message + ", URI: " + uri);
+            Log.d(Config.TAG, "From: " + from + ", Type: " + type + "Time: " + sentTime
+                    + ", Message: " + message + ", URI: " + uri + ", Start: " + start + ", End: " + end);
+
+            if (message == null) return;
 
             // save it as the last notification
             LastNotification.save(this, new LastNotification.Notification(
@@ -63,7 +68,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
             // show notification if the message is fresh
             if (sentTime > (System.currentTimeMillis() - TimeUnit.HOURS.toMillis(12))) {
-                showNotification(this, message, uri);
+                showNotification(this, message, uri, start, end);
             }
         }
 
@@ -76,8 +81,15 @@ public class MyFcmListenerService extends FirebaseMessagingService {
         }
     }
 
+    public static void showNotificationWithoutPostpone(Context context, @NonNull String message, @Nullable String uri) {
+        showNotification(context, message, uri, null, null);
+    }
 
-    protected static void showNotification(Context context, String message, @Nullable String uri) {
+
+    private static void showNotification(Context context, @NonNull String message,
+                                         @Nullable String uri, @Nullable String start,
+                                         @Nullable String end) {
+
         Context ctx = context.getApplicationContext();
 
         int pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
@@ -103,6 +115,16 @@ public class MyFcmListenerService extends FirebaseMessagingService {
         if (action != null && action.resolveActivity(ctx.getPackageManager()) != null) {
             builder.addAction(R.drawable.ic_open, ctx.getString(R.string.notification_action_view),
                     PendingIntent.getActivity(ctx, 0, action, pendingIntentFlags));
+        }
+
+        // add action to postpone if start and end are not empty
+        //TODO: what if FCM is received after start, should be the notification postponed?
+        if (!TextUtils.isEmpty(start) && !TextUtils.isEmpty(end)) {
+            Intent actionPostpone = PostponeNotificationReceiver.getIntent(
+                    ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID, message, uri, start, end);
+            builder.addAction(R.drawable.ic_postpone, ctx.getString(R.string.notification_action_postpone),
+                    PendingIntent.getBroadcast(ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
+                            actionPostpone, pendingIntentFlags));
         }
 
         Intent actionCancel = CancelNotificationReceiver.getIntent(
