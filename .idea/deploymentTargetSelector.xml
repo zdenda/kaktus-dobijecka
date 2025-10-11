@@ -4,11 +4,11 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-08-22T20:22:26.178258300Z">
+        <DropdownSelection timestamp="2025-08-24T17:31:23.199270600Z">
           <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\zdenda\.android\avd\Nexus_5.avd" />
-            </handle>
+            <template>
+              <DeviceId pluginId="FirebaseDirectAccess" type="TEMPLATE" identifier="model_id=tegu/35" />
+            </template>
           </Target>
         </DropdownSelection>
         <DialogSelection />
