@@ -3,8 +3,11 @@ package eu.zkkn.android.kaktus
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationManagerCompat
+import eu.zkkn.android.kaktus.fcm.MyFcmListenerService
+import java.util.Date
 
 
 class PostponeNotificationReceiver : BroadcastReceiver() {
@@ -53,8 +56,15 @@ class PostponeNotificationReceiver : BroadcastReceiver() {
             val startDate = start.toDateOrNull("yyyy-MM-dd'T'HH:mm:ssZZZZZ")
             if (startDate == null) return
 
-            //TODO: Maybe don't cancel the notification if it's after end,
-            // just update the current one and remove the postpone button
+            // Check if the start date has already passed
+            val now = Date()
+            if (now.after(startDate)) {
+                MyFcmListenerService.showNotificationWithoutPostpone(context, message, uri)
+                Toast.makeText(context, context.getString(R.string.error_cannot_postpone),
+                    Toast.LENGTH_LONG).show()
+                return
+            }
+
             NotificationManagerCompat.from(context).cancel(id)
             PostponeNotificationWorker.schedulePostponedNotification(context, startDate, message, uri)
         }

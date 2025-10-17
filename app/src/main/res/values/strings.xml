@@ -46,6 +46,8 @@
     <string name="notification_action_postpone">Odložit</string>
     <string name="notification_action_cancel">Skrýt</string>
 
+    <string name="error_cannot_postpone">Dobíječka už probíhá, proto upozornění nelze odložit.</string>
+
     <string name="activity_about_name">O aplikaci</string>
     <string name="about_close">Zavřít</string>
     <string name="about_version">Verze: %s</string>

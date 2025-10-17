@@ -11,7 +11,9 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -135,6 +137,15 @@ public class MyFcmListenerService extends FirebaseMessagingService {
 
         NotificationHelper.notify(ctx, NotificationHelper.DOBIJECKA_NOTIFICATION_ID,
                 builder.build());
+    }
+
+
+    public static void showTestNotification(Context context) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ", Locale.US);
+        String start = dateFormat.format(new Date(System.currentTimeMillis() + 1 * 60 * 1000));
+        String end = dateFormat.format(new Date(System.currentTimeMillis() + 6 * 60 * 1000));
+        showNotification(context, "Test notification from " + start + " to " + end,
+                "https://www.mujkaktus.cz/chces-pridat", start, end);
     }
 
 }
