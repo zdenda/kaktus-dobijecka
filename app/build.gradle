@@ -20,7 +20,7 @@ android {
         //noinspection OldTargetApi test on Android 16
         targetSdkVersion 35 // Android 15
         versionCode 53
-        versionName '1.0.0-α02'
+        versionName '1.0.0-α03'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -64,7 +64,7 @@ android {
 
 dependencies {
 
-    def work_version = "2.10.3"
+    def work_version = "2.10.5"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -76,13 +76,14 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation "androidx.lifecycle:lifecycle-common:2.9.2"
+    implementation "androidx.lifecycle:lifecycle-common:2.9.4"
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation "androidx.work:work-runtime:$work_version"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     implementation "androidx.work:work-gcm:$work_version"
+    //noinspection GradleDependency v18.8.0 needs minSdkVersion 23
     implementation 'com.google.android.gms:play-services-base:18.7.2'
-    implementation 'com.google.guava:guava:33.4.8-android'
+    implementation 'com.google.guava:guava:33.5.0-android'
 
     // Import the BoM for the Firebase platform
     //noinspection GradleDependency v34.0.0 needs minSdkVersion 23
