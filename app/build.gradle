@@ -12,7 +12,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     namespace 'eu.zkkn.android.kaktus'
-    compileSdk 36
+    compileSdkVersion = 36
     buildToolsVersion = '36.0.0'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
@@ -20,7 +20,7 @@ android {
         //noinspection OldTargetApi test on Android 16
         targetSdkVersion 35 // Android 15
         versionCode 53
-        versionName '1.0.0-α01'
+        versionName '1.0.0-α02'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -38,8 +38,6 @@ android {
             // enable resources shrinking, ProGuard and PNG crunching
             shrinkResources true
             minifyEnabled true
-            // ProGuard optimization introduces certain risks, so test thoroughly and
-            // use it only for beta builds (for now)
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             aaptOptions.cruncherEnabled = true
         }
@@ -47,7 +45,7 @@ android {
             // enable shrinking of code and resources
             shrinkResources true
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     buildFeatures {

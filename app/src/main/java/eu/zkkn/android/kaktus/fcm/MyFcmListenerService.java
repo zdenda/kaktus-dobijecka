@@ -140,6 +140,7 @@ public class MyFcmListenerService extends FirebaseMessagingService {
     }
 
 
+    /** @noinspection unused, PointlessArithmeticExpression */
     public static void showTestNotification(Context context) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ", Locale.US);
         String start = dateFormat.format(new Date(System.currentTimeMillis() + 1 * 60 * 1000));
