@@ -124,6 +124,7 @@ class CheckServletTest {
         assertTrue(CheckServlet.timeInfoMatchesPattern("9.7.25 16 - 18"));
         assertTrue(CheckServlet.timeInfoMatchesPattern("9. 7. 25 6 - 8"));
         assertTrue(CheckServlet.timeInfoMatchesPattern("9. 7. 25 06 - 08"));
+        assertTrue(CheckServlet.timeInfoMatchesPattern("15. 10. 2025 15:00 - 17:00"));
     }
 
     @Test

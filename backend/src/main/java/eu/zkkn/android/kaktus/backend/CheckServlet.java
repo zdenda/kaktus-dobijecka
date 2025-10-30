@@ -187,7 +187,7 @@ public class CheckServlet extends HttpServlet {
                 .timeout(APP_ENGINE_REQ_TIMEOUT).get();
 
         // Try query here: https://try.jsoup.org/
-        Elements elements = document.select("div.richTextStyles h4 strong");
+        Elements elements = document.select("div.text-body-copy div.richTextStyles h4");
 
         // there should be only one element
         if (elements.size() != 1) {
