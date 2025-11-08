@@ -1,5 +1,7 @@
 // Android Application build file
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 // Android app
 apply plugin: 'com.android.application'
 // Kotlin
@@ -13,14 +15,14 @@ apply plugin: 'com.google.firebase.crashlytics'
 android {
     namespace 'eu.zkkn.android.kaktus'
     compileSdkVersion = 36
-    buildToolsVersion = '36.0.0'
+    buildToolsVersion = '36.1.0'
     defaultConfig {
         applicationId "eu.zkkn.android.kaktus"
         minSdkVersion 21
         //noinspection OldTargetApi test on Android 16
         targetSdkVersion 35 // Android 15
-        versionCode 53
-        versionName '1.0.0-α03'
+        versionCode 54
+        versionName '1.0.0'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -57,14 +59,16 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_1_8
+        }
     }
 }
 
 dependencies {
 
-    def work_version = "2.10.5"
+    def work_version = "2.10.5" // v2.11.0 needs minSdkVersion 23
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -78,8 +82,11 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "androidx.lifecycle:lifecycle-common:2.9.4"
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    //noinspection GradleDependency v2.11.0 needs minSdkVersion 23
     implementation "androidx.work:work-runtime:$work_version"
+    //noinspection GradleDependency v2.11.0 needs minSdkVersion 23
     implementation "androidx.work:work-runtime-ktx:$work_version"
+    //noinspection GradleDependency v2.11.0 needs minSdkVersion 23
     implementation "androidx.work:work-gcm:$work_version"
     //noinspection GradleDependency v18.8.0 needs minSdkVersion 23
     implementation 'com.google.android.gms:play-services-base:18.7.2'
