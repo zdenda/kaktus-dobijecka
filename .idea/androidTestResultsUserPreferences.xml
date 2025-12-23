@@ -10,6 +10,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="Google Pixel 9" value="120" />
+                  <entry key="Pixel_3a_API_34" value="120" />
                   <entry key="Pixel_8_Pro_API_34" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -39,6 +40,7 @@
                   <entry key="Google Pixel 9" value="120" />
                   <entry key="Google Pixel 9a" value="120" />
                   <entry key="Nexus_5" value="120" />
+                  <entry key="Pixel_3a_API_34" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>

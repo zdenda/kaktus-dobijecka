@@ -30,6 +30,11 @@ import androidx.core.content.IntentCompat;
 import androidx.core.content.PackageManagerCompat;
 import androidx.core.content.PackageManagerCompat.UnusedAppRestrictionsStatus;
 import androidx.core.content.UnusedAppRestrictionsConstants;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.insets.ColorProtection;
+import androidx.core.view.insets.ProtectionLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,6 +44,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -105,6 +111,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainScrollView), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        ProtectionLayout protectionLayout = findViewById(R.id.mainProtectionLayout);
+        if (protectionLayout != null) {
+            int colorPrimaryDark = ContextCompat.getColor(this, R.color.colorPrimaryDark);
+            protectionLayout.setProtections(Arrays.asList(
+                    new ColorProtection(WindowInsetsCompat.Side.TOP, colorPrimaryDark),
+                    new ColorProtection(WindowInsetsCompat.Side.LEFT, colorPrimaryDark),
+                    new ColorProtection(WindowInsetsCompat.Side.RIGHT, colorPrimaryDark)
+            ));
+        }
+
 
         mSemaphoreStatus = findViewById(R.id.tv_status);
 
