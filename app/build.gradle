@@ -22,7 +22,7 @@ android {
         //noinspection OldTargetApi test on Android 16
         targetSdkVersion 35 // Android 15
         versionCode 54
-        versionName '1.0.0'
+        versionName '1.0.1-α01'
         resourceConfigurations += ['en', 'cs']
         vectorDrawables.useSupportLibrary = true
         testApplicationId "eu.zkkn.android.kaktus.test"
@@ -80,6 +80,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //noinspection GradleDependency v2.10.0 needs minSdkVersion 23
     implementation "androidx.lifecycle:lifecycle-common:2.9.4"
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     //noinspection GradleDependency v2.11.0 needs minSdkVersion 23
