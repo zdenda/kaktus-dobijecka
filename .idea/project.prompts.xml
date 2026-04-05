@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PromptTemplates">
+    <option name="prompts">
+      <list>
+        <PromptTemplate>
+          <option name="enabled" value="true" />
+          <option name="name" value="Fix issue from Claude on GitHub" />
+          <option name="text" value="I want you to fix an issue in a repository. First, ask me for the link to the GitHub issue I want to fix.&#10;&#10;Once I provide it:&#10;&#10;1. **Read the GitHub issue** and understand the problem described.&#10;&#10;2. **Clone the repository** (use the default branch) and **examine the actual code**. Verify whether the issue is still valid and actually needs fixing. If you determine it's a false positive or already fixed, tell me and stop.&#10;&#10;3. **Evaluate the suggested fix** if one is provided in the issue. Assess whether it will work correctly and whether it could introduce any regressions or new issues.&#10;&#10;4. **Consider your own solution.** If you come up with an alternative approach, compare both solutions and explain which is better and why. Pick the best one.&#10;&#10;5. **Implement the fix.** Make the code changes, and if the issue mentions new tests, implement those too.&#10;&#10;   **Path hint:** If you can't find a file at the path mentioned in the issue, try replacing `java` with `kotlin` in the path (e.g., `backend/src/main/java/eu/.../Messaging.kt` → `backend/src/main/kotlin/eu/.../Messaging.kt`), or vice versa.&#10;&#10;   **Important constraints — do NOT:**&#10;   - Change `minSdk`, `targetSdk`, `compileSdk`, or any other SDK/platform version settings&#10;   - Upgrade or downgrade major dependency versions (minor/patch security fixes are OK)&#10;   - Change the servlet version, App Engine runtime, or any deployment target&#10;   - Change supported device range or platform compatibility in any way&#10;   - Make large-scale refactors — keep changes minimal and surgical, focused only on the issue&#10;&#10;6. **Verify your changes:**&#10;   - Build the project (if a build system is available)&#10;   - Run existing tests to confirm no regressions&#10;   - Run any new tests you added&#10;&#10;7. **Do NOT commit.** Instead, prepare a commit message I can use. The commit message must:&#10;   - Include a `Fixes #&lt;issue_number&gt;` keyword so that the GitHub issue is automatically closed when the commit is merged&#10;   - End with a line stating it was done by AI and which model was used (e.g., `AI-assisted fix by &lt;model_name&gt;`)&#10;   &#10;   Show me the suggested commit message at the end.&#10;&#10;Ask me if anything is unclear before you start." />
+        </PromptTemplate>
+      </list>
+    </option>
+  </component>
+</project>

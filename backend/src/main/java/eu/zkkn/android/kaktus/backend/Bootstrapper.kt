@@ -1,5 +1,8 @@
 package eu.zkkn.android.kaktus.backend
 
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import com.googlecode.objectify.ObjectifyService
 import javax.servlet.ServletContextEvent
 import javax.servlet.ServletContextListener
@@ -18,6 +21,18 @@ class Bootstrapper : ServletContextListener {
 
         if (sce != null) {
             ServletContextHolder.setServletContext(sce.servletContext)
+        }
+
+        // Initialize Firebase
+        if (FirebaseApp.getApps().isEmpty()) {
+            val googleCredentials = GoogleCredentials.fromStream(
+                ServletContextHolder.getServletContext()
+                    .getResourceAsStream("/WEB-INF/serviceAccountKey.json")
+            )
+            val options = FirebaseOptions.builder()
+                .setCredentials(googleCredentials)
+                .build()
+            FirebaseApp.initializeApp(options)
         }
 
         // For Objectify v6: ObjectifyService.init();

@@ -3,9 +3,6 @@ package eu.zkkn.android.kaktus.backend
 import com.google.appengine.api.taskqueue.QueueFactory
 import com.google.appengine.api.taskqueue.RetryOptions
 import com.google.appengine.api.taskqueue.TaskOptions
-import com.google.auth.oauth2.GoogleCredentials
-import com.google.firebase.FirebaseApp
-import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.AndroidConfig
 import com.google.firebase.messaging.FcmOptions
 import com.google.firebase.messaging.FirebaseMessaging
@@ -25,14 +22,8 @@ class FcmSender : HttpServlet() {
 
     private val log = Logger.getLogger(this::class.java.name)
 
-    private val firebaseMessaging: FirebaseMessaging by lazy {
-        val googleCredentials = GoogleCredentials.fromStream(
-            ServletContextHolder.getServletContext()
-                .getResourceAsStream("/WEB-INF/serviceAccountKey.json")
-        )
-        val options = FirebaseOptions.builder().setCredentials(googleCredentials).build()
-        FirebaseMessaging.getInstance(FirebaseApp.initializeApp(options))
-    }
+    private val firebaseMessaging: FirebaseMessaging
+        get() = FirebaseMessaging.getInstance()
 
     override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
         log.info("Start sending FCMs")
