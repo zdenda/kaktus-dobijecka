@@ -22,7 +22,21 @@ class ManualNotificationsServlet : HttpServlet() {
             return
         }
 
-        FcmSender.sendFcmToAll(message, debug = debug.toBoolean())
+        val isDebug = debug.toBoolean()
+
+        FcmSender.sendFcmToAll(message, debug = isDebug)
+
+        val adminEmail = System.getProperty("admin.email")
+        if (!adminEmail.isNullOrEmpty()) {
+            val subject = if (isDebug) "[DEBUG] Manual Notification Sent" else "Manual Notification Sent"
+            Utils.sendEmail(
+                "admin",
+                adminEmail,
+                subject,
+                "Manual notification was sent with the following message:\n\n$message"
+            )
+        }
+
         resp.writer.println("OK")
     }
 }
