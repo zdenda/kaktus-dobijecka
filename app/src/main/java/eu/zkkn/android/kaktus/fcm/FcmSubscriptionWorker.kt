@@ -84,11 +84,11 @@ class FcmSubscriptionWorker(
             val firebaseMessaging = FirebaseMessaging.getInstance()
 
             // subscribe to notifications
-            firebaseMessaging.subscribeToTopic(FcmHelper.FCM_TOPIC_NOTIFICATIONS)
+            firebaseMessaging.subscribeToTopic(FcmHelper.FCM_TOPIC_NOTIFICATIONS).await()
 
             // and also to debug notifications if this is a debug build
             if (BuildConfig.DEBUG) {
-                firebaseMessaging.subscribeToTopic("${FcmHelper.FCM_TOPIC_NOTIFICATIONS}-debug")
+                firebaseMessaging.subscribeToTopic("${FcmHelper.FCM_TOPIC_NOTIFICATIONS}-debug").await()
             }
 
             Preferences.setFcmToken(applicationContext, token)
