@@ -331,7 +331,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void unRegisterFcmRegistrationReceiver() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmRegistrationBroadcastReceiver);
+        if (mFcmRegistrationBroadcastReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmRegistrationBroadcastReceiver);
+        }
     }
 
     private void registerFcmMessageReceiver() {
@@ -346,7 +348,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void unregisterFcmMessageReceiver() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmMessageBroadcastReceiver);
+        if (mFcmMessageBroadcastReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mFcmMessageBroadcastReceiver);
+        }
     }
 
     private void showDebugInfo() {
