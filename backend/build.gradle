@@ -15,16 +15,16 @@ configurations {
 
 dependencies {
 
-    def appEngineVersion = '2.0.39'
+    def appEngineVersion = '5.0.0'
 
     compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
     compileOnly "com.google.appengine:appengine-resources:$appEngineVersion"
 
     implementation "com.google.appengine:appengine-api-1.0-sdk:$appEngineVersion"
-    implementation 'com.google.firebase:firebase-admin:9.7.0'
+    implementation 'com.google.firebase:firebase-admin:9.8.0'
     //noinspection NewerVersionAvailable: GradleDependency v6.0 breaks local dev environment
     implementation 'com.googlecode.objectify:objectify:5.1.25' //TODO v6.0
-    implementation 'org.jsoup:jsoup:1.21.2'
+    implementation 'org.jsoup:jsoup:1.22.1'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'javax.activation:activation:1.1.1' // necessary for sending emails
 
@@ -66,8 +66,11 @@ appengine {
     }
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 kotlin {
     jvmToolchain(17)
