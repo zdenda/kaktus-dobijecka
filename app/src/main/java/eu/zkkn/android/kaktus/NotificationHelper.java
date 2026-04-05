@@ -25,7 +25,23 @@ public class NotificationHelper {
 
     // NotificationManagerCompat uses app context, so it doesn't leak activity nor service
     @SuppressLint("StaticFieldLeak")
-    private static NotificationManagerCompat sNotificationManager;
+    private static volatile NotificationManagerCompat sNotificationManager;
+
+
+    /**
+     * Initialize the NotificationManagerCompat. Should be called from Application.onCreate().
+     * @param context Context
+     */
+    public static void init(Context context) {
+        if (sNotificationManager == null) {
+            synchronized (NotificationHelper.class) {
+                if (sNotificationManager == null) {
+                    sNotificationManager = NotificationManagerCompat.from(
+                            context.getApplicationContext());
+                }
+            }
+        }
+    }
 
 
     public static NotificationCompat.Builder getDefaultBuilder(Context context, String channelId) {
@@ -60,7 +76,7 @@ public class NotificationHelper {
 
     private static NotificationManagerCompat getNotificationManager(Context context) {
         if (sNotificationManager == null) {
-            sNotificationManager = NotificationManagerCompat.from(context.getApplicationContext());
+            init(context);
         }
         return sNotificationManager;
     }

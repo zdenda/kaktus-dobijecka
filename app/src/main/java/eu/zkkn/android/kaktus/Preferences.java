@@ -101,12 +101,26 @@ public class Preferences {
             "lastSubscriptionRefreshTime-v" + FcmSubscriptionWorker.PERIODIC_WORK_VERSION;
 
 
-    private static SharedPreferences sPreferences;
+    private static volatile SharedPreferences sPreferences;
+
+    /**
+     * Initialize the preferences. Should be called from Application.onCreate().
+     * @param context Context
+     */
+    public static void init(Context context) {
+        if (sPreferences == null) {
+            synchronized (Preferences.class) {
+                if (sPreferences == null) {
+                    sPreferences = PreferenceManager.getDefaultSharedPreferences(
+                            context.getApplicationContext());
+                }
+            }
+        }
+    }
 
     private static SharedPreferences getPref(Context context) {
         if (sPreferences == null) {
-            sPreferences = PreferenceManager.getDefaultSharedPreferences(
-                    context.getApplicationContext());
+            init(context);
         }
         return sPreferences;
     }
